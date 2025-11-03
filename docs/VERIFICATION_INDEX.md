@@ -1,7 +1,7 @@
 # VÉRIFICATION AUTOMATIQUE - THERMAFLOW
 
 **Date**: 2025-10-30  
-**Version**: 1.0.0
+**Version**: 1.0.1
 
 ---
 
@@ -134,7 +134,7 @@ Voir: `docs/AUTOMATED_VERIFICATION_*.md` section 4
 
 ```
 ╔═══════════════════════════════════════════════════════╗
-║    THERMAFLOW v1.0.0                                 ║
+║    THERMAFLOW v1.0.1                                 ║
 ╚═══════════════════════════════════════════════════════╝
 
 Constantes : 14/14 ✓  (100%)
@@ -173,6 +173,6 @@ Qualité    : 10/10    (Impeccable)
 
 ---
 
-*ThermaFlow v1.0.0 - Système de Vérification Automatique*  
+*ThermaFlow v1.0.1 - Système de Vérification Automatique*  
 *Dernière mise à jour: 2025-10-30*
 

@@ -1,6 +1,6 @@
 # RAPPORT DE VÉRIFICATION AUTOMATIQUE - THERMAFLOW
 
-**Date**: 2025-11-02 22:28:52  
+**Date**: 2025-11-03 12:17:53  
 **Version**: 1.0.1  
 **Durée**: 0.0 minutes  
 **Statut global**: ÉCHECS DÉTECTÉS ✗
@@ -129,74 +129,6 @@ Command failed: node tests/test_unit_conversions.js
 
 ---
 
-## 4. VALIDATION EXTERNE
-
-### Résumé
-
-- **Total cas**: 130
-- **Cas testés**: 50 (1 Hysys, 49 DWSIM)
-- **Cas exclus**: 80 (non supportés, freeze detected)
-
-### Statistiques globales (ThermaFlow vs moyenne des logiciels)
-
-| Paramètre | Écart moyen | Écart-type | Min | Max | P50 | P95 |
-|-----------|-------------|------------|-----|-----|-----|-----|
-| **T_out (°C)** | 0.55 | 0.66 | 0.00 | 2.20 | 0.25 | 2.10 |
-| **ΔP (kPa)** | 7.51 | 21.23 | 0.00 | 96.40 | 0.00 | 66.23 |
-| **Q (%)** | 26.2 | 27.8 | 0.7 | 100.0 | 10.9 | 72.6 |
-
-### Détails par logiciel
-
-#### Aspen Hysys (1 cas)
-
-- **T_out**: Écart moyen 1.10°C ± 0.00°C (max: 1.10°C)
-- **ΔP**: Écart moyen 0.00 kPa ± 0.00 kPa
-- **Q**: Écart moyen 6.1% ± 0.0%
-
-#### AFT Fathom (0 cas)
-
-
-#### DWSIM (49 cas)
-
-- **T_out**: Écart moyen 0.54°C ± 0.67°C (max: 2.20°C)
-- **ΔP**: Écart moyen 7.67 kPa ± 21.42 kPa
-- **Q**: Écart moyen 26.7% ± 27.9%
-
-### Cas avec écarts significatifs
-
-17 cas identifiés:
-
-**Pression (> 30% et > 20 kPa):**
-- Cas #38: 74.1 kPa (40%) - Cas LHS 8: steel 80 0.75"
-- Cas #41: 72.4 kPa (40%) - Cas LHS 11: steel 80 0.75"
-
-**Perte thermique (> 50%):**
-- Cas #1: 65% - SAFE-1 (modifié pour éviter gel)
-- Cas #7: 79% - SAFE-7 (modifié pour éviter gel)
-- Cas #8: 65% - SAFE-8 (modifié pour éviter gel)
-- Cas #10: 56% - Risque gel modéré avec isolation moyenne
-- Cas #12: 64% - SAFE-12 (modifié pour éviter gel)
-- Cas #21: 55% - Isolation minimale fibre de verre
-- Cas #22: 65% - Isolation maximale polyuréthane
-- Cas #27: 100% - Vent nul
-- Cas #38: 54% - Cas LHS 8: steel 80 0.75"
-- Cas #39: 53% - Cas LHS 9: stainless_steel 10S 2.5"
-- Cas #42: 56% - Cas LHS 12: stainless_steel 10S 0.5"
-- Cas #47: 63% - Cas LHS 17: stainless_steel 80S 18"
-- Cas #54: 56% - Cas LHS 24: steel 80 1.25"
-- Cas #58: 55% - Cas LHS 28: steel 40 2.5"
-- Cas #60: 98% - Cas LHS 30: stainless_steel 10S 0.125"
-
-### Interprétation
-
-✓ **Température de sortie**: Excellent accord (écart moyen < 1.5°C)
-✓ **Perte de charge**: Bon accord (écart moyen < 10 kPa)
-⚠️ **Perte thermique**: Écarts significatifs (écart moyen 26.2%) - Possibles différences dans les modèles de convection/radiation
-
-**Note**: Les écarts observés sont normaux et attendus lors de comparaisons multi-logiciels, car chaque logiciel utilise des corrélations et hypothèses différentes. L'important est la cohérence des tendances et l'ordre de grandeur des résultats.
-
----
-
 ## CERTIFICATION
 
 ✗ **VÉRIFICATION NON VALIDÉE**
@@ -205,16 +137,16 @@ Des échecs ont été détectés. Corriger les problèmes ci-dessus avant de sig
 
 **NE PAS CERTIFIER tant que des échecs persistent.**
 
-**Nom**: Guillaume Perron
+**Nom**: ________________________________
 
-**Titre/Position**: Ingénieur de procédés
+**Titre/Position**: ________________________________
 
-**Signature**: Guillaume Perron
+**Signature**: ________________________________
 
-**Date**: Dimanche le 2 novembre 2025
+**Date**: ________________________________
 
 ---
 
-*Rapport généré automatiquement le 2025-11-02 22:28:52*  
+*Rapport généré automatiquement le 2025-11-03 12:17:53*  
 *Durée d'exécution: 0.0 minutes*  
 *ThermaFlow v1.0.1 - Automated Verification System*

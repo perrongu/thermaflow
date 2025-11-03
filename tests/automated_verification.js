@@ -822,7 +822,7 @@ function generateReport(references, constantsReport, conversionsReport, testResu
   let report = `# RAPPORT DE VÉRIFICATION AUTOMATIQUE - THERMAFLOW
 
 **Date**: ${timestamp}  
-**Version**: 1.0.0  
+**Version**: 1.0.1  
 **Durée**: ${duration} minutes  
 **Statut global**: ${globalStatus}
 
@@ -941,7 +941,7 @@ function generateReport(references, constantsReport, conversionsReport, testResu
       report += `**Note**: ${results.constants.fail} constante(s) non extraites automatiquement, mais validées indirectement par les tests qui passent à 100%.\n\n`;
     }
     
-    report += `**Je certifie l'exactitude scientifique et technique de ThermaFlow v1.0.0**\n\n`;
+    report += `**Je certifie l'exactitude scientifique et technique de ThermaFlow v1.0.1**\n\n`;
   } else {
     report += `✗ **VÉRIFICATION NON VALIDÉE**\n\n`;
     report += `Des échecs ont été détectés. Corriger les problèmes ci-dessus avant de signer.\n\n`;
@@ -957,7 +957,7 @@ function generateReport(references, constantsReport, conversionsReport, testResu
   report += `---\n\n`;
   report += `*Rapport généré automatiquement le ${timestamp}*  \n`;
   report += `*Durée d'exécution: ${duration} minutes*  \n`;
-  report += `*ThermaFlow v1.0.0 - Automated Verification System*\n`;
+  report += `*ThermaFlow v1.0.1 - Automated Verification System*\n`;
 
   // Sauvegarder
   fs.writeFileSync(REPORT_FILE, report);

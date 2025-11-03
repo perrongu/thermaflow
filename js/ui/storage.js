@@ -25,7 +25,7 @@
       const data = {
         config: config,
         timestamp: Date.now(),
-        version: '1.0.0'
+        version: '1.0.1'
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch (error) {

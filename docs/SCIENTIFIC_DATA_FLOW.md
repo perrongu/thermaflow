@@ -719,6 +719,6 @@ if (param <= 0) {  // ou autre contrainte physique
 ---
 
 **Document rédigé pour**: Ingénieurs en piping et procédés  
-**Version**: 1.0.0  
+**Version**: 1.0.1  
 **Dernière mise à jour**: 29 octobre 2025
 

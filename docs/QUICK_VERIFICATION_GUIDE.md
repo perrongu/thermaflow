@@ -305,5 +305,5 @@ Pour questions sur:
 ---
 
 *Guide créé le 2025-10-30*  
-*ThermaFlow v1.0.0 - Quick Verification System*
+*ThermaFlow v1.0.1 - Quick Verification System*
 

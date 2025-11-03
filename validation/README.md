@@ -1,10 +1,10 @@
-# Validation Externe ThermaFlow v1.0.0
+# Validation Externe ThermaFlow v1.0.1
 
 Ce dossier contient les fichiers nécessaires pour la validation croisée de ThermaFlow avec des logiciels de simulation de référence.
 
 ## Fichier d'échantillon
 
-**`external_validation_sample_v1.0.json`** - 130 cas de test statistiquement représentatifs
+**`external_validation_sample_v1.0.1.json`** - 130 cas de test statistiquement représentatifs
 
 ### Stratégie d'échantillonnage
 
@@ -44,7 +44,7 @@ L'échantillon a été généré selon une approche combinée pour garantir une 
 {
   "metadata": {
     "generator": "ThermaFlow External Validation Sample Generator",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "date": "2025-10-31",
     "total_cases": 130,
     "description": "...",
@@ -158,7 +158,7 @@ import numpy as np
 from scipy import stats
 
 # Charger les données
-with open('external_validation_sample_v1.0.json') as f:
+with open('external_validation_sample_v1.0.1.json') as f:
     data = json.load(f)
 
 # Extraire résultats (en excluant les cas de gel)
@@ -276,9 +276,9 @@ const rng = new SeededRandom(42); // Changer 42 pour un autre nombre
 ## Fichiers de sortie attendus
 
 Après validation complète:
-- `external_validation_sample_v1.0.json` (complété avec résultats)
+- `external_validation_sample_v1.0.1.json` (complété avec résultats)
 - `validation_analysis.xlsx` (analyse statistique)
-- `validation_report_v1.0.pdf` (rapport final)
+- `validation_report_v1.0.1.pdf` (rapport final)
 
 ## Gestion des cas de gel
 

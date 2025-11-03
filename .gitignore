@@ -1,14 +1,13 @@
 # Memory bank (documentation privée de travail)
 memory-bank/
 
-# Documentation interdite à la racine (sauf README.md)
+# Documentation interdite à la racine (sauf README.md et CHANGELOG.md)
 # Suivre la stratégie Memory Bank uniquement!
 /INDEX.md
 /ARCHITECTURE.md
 /OVERVIEW.md
 /SUMMARY.md
 /STATUS.md
-/CHANGELOG.md
 /PEER_REVIEW.md
 /REVUE_*.md
 /*.plan.md
@@ -23,7 +22,7 @@ memory-bank/
 node_modules/
 
 # Fichiers protégés par copyright (manuels commerciaux)
-docs/references/*.pdf
+docs/references/
 
 # Fichiers temporaires
 *.tmp

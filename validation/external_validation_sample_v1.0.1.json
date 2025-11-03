@@ -1,7 +1,7 @@
 {
   "metadata": {
     "generator": "ThermaFlow External Validation Sample Generator",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "date": "2025-11-01",
     "total_cases": 130,
     "description": "Échantillon pour validation croisée avec Aspen Hysys, AFT Fathom, DWSIM",
@@ -528,7 +528,7 @@
           "T_out_C": 54.7,
           "pressure_drop_kPa": 3.4,
           "heat_loss_W": 1123,
-          "notes": "Duplication of an existing case (case 7)"
+          "notes": ""
         }
       }
     },
@@ -689,7 +689,7 @@
           "status": "ok",
           "T_out_C": 46.5,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 1200,
+          "heat_loss_W": 1214,
           "notes": ""
         }
       }

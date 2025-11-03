@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "date": "2025-10-31",
     "source": "Perry's Chemical Engineers' Handbook 9th Ed. + CODATA 2018 + PINT",
     "note": "Constantes extractibles automatiquement. Autres constantes validées par tests unitaires. Conversions d'unités UI validées avec PINT.",

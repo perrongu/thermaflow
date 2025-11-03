@@ -158,7 +158,7 @@ test('Test 6: Compatibilité ancien format', () => {
   const oldFormat = {
     config: { totalLength: 100 },
     timestamp: Date.now(),
-    version: '1.0.0'
+    version: '1.0.1'
   };
   
   localStorage.setItem('thermaflow_last_config', JSON.stringify(oldFormat));

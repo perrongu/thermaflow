@@ -1,12 +1,12 @@
 /**
  * generate_validation_sample.js
  * 
- * Générateur d'échantillon de validation externe pour ThermaFlow v1.0.0
+ * Générateur d'échantillon de validation externe pour ThermaFlow v1.0.1
  * 
  * Stratégie: Combinaison de grille systématique (cas critiques) + Latin Hypercube Sampling
  * 
  * Usage: node scripts/generate_validation_sample.js
- * Output: validation/external_validation_sample_v1.0.json
+ * Output: validation/external_validation_sample_v1.0.1.json
  */
 
 const fs = require('fs');
@@ -697,7 +697,7 @@ function exportJSON(cases, outputPath) {
   const output = {
     metadata: {
       generator: 'ThermaFlow External Validation Sample Generator',
-      version: '1.0.0',
+      version: '1.0.1',
       date: new Date().toISOString().split('T')[0],
       total_cases: cases.length,
       description: 'Échantillon pour validation croisée avec Aspen Hysys, AFT Fathom, DWSIM',
@@ -761,7 +761,7 @@ function exportJSON(cases, outputPath) {
 
 function main() {
   console.log('╔═══════════════════════════════════════════════════════════════╗');
-  console.log('║   ThermaFlow External Validation Sample Generator v1.0.0     ║');
+  console.log('║   ThermaFlow External Validation Sample Generator v1.0.1     ║');
   console.log('╚═══════════════════════════════════════════════════════════════╝');
   
   // 1. Générer cas critiques
@@ -785,7 +785,7 @@ function main() {
   displayStatistics(allCases);
   
   // 6. Export
-  const outputPath = path.join(__dirname, '..', 'validation', 'external_validation_sample_v1.0.json');
+  const outputPath = path.join(__dirname, '..', 'validation', 'external_validation_sample_v1.0.1.json');
   exportJSON(allCases, outputPath);
   
   console.log('\n✅ Génération terminée avec succès!');
