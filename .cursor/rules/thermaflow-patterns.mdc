@@ -1,0 +1,366 @@
+---
+description: Patterns et intelligence spécifiques à ThermaFlow
+globs: 
+alwaysApply: true
+---
+
+# ThermaFlow - Project Intelligence
+
+## RÈGLE ABSOLUE DE DOCUMENTATION ⚠️
+
+**ThermaFlow utilise UNIQUEMENT la stratégie Memory Bank** (voir `memory-bank.mdc`)
+
+### Structure autorisée
+```
+/
+├── README.md                    # Page GitHub uniquement
+├── memory-bank/                 # Documentation STRATÉGIQUE (source de vérité)
+│   ├── projectbrief.md
+│   ├── productContext.md
+│   ├── systemPatterns.md
+│   ├── techContext.md
+│   ├── activeContext.md
+│   └── progress.md
+└── docs/                        # Documentation TECHNIQUE minimale
+    ├── ROADMAP.md              # Résumé (lien vers progress.md)
+    ├── CONTRIBUTING.md         # Guide contribution
+    ├── implementation/         # Détails phases (équations, refs)
+    ├── modules/                # Référence API
+    └── references/             # Sources scientifiques
+```
+
+### ❌ INTERDICTIONS STRICTES
+- JAMAIS créer: INDEX.md, ARCHITECTURE.md, OVERVIEW.md, SUMMARY.md, STATUS.md
+- JAMAIS créer fichiers .md à la racine (sauf README.md)
+- JAMAIS créer fichiers de revue (PEER_REVIEW.md, REVUE_*.md)
+- JAMAIS dupliquer info entre memory-bank/ et docs/
+- JAMAIS créer docs/README.md
+
+### ✅ Workflow documentation
+- Documentation stratégique → **memory-bank/**
+- Détails techniques → **docs/implementation/**
+- Référence API → **docs/modules/**
+- Tout le reste → **INTERDIT**
+
+## Architecture fondamentale
+
+**RÈGLE ABSOLUE**: HTML/CSS/JS pur - Aucun bundler, aucun serveur
+
+### Structure des fichiers
+```
+/
+├── index.html          # Ouverture directe (file://)
+├── css/*.css           # Styles purs
+├── js/
+│   ├── solver/         # ✅ Phase 1 COMPLÈTE - Modules calcul
+│   ├── engine/         # Phase 2 - Orchestration
+│   └── ui/             # Phase 3 - Interface
+├── data/*.js           # Données statiques
+└── tests/              # Tests Node.js uniquement
+```
+
+### Code browser vs Node.js
+
+**Dans js/ (browser uniquement)**:
+```javascript
+// ✅ PERMIS
+function calculateSomething(param) {
+  // JavaScript pur ES6
+  return result;
+}
+
+// Export conditionnel pour tests
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { calculateSomething };
+}
+```
+
+**INTERDIT dans js/**:
+- ❌ `require()` sans condition
+- ❌ `module.exports` sans condition
+- ❌ `import/export` (nécessite bundler)
+- ❌ API Node.js (fs, path, etc.)
+
+## Patterns de code établis
+
+### 1. Modules solver (Phase 1)
+
+**Template standard**:
+```javascript
+/**
+ * Calcule quelque chose
+ * @param {number} param - Description [unité SI]
+ * @returns {number} Résultat [unité SI]
+ * @throws {Error} Si paramètre invalide
+ */
+function calculateSomething(param) {
+  // 1. Validation stricte
+  if (typeof param !== 'number' || !isFinite(param)) {
+    throw new Error(`Paramètre invalide: ${param}`);
+  }
+  if (param <= 0) {
+    throw new Error(`Paramètre doit être > 0: ${param}`);
+  }
+  
+  // 2. Calcul
+  const result = /* équation avec constantes nommées */;
+  
+  // 3. Retour
+  return result;
+}
+
+// Export conditionnel
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { calculateSomething };
+}
+```
+
+### 2. Données immutables
+
+**TOUJOURS** protéger les données statiques:
+```javascript
+const materialData = {
+  steel: { k: 50.2, rho: 7850, cp: 486 }
+};
+
+Object.freeze(materialData);
+Object.freeze(materialData.steel); // Nested aussi
+```
+
+### 3. Constantes physiques
+
+**TOUJOURS** nommer les constantes:
+```javascript
+// ✅ BON
+const STEFAN_BOLTZMANN = 5.67e-8; // W/(m²·K⁴)
+const h_rad = emissivity * STEFAN_BOLTZMANN * (T1**2 + T2**2) * (T1 + T2);
+
+// ❌ MAUVAIS
+const h_rad = emissivity * 5.67e-8 * (T1**2 + T2**2) * (T1 + T2);
+```
+
+### 4. Gestion d'erreurs
+
+**Fail fast** avec messages clairs:
+```javascript
+// ✅ BON
+if (T < 0 || T > 100) {
+  throw new Error(`Température hors plage: ${T}°C (plage valide: 0-100°C)`);
+}
+
+// ❌ MAUVAIS
+if (T < 0) return null; // Erreur silencieuse
+```
+
+### 5. JSDoc complet
+
+**OBLIGATOIRE** sur toutes les fonctions:
+```javascript
+/**
+ * Calcule le nombre de Reynolds
+ * 
+ * @param {number} rho - Masse volumique [kg/m³]
+ * @param {number} V - Vitesse [m/s]
+ * @param {number} D - Diamètre [m]
+ * @param {number} mu - Viscosité dynamique [Pa·s]
+ * @returns {number} Nombre de Reynolds [-]
+ * @throws {Error} Si paramètres invalides
+ * 
+ * @reference Perry's Handbook Section 6-3
+ */
+function calculateReynolds(rho, V, D, mu) {
+  // ...
+}
+```
+
+## Standards de qualité
+
+### Tests
+- **100% des tests doivent passer** (non négociable)
+- Validation croisée multi-sources (Perry's + fluids.readthedocs.io)
+- Cas limites testés systématiquement
+- Messages d'erreur testés
+
+### Performance
+- Interpolation: < 0.2 ms ✅
+- Calcul segment: < 5 ms ✅
+- Conduite complète: < 1 s ✅
+
+### Documentation
+- JSDoc 100% fonctions
+- Unités SI explicites
+- Références scientifiques citées
+- Exemples d'utilisation
+
+## Workflow de développement
+
+### Ajout d'un module solver
+1. Créer `js/solver/nouveau-module.js`
+2. JSDoc complet avec @reference
+3. Validation stricte des entrées
+4. Export conditionnel pour tests
+5. Créer `tests/test_nouveau.js`
+6. Valider contre sources multiples (Perry's, fluids.readthedocs.io)
+7. Vérifier 100% tests passent
+8. Documenter dans `docs/implementation/`
+9. Mettre à jour Memory Bank
+
+### Modification d'un module existant
+1. Lire les tests existants
+2. Modifier le code
+3. **Vérifier TOUS les tests passent**
+4. Ajouter tests pour nouveau comportement
+5. Mettre à jour JSDoc
+6. Documenter dans Memory Bank
+
+## Choix techniques validés
+
+### Tables + Interpolation (vs équations directes)
+**Pourquoi**: Précision IAPWS-97 + performance excellente
+- Eau: Tables générées depuis IAPWS-97
+- Air: Tables avec corrélations validées
+- Interpolation linéaire 2D: < 0.2 ms
+
+### Colebrook itératif (vs approximations)
+**Pourquoi**: Standard industriel, précision garantie
+- Converge en 5-10 itérations
+- Estimation initiale Swamee-Jain
+- Churchill disponible si approximation acceptable
+
+### Méthode NTU (vs LMTD)
+**Pourquoi**: Formule explicite pour T_out
+- Pas d'itération nécessaire
+- Adapté aux échangeurs à T_amb constante
+- Plus rapide que LMTD
+
+### Tests Node.js (vs browser)
+**Pourquoi**: Rapidité, automatisation
+- Exports conditionnels dans modules
+- Tests exécutés en CLI
+- Production reste 100% browser
+
+## Anti-patterns à éviter
+
+### ❌ Code Node.js dans js/
+```javascript
+// INTERDIT
+const fs = require('fs');
+module.exports = { fonction }; // Sans condition
+```
+
+### ❌ État global muable
+```javascript
+// MAUVAIS
+let config = {};
+function setConfig(newConfig) {
+  config = newConfig; // Mutation globale
+}
+```
+
+### ❌ Validation laxiste
+```javascript
+// MAUVAIS
+function calc(x) {
+  return x * 2; // Pas de validation!
+}
+```
+
+### ❌ Magic numbers
+```javascript
+// MAUVAIS
+const result = value * 64; // C'est quoi 64?
+
+// BON
+const LAMINAR_FRICTION_CONSTANT = 64; // f = 64/Re
+const result = value * LAMINAR_FRICTION_CONSTANT;
+```
+
+### ❌ console.log en production
+```javascript
+// MAUVAIS
+function calculate() {
+  console.log('Calculating...'); // Pollution console
+}
+
+// ACCEPTABLE pour warnings
+function colebrook() {
+  if (!converged) {
+    console.warn('Colebrook: convergence non atteinte'); // OK
+  }
+}
+```
+
+## Commandes essentielles
+
+```bash
+# Tests Phase 1
+node tests/test_phase1_hydraulics.js
+node tests/test_phase1_heat_transfer.js
+node tests/test_phase1_materials.js
+
+# Démonstration
+node examples/solver_demo.js
+
+# Tous les tests
+for f in tests/test_phase1_*.js; do node "$f"; done
+
+# Génération données (si nécessaire)
+cd scripts && python3 generate_fluid_properties.py
+```
+
+## État actuel du projet
+
+### ✅ Phase 1 COMPLÈTE
+- 9 modules solver
+- 99 tests (100%)
+- Documentation complète
+- Validation scientifique rigoureuse
+
+### ⏳ Phase 2 PROCHAINE
+- pipe-segment.js
+- pipe-network.js
+- freeze-detector.js
+
+## Leçons Phase 1 à appliquer
+
+1. ✅ **Validation multi-sources** = confiance maximale
+2. ✅ **Tests unitaires systématiques** = zéro régression
+3. ✅ **JSDoc rigoureux** = code autodocumenté
+4. ✅ **Exports conditionnels** = compatibilité browser + Node.js
+5. ✅ **Fonctions pures** = testabilité et prévisibilité
+6. ✅ **Données immutables** = pas d'effets de bord
+7. ✅ **Performance mesurée** = objectifs dépassés
+
+## Communication avec utilisateur
+
+- Toujours en français ✅
+- Concis et direct ✅
+- Code concret, pas de théorie générale ✅
+- Anticiper les besoins ✅
+- Traiter comme un expert ✅
+
+## Références scientifiques
+
+### Sources principales
+- **Perry's Handbook**: Sections 5 (Heat Transfer) et 6 (Fluid Dynamics)
+- **IAPWS-97**: Propriétés eau
+- **fluids.readthedocs.io**: Validation croisée
+
+### Tables de référence
+- Section 6-7: Friction factors
+- Section 5-12: Internal convection
+- Section 5-13: External convection
+- Section 2-312: Material properties
+
+## Évolution du projet
+
+### Prochaines étapes
+1. Phase 2: Engine (segment → network → detector)
+2. Phase 3: UI (formulaire + charts + export)
+3. Release v1.0.0
+
+### Vision long terme
+- API externe
+- Fluides avec glycol
+- Analyse transitoire
+- Optimisation automatique

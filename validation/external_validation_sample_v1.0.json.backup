@@ -1,0 +1,6993 @@
+{
+  "metadata": {
+    "generator": "ThermaFlow External Validation Sample Generator",
+    "version": "1.0.0",
+    "date": "2025-11-01",
+    "total_cases": 130,
+    "description": "Échantillon pour validation croisée avec Aspen Hysys, AFT Fathom, DWSIM",
+    "sampling_strategy": {
+      "critical_cases": 30,
+      "lhs_cases": 100,
+      "method": "Grille systématique + Latin Hypercube Sampling"
+    },
+    "ranges": {
+      "length_m": {
+        "min": 1,
+        "max": 1000
+      },
+      "temp_C": {
+        "min": 1,
+        "max": 100
+      },
+      "flow_m3h": {
+        "min": 0.1,
+        "max": 6000
+      },
+      "pressure_kPag": {
+        "min": 100,
+        "max": 1000
+      },
+      "ambient_temp_C": {
+        "min": -50,
+        "max": 30
+      },
+      "wind_kmh": {
+        "min": 0,
+        "max": 108
+      }
+    },
+    "nps_ranges": {
+      "steel": {
+        "min": 0.5,
+        "max": 36
+      },
+      "copper": {
+        "min": 0.25,
+        "max": 12
+      },
+      "stainless_steel": {
+        "min": 0.125,
+        "max": 24
+      }
+    }
+  },
+  "cases": [
+    {
+      "case_id": 1,
+      "description": "SAFE-1 (modifié pour éviter gel)",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 55,
+          "flow_m3h": 5,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": -15,
+          "wind_kmh": 15
+        },
+        "insulation": {
+          "material": "polyurethane_foam",
+          "thickness_mm": 50
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 54.9,
+          "pressure_drop_kPa": 8.9,
+          "heat_loss_W": 400,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 54.8,
+          "pressure_drop_kPa": 8.9,
+          "heat_loss_W": 1153,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 2,
+      "description": "Température eau minimale, air chaud",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 1,
+          "flow_m3h": 5,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": 30,
+          "wind_kmh": 15
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 4.1,
+          "pressure_drop_kPa": 10.9,
+          "heat_loss_W": -18207,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 4,
+          "pressure_drop_kPa": 10.9,
+          "heat_loss_W": -17532,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 3,
+      "description": "Température eau maximale, air très froid",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 100,
+          "flow_m3h": 5,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": -40,
+          "wind_kmh": 15
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 83.3,
+          "pressure_drop_kPa": 8.2,
+          "heat_loss_W": 93678,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 83.7,
+          "pressure_drop_kPa": 8.1,
+          "heat_loss_W": 91250,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 4,
+      "description": "Température eau maximale, air chaud",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 100,
+          "flow_m3h": 5,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": 30,
+          "wind_kmh": 15
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 92.1,
+          "pressure_drop_kPa": 8.1,
+          "heat_loss_W": 44248,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 91.9,
+          "pressure_drop_kPa": 8.1,
+          "heat_loss_W": 45535,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 5,
+      "description": "Température eau moyenne, air très froid",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 5,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": -40,
+          "wind_kmh": 15
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 39.5,
+          "pressure_drop_kPa": 9.1,
+          "heat_loss_W": 60164,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 40.1,
+          "pressure_drop_kPa": 9.1,
+          "heat_loss_W": 56855,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 6,
+      "description": "Température eau moyenne, air chaud",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 5,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": 30,
+          "wind_kmh": 15
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 47.8,
+          "pressure_drop_kPa": 9,
+          "heat_loss_W": 12631,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 47.8,
+          "pressure_drop_kPa": 9,
+          "heat_loss_W": 12543,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 7,
+      "description": "SAFE-7 (modifié pour éviter gel)",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 55,
+          "flow_m3h": 3,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": -15,
+          "wind_kmh": 0
+        },
+        "insulation": {
+          "material": "polyurethane_foam",
+          "thickness_mm": 50
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 54.9,
+          "pressure_drop_kPa": 3.4,
+          "heat_loss_W": 241,
+          "notes": "0.001 m/s as wind speed"
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 54.7,
+          "pressure_drop_kPa": 3.4,
+          "heat_loss_W": 1123,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 8,
+      "description": "SAFE-8 (modifié pour éviter gel)",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 55,
+          "flow_m3h": 3,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": -15,
+          "wind_kmh": 50
+        },
+        "insulation": {
+          "material": "polyurethane_foam",
+          "thickness_mm": 50
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 54.9,
+          "pressure_drop_kPa": 3.4,
+          "heat_loss_W": 404,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 54.7,
+          "pressure_drop_kPa": 3.4,
+          "heat_loss_W": 1159,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 9,
+      "description": "SAFE-9 (modifié pour éviter gel)",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 55,
+          "flow_m3h": 3,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": -15,
+          "wind_kmh": 0
+        },
+        "insulation": {
+          "material": "polyurethane_foam",
+          "thickness_mm": 50
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 54.7,
+          "pressure_drop_kPa": 3.4,
+          "heat_loss_W": 1123,
+          "notes": "Duplication of an existing case (case 7)"
+        }
+      }
+    },
+    {
+      "case_id": 10,
+      "description": "Risque gel modéré avec isolation moyenne",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 5,
+          "flow_m3h": 3,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": -40,
+          "wind_kmh": 30
+        },
+        "insulation": {
+          "material": "fiberglass",
+          "thickness_mm": 25
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 4.8,
+          "pressure_drop_kPa": 4.3,
+          "heat_loss_W": 804,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 4.5,
+          "pressure_drop_kPa": 4.3,
+          "heat_loss_W": 1807,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 11,
+      "description": "Débit minimal, petit diamètre",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 0.5,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 0.1,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": 0,
+          "wind_kmh": 15
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 2.3,
+          "pressure_drop_kPa": 2.6,
+          "heat_loss_W": 5484,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 4.4,
+          "pressure_drop_kPa": 2.3,
+          "heat_loss_W": 5232,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 12,
+      "description": "SAFE-12 (modifié pour éviter gel)",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 4,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 0.3,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": 0,
+          "wind_kmh": 15
+        },
+        "insulation": {
+          "material": "polyurethane_foam",
+          "thickness_mm": 50
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 48.7,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 438,
+          "notes": "Strange result for DWSIM"
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 46.5,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 1200,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 13,
+      "description": "Débit maximal, grand diamètre",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 12,
+          "length_m": 20
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 6000,
+          "pressure_kPag": 450
+        },
+        "ambient": {
+          "temp_C": 0,
+          "wind_kmh": 15
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 50,
+          "pressure_drop_kPa": 220.4,
+          "heat_loss_W": 17540,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 50,
+          "pressure_drop_kPa": 227.1,
+          "heat_loss_W": 21293,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 14,
+      "description": "Débit élevé, diamètre moyen",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 6,
+          "length_m": 20
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 1000,
+          "pressure_kPag": 450
+        },
+        "ambient": {
+          "temp_C": 0,
+          "wind_kmh": 15
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 50,
+          "pressure_drop_kPa": 214.5,
+          "heat_loss_W": 12170,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 50,
+          "pressure_drop_kPa": 214.8,
+          "heat_loss_W": 13276,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 15,
+      "description": "Acier petit diamètre, longueur minimale",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 0.5,
+          "length_m": 1
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 5,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": 0,
+          "wind_kmh": 15
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 50,
+          "pressure_drop_kPa": 41.6,
+          "heat_loss_W": 218,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 50,
+          "pressure_drop_kPa": 42.4,
+          "heat_loss_W": 178,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 16,
+      "description": "SAFE-16 (modifié pour éviter gel)",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 36,
+          "length_m": 1000
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 5,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": 0,
+          "wind_kmh": 15
+        },
+        "insulation": {
+          "material": "polyurethane_foam",
+          "thickness_mm": 50
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "ok",
+          "T_out_C": 39.8,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 61056,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "case_not_supported",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": "NPS not available in DWSIM"
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 38.7,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 65023,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 17,
+      "description": "Cuivre petit diamètre",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "K",
+          "nps": 2,
+          "length_m": 10
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 5,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": 0,
+          "wind_kmh": 15
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "case_not_supported",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 49.5,
+          "pressure_drop_kPa": 0.9,
+          "heat_loss_W": 3088,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 18,
+      "description": "Cuivre grand diamètre",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "M",
+          "nps": 12,
+          "length_m": 500
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 5,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": 0,
+          "wind_kmh": 15
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "case_not_supported",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 11.9,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 218694,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 19,
+      "description": "Inox petit diamètre",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 2,
+          "length_m": 5
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 5,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": 0,
+          "wind_kmh": 15
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 49.7,
+          "pressure_drop_kPa": 0.4,
+          "heat_loss_W": 1626,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 49.7,
+          "pressure_drop_kPa": 0.3,
+          "heat_loss_W": 1509,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 20,
+      "description": "Inox grand diamètre",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "80S",
+          "nps": 24,
+          "length_m": 800
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 5,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": 0,
+          "wind_kmh": 15
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 6.26,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 251096,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 4.7,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 260254,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 21,
+      "description": "Isolation minimale fibre de verre",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 5,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": -20,
+          "wind_kmh": 30
+        },
+        "insulation": {
+          "material": "fiberglass",
+          "thickness_mm": 13
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 49.6,
+          "pressure_drop_kPa": 9,
+          "heat_loss_W": 2092,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 49.2,
+          "pressure_drop_kPa": 9,
+          "heat_loss_W": 4612,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 22,
+      "description": "Isolation maximale polyuréthane",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 5,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": -20,
+          "wind_kmh": 30
+        },
+        "insulation": {
+          "material": "polyurethane_foam",
+          "thickness_mm": 100
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 50,
+          "pressure_drop_kPa": 9,
+          "heat_loss_W": 270,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 49.9,
+          "pressure_drop_kPa": 9,
+          "heat_loss_W": 778,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 23,
+      "description": "Isolation moyenne laine minérale",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 5,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": -20,
+          "wind_kmh": 30
+        },
+        "insulation": {
+          "material": "mineral_wool",
+          "thickness_mm": 50
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 49.7,
+          "pressure_drop_kPa": 9,
+          "heat_loss_W": 1771,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 49.7,
+          "pressure_drop_kPa": 9,
+          "heat_loss_W": 1683,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 24,
+      "description": "Isolation élastomère",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 5,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": -20,
+          "wind_kmh": 30
+        },
+        "insulation": {
+          "material": "elastomeric_foam",
+          "thickness_mm": 25
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "case_not_supported",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 49.5,
+          "pressure_drop_kPa": 9,
+          "heat_loss_W": 2821,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 25,
+      "description": "Pression minimale",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 50
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 5,
+          "pressure_kPag": 150
+        },
+        "ambient": {
+          "temp_C": 0,
+          "wind_kmh": 15
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 47.1,
+          "pressure_drop_kPa": 4.5,
+          "heat_loss_W": 16642,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 47.2,
+          "pressure_drop_kPa": 4.5,
+          "heat_loss_W": 16121,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 26,
+      "description": "Pression maximale",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 5,
+          "pressure_kPag": 1000
+        },
+        "ambient": {
+          "temp_C": 0,
+          "wind_kmh": 15
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 44.4,
+          "pressure_drop_kPa": 9,
+          "heat_loss_W": 32316,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 44.5,
+          "pressure_drop_kPa": 9,
+          "heat_loss_W": 31304,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 27,
+      "description": "Vent nul",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 5,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": 0,
+          "wind_kmh": 0
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 50,
+          "pressure_drop_kPa": 9,
+          "heat_loss_W": 0,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 48.5,
+          "pressure_drop_kPa": 9,
+          "heat_loss_W": 8848,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 28,
+      "description": "Vent maximal",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 5,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": 0,
+          "wind_kmh": 108
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 34.3,
+          "pressure_drop_kPa": 9.2,
+          "heat_loss_W": 90289,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 35.2,
+          "pressure_drop_kPa": 9.1,
+          "heat_loss_W": 84795,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 29,
+      "description": "Vent modéré",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 5,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": 0,
+          "wind_kmh": 30
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 41.8,
+          "pressure_drop_kPa": 9.1,
+          "heat_loss_W": 47186,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 42.4,
+          "pressure_drop_kPa": 9,
+          "heat_loss_W": 43682,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 30,
+      "description": "Vent élevé",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 100
+        },
+        "fluid": {
+          "temp_C": 50,
+          "flow_m3h": 5,
+          "pressure_kPag": 300
+        },
+        "ambient": {
+          "temp_C": 0,
+          "wind_kmh": 70
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 37.2,
+          "pressure_drop_kPa": 9.1,
+          "heat_loss_W": 73189,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 38.2,
+          "pressure_drop_kPa": 9.1,
+          "heat_loss_W": 67463,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 31,
+      "description": "Cas LHS 1: steel 160 1.25\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 1.25,
+          "length_m": 75
+        },
+        "fluid": {
+          "temp_C": 53.9,
+          "flow_m3h": 4.7,
+          "pressure_kPag": 741
+        },
+        "ambient": {
+          "temp_C": -29,
+          "wind_kmh": 16
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 47.1,
+          "pressure_drop_kPa": 45.4,
+          "heat_loss_W": 38892,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 47.7,
+          "pressure_drop_kPa": 45.5,
+          "heat_loss_W": 33265,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 32,
+      "description": "Cas LHS 2: steel 40 30\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 30,
+          "length_m": 232
+        },
+        "fluid": {
+          "temp_C": 25.6,
+          "flow_m3h": 27.9,
+          "pressure_kPag": 926
+        },
+        "ambient": {
+          "temp_C": -9,
+          "wind_kmh": 12
+        },
+        "insulation": {
+          "material": "elastomeric_foam",
+          "thickness_mm": 21
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "case_not_supported",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 24.6,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 32259,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 33,
+      "description": "Cas LHS 3: stainless_steel 10S 3\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 3,
+          "length_m": 35
+        },
+        "fluid": {
+          "temp_C": 46.4,
+          "flow_m3h": 1.3,
+          "pressure_kPag": 699
+        },
+        "ambient": {
+          "temp_C": -19,
+          "wind_kmh": 1
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 44,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 3649,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 43.3,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 4613,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 34,
+      "description": "Cas LHS 4: copper M 6\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "M",
+          "nps": 6,
+          "length_m": 201
+        },
+        "fluid": {
+          "temp_C": 26.6,
+          "flow_m3h": 39.1,
+          "pressure_kPag": 881
+        },
+        "ambient": {
+          "temp_C": 6,
+          "wind_kmh": 22
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "case_not_supported",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 25.3,
+          "pressure_drop_kPa": 4,
+          "heat_loss_W": 59721,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 35,
+      "description": "Cas LHS 5: steel 160 1.25\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 1.25,
+          "length_m": 72
+        },
+        "fluid": {
+          "temp_C": 69.1,
+          "flow_m3h": 0.7,
+          "pressure_kPag": 850
+        },
+        "ambient": {
+          "temp_C": -19,
+          "wind_kmh": 13
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 35.5,
+          "pressure_drop_kPa": 1.3,
+          "heat_loss_W": 26712,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 37.6,
+          "pressure_drop_kPa": 1.3,
+          "heat_loss_W": 25013,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 36,
+      "description": "Cas LHS 6: stainless_steel 10S 0.25\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 1,
+          "length_m": 44
+        },
+        "fluid": {
+          "temp_C": 34.5,
+          "flow_m3h": 6.5,
+          "pressure_kPag": 240
+        },
+        "ambient": {
+          "temp_C": 3,
+          "wind_kmh": 27
+        },
+        "insulation": {
+          "material": "mineral_wool",
+          "thickness_mm": 25
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 34.5,
+          "pressure_drop_kPa": 164.7,
+          "heat_loss_W": 361,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 34.5,
+          "pressure_drop_kPa": 139.7,
+          "heat_loss_W": 352,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 37,
+      "description": "Cas LHS 7: stainless_steel 10S 14\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 14,
+          "length_m": 14
+        },
+        "fluid": {
+          "temp_C": 12,
+          "flow_m3h": 5.8,
+          "pressure_kPag": 570
+        },
+        "ambient": {
+          "temp_C": 7,
+          "wind_kmh": 12
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 11.9,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 899,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 11.9,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 939,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 38,
+      "description": "Cas LHS 8: steel 80 0.75\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "80",
+          "nps": 0.75,
+          "length_m": 467
+        },
+        "fluid": {
+          "temp_C": 39.5,
+          "flow_m3h": 0.7,
+          "pressure_kPag": 720
+        },
+        "ambient": {
+          "temp_C": 3,
+          "wind_kmh": 5
+        },
+        "insulation": {
+          "material": "fiberglass",
+          "thickness_mm": 47
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 38,
+          "pressure_drop_kPa": 183.7,
+          "heat_loss_W": 1203,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 36.2,
+          "pressure_drop_kPa": 257.8,
+          "heat_loss_W": 2639,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 39,
+      "description": "Cas LHS 9: stainless_steel 10S 2.5\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 2.5,
+          "length_m": 138
+        },
+        "fluid": {
+          "temp_C": 80,
+          "flow_m3h": 54.7,
+          "pressure_kPag": 929
+        },
+        "ambient": {
+          "temp_C": -3,
+          "wind_kmh": 2
+        },
+        "insulation": {
+          "material": "fiberglass",
+          "thickness_mm": 25
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 80,
+          "pressure_drop_kPa": 344,
+          "heat_loss_W": 2271,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 79.9,
+          "pressure_drop_kPa": 285.3,
+          "heat_loss_W": 4862,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 40,
+      "description": "Cas LHS 10: steel 40 30\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 30,
+          "length_m": 28
+        },
+        "fluid": {
+          "temp_C": 23,
+          "flow_m3h": 49.5,
+          "pressure_kPag": 246
+        },
+        "ambient": {
+          "temp_C": -18,
+          "wind_kmh": 24
+        },
+        "insulation": {
+          "material": "mineral_wool",
+          "thickness_mm": 51
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "case_not_supported",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 23,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 2102,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 41,
+      "description": "Cas LHS 11: steel 80 0.75\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "80",
+          "nps": 0.75,
+          "length_m": 103
+        },
+        "fluid": {
+          "temp_C": 17.7,
+          "flow_m3h": 1.5,
+          "pressure_kPag": 434
+        },
+        "ambient": {
+          "temp_C": -13,
+          "wind_kmh": 21
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 8.1,
+          "pressure_drop_kPa": 182.6,
+          "heat_loss_W": 16772,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 10.2,
+          "pressure_drop_kPa": 255,
+          "heat_loss_W": 13005,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 42,
+      "description": "Cas LHS 12: stainless_steel 10S 0.5\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 1,
+          "length_m": 10
+        },
+        "fluid": {
+          "temp_C": 73.9,
+          "flow_m3h": 23.7,
+          "pressure_kPag": 503
+        },
+        "ambient": {
+          "temp_C": -8,
+          "wind_kmh": 18
+        },
+        "insulation": {
+          "material": "fiberglass",
+          "thickness_mm": 74
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 74,
+          "pressure_drop_kPa": 457.8,
+          "heat_loss_W": 53,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 73.9,
+          "pressure_drop_kPa": 361.4,
+          "heat_loss_W": 120,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 43,
+      "description": "Cas LHS 13: copper M 3\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "M",
+          "nps": 3,
+          "length_m": 18
+        },
+        "fluid": {
+          "temp_C": 82.4,
+          "flow_m3h": 3.2,
+          "pressure_kPag": 351
+        },
+        "ambient": {
+          "temp_C": -27,
+          "wind_kmh": 26
+        },
+        "insulation": {
+          "material": "elastomeric_foam",
+          "thickness_mm": 19
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "case_not_supported",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 82.1,
+          "pressure_drop_kPa": 0.1,
+          "heat_loss_W": 1207,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 44,
+      "description": "Cas LHS 14: stainless_steel 10S 0.375\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 1,
+          "length_m": 10
+        },
+        "fluid": {
+          "temp_C": 84.3,
+          "flow_m3h": 14.5,
+          "pressure_kPag": 500
+        },
+        "ambient": {
+          "temp_C": -27,
+          "wind_kmh": 2
+        },
+        "insulation": {
+          "material": "mineral_wool",
+          "thickness_mm": 70
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 84.3,
+          "pressure_drop_kPa": 171.2,
+          "heat_loss_W": 164,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 84.3,
+          "pressure_drop_kPa": 136.4,
+          "heat_loss_W": 156,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 45,
+      "description": "Cas LHS 15: stainless_steel 10S 24\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 24,
+          "length_m": 30
+        },
+        "fluid": {
+          "temp_C": 13.3,
+          "flow_m3h": 3.7,
+          "pressure_kPag": 993
+        },
+        "ambient": {
+          "temp_C": -2,
+          "wind_kmh": 3
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 12.7,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 2649,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 12.3,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 4103,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 46,
+      "description": "Cas LHS 16: steel 80 2.5\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "80",
+          "nps": 2.5,
+          "length_m": 15
+        },
+        "fluid": {
+          "temp_C": 45.8,
+          "flow_m3h": 7.3,
+          "pressure_kPag": 170
+        },
+        "ambient": {
+          "temp_C": -6,
+          "wind_kmh": 19
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 44.9,
+          "pressure_drop_kPa": 1.5,
+          "heat_loss_W": 7355,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 45,
+          "pressure_drop_kPa": 1.9,
+          "heat_loss_W": 6495,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 47,
+      "description": "Cas LHS 17: stainless_steel 80S 18\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "80S",
+          "nps": 18,
+          "length_m": 15
+        },
+        "fluid": {
+          "temp_C": 37,
+          "flow_m3h": 30.7,
+          "pressure_kPag": 889
+        },
+        "ambient": {
+          "temp_C": -14,
+          "wind_kmh": 7
+        },
+        "insulation": {
+          "material": "polyurethane_foam",
+          "thickness_mm": 28
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 37,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 362,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 37,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 990,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 48,
+      "description": "Cas LHS 18: copper L 0.25\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "L",
+          "nps": 2,
+          "length_m": 10
+        },
+        "fluid": {
+          "temp_C": 72,
+          "flow_m3h": 2.2,
+          "pressure_kPag": 278
+        },
+        "ambient": {
+          "temp_C": -23,
+          "wind_kmh": 11
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "case_not_supported",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 70,
+          "pressure_drop_kPa": 0.2,
+          "heat_loss_W": 5075,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 49,
+      "description": "Cas LHS 19: copper K 0.5\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "K",
+          "nps": 0.5,
+          "length_m": 54
+        },
+        "fluid": {
+          "temp_C": 66.3,
+          "flow_m3h": 1.1,
+          "pressure_kPag": 479
+        },
+        "ambient": {
+          "temp_C": 9,
+          "wind_kmh": 6
+        },
+        "insulation": {
+          "material": "elastomeric_foam",
+          "thickness_mm": 17
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "case_not_supported",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 65.8,
+          "pressure_drop_kPa": 186.2,
+          "heat_loss_W": 641,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 50,
+      "description": "Cas LHS 20: steel 80 3\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "80",
+          "nps": 3,
+          "length_m": 112
+        },
+        "fluid": {
+          "temp_C": 63.4,
+          "flow_m3h": 1.7,
+          "pressure_kPag": 657
+        },
+        "ambient": {
+          "temp_C": 9,
+          "wind_kmh": 11
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 44.7,
+          "pressure_drop_kPa": 0.3,
+          "heat_loss_W": 36383,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 45,
+          "pressure_drop_kPa": 0.3,
+          "heat_loss_W": 35681,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 51,
+      "description": "Cas LHS 21: steel 40 1\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 1,
+          "length_m": 446
+        },
+        "fluid": {
+          "temp_C": 31.2,
+          "flow_m3h": 1,
+          "pressure_kPag": 481
+        },
+        "ambient": {
+          "temp_C": -12,
+          "wind_kmh": 17
+        },
+        "insulation": {
+          "material": "mineral_wool",
+          "thickness_mm": 38
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 27.9,
+          "pressure_drop_kPa": 63,
+          "heat_loss_W": 3849,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 28,
+          "pressure_drop_kPa": 63.2,
+          "heat_loss_W": 3659,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 52,
+      "description": "Cas LHS 22: steel 160 14\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "160",
+          "nps": 14,
+          "length_m": 349
+        },
+        "fluid": {
+          "temp_C": 65.8,
+          "flow_m3h": 2,
+          "pressure_kPag": 982
+        },
+        "ambient": {
+          "temp_C": -16,
+          "wind_kmh": 21
+        },
+        "insulation": {
+          "material": "mineral_wool",
+          "thickness_mm": 56
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 55.5,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 23541,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 55.9,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 22492,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 53,
+      "description": "Cas LHS 23: copper K 1.25\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "K",
+          "nps": 1.25,
+          "length_m": 20
+        },
+        "fluid": {
+          "temp_C": 30.4,
+          "flow_m3h": 21.3,
+          "pressure_kPag": 816
+        },
+        "ambient": {
+          "temp_C": -8,
+          "wind_kmh": 9
+        },
+        "insulation": {
+          "material": "elastomeric_foam",
+          "thickness_mm": 22
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "case_not_supported",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 30.4,
+          "pressure_drop_kPa": 261.4,
+          "heat_loss_W": 225,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 54,
+      "description": "Cas LHS 24: steel 80 1.25\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "80",
+          "nps": 1.25,
+          "length_m": 46
+        },
+        "fluid": {
+          "temp_C": 89.7,
+          "flow_m3h": 1,
+          "pressure_kPag": 677
+        },
+        "ambient": {
+          "temp_C": -29,
+          "wind_kmh": 10
+        },
+        "insulation": {
+          "material": "fiberglass",
+          "thickness_mm": 41
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 89.2,
+          "pressure_drop_kPa": 2,
+          "heat_loss_W": 548,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 88.6,
+          "pressure_drop_kPa": 2.9,
+          "heat_loss_W": 1233,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 55,
+      "description": "Cas LHS 25: steel 40 36\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 36,
+          "length_m": 29
+        },
+        "fluid": {
+          "temp_C": 43.1,
+          "flow_m3h": 20,
+          "pressure_kPag": 956
+        },
+        "ambient": {
+          "temp_C": -21,
+          "wind_kmh": 17
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "case_not_supported",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 40,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 70415,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 56,
+      "description": "Cas LHS 26: stainless_steel 40S 8\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "40S",
+          "nps": 8,
+          "length_m": 20
+        },
+        "fluid": {
+          "temp_C": 46.9,
+          "flow_m3h": 4.5,
+          "pressure_kPag": 499
+        },
+        "ambient": {
+          "temp_C": 1,
+          "wind_kmh": 29
+        },
+        "insulation": {
+          "material": "elastomeric_foam",
+          "thickness_mm": 42
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "case_not_supported",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 46.8,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 686,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 57,
+      "description": "Cas LHS 27: stainless_steel 40S 3\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "40S",
+          "nps": 3,
+          "length_m": 16
+        },
+        "fluid": {
+          "temp_C": 72.6,
+          "flow_m3h": 2.2,
+          "pressure_kPag": 140
+        },
+        "ambient": {
+          "temp_C": 10,
+          "wind_kmh": 12
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 69.8,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 7073,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 70,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 6534,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 58,
+      "description": "Cas LHS 28: steel 40 2.5\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2.5,
+          "length_m": 50
+        },
+        "fluid": {
+          "temp_C": 83.2,
+          "flow_m3h": 78.1,
+          "pressure_kPag": 500
+        },
+        "ambient": {
+          "temp_C": -13,
+          "wind_kmh": 5
+        },
+        "insulation": {
+          "material": "fiberglass",
+          "thickness_mm": 27
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 83.3,
+          "pressure_drop_kPa": 352.2,
+          "heat_loss_W": 930,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 83.2,
+          "pressure_drop_kPa": 354.4,
+          "heat_loss_W": 2049,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 59,
+      "description": "Cas LHS 29: steel 160 4\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 4,
+          "length_m": 136
+        },
+        "fluid": {
+          "temp_C": 58.1,
+          "flow_m3h": 19.2,
+          "pressure_kPag": 671
+        },
+        "ambient": {
+          "temp_C": -6,
+          "wind_kmh": 22
+        },
+        "insulation": {
+          "material": "elastomeric_foam",
+          "thickness_mm": 29
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "case_not_supported",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 57.9,
+          "pressure_drop_kPa": 5.4,
+          "heat_loss_W": 5137,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 60,
+      "description": "Cas LHS 30: stainless_steel 10S 0.125\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 2,
+          "length_m": 50
+        },
+        "fluid": {
+          "temp_C": 10.5,
+          "flow_m3h": 2.6,
+          "pressure_kPag": 428
+        },
+        "ambient": {
+          "temp_C": 8,
+          "wind_kmh": 28
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 10.5,
+          "pressure_drop_kPa": 1.3,
+          "heat_loss_W": 20,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 10.2,
+          "pressure_drop_kPa": 1.3,
+          "heat_loss_W": 961,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 61,
+      "description": "Cas LHS 31: stainless_steel 40S 10\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "40S",
+          "nps": 10,
+          "length_m": 17
+        },
+        "fluid": {
+          "temp_C": 77,
+          "flow_m3h": 5.2,
+          "pressure_kPag": 661
+        },
+        "ambient": {
+          "temp_C": 5,
+          "wind_kmh": 10
+        },
+        "insulation": {
+          "material": "elastomeric_foam",
+          "thickness_mm": 20
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "case_not_supported",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 76.7,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 1969,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 62,
+      "description": "Cas LHS 32: stainless_steel 40S 1.25\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "40S",
+          "nps": 1.25,
+          "length_m": 96
+        },
+        "fluid": {
+          "temp_C": 14.9,
+          "flow_m3h": 0.8,
+          "pressure_kPag": 648
+        },
+        "ambient": {
+          "temp_C": -5,
+          "wind_kmh": 27
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 4.1,
+          "pressure_drop_kPa": 2.7,
+          "heat_loss_W": 10096,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 5.3,
+          "pressure_drop_kPa": 2.6,
+          "heat_loss_W": 8914,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 63,
+      "description": "Cas LHS 33: steel 120 24\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "120",
+          "nps": 24,
+          "length_m": 127
+        },
+        "fluid": {
+          "temp_C": 85.5,
+          "flow_m3h": 31.5,
+          "pressure_kPag": 459
+        },
+        "ambient": {
+          "temp_C": 4,
+          "wind_kmh": 21
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 76.7,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 312889,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 74.9,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 377119,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 64,
+      "description": "Cas LHS 34: stainless_steel 40S 1.25\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "40S",
+          "nps": 1.25,
+          "length_m": 16
+        },
+        "fluid": {
+          "temp_C": 51.1,
+          "flow_m3h": 4.9,
+          "pressure_kPag": 859
+        },
+        "ambient": {
+          "temp_C": 0,
+          "wind_kmh": 22
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 50.1,
+          "pressure_drop_kPa": 10.5,
+          "heat_loss_W": 5802,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 50.2,
+          "pressure_drop_kPa": 9.2,
+          "heat_loss_W": 4891,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 65,
+      "description": "Cas LHS 35: steel 80 4\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "80",
+          "nps": 4,
+          "length_m": 159
+        },
+        "fluid": {
+          "temp_C": 57.4,
+          "flow_m3h": 11.5,
+          "pressure_kPag": 391
+        },
+        "ambient": {
+          "temp_C": -18,
+          "wind_kmh": 19
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "ok",
+          "T_out_C": 47.2,
+          "pressure_drop_kPa": 3.1,
+          "heat_loss_W": 133460,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 47.7,
+          "pressure_drop_kPa": 3.7,
+          "heat_loss_W": 127575,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 66,
+      "description": "Cas LHS 36: stainless_steel 40S 4\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "40S",
+          "nps": 4,
+          "length_m": 22
+        },
+        "fluid": {
+          "temp_C": 77.9,
+          "flow_m3h": 1.3,
+          "pressure_kPag": 450
+        },
+        "ambient": {
+          "temp_C": -15,
+          "wind_kmh": 29
+        },
+        "insulation": {
+          "material": "mineral_wool",
+          "thickness_mm": 22
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 76.9,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 1421,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 67,
+      "description": "Cas LHS 37: copper K 0.75\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "K",
+          "nps": 0.75,
+          "length_m": 12
+        },
+        "fluid": {
+          "temp_C": 68.3,
+          "flow_m3h": 8.3,
+          "pressure_kPag": 500
+        },
+        "ambient": {
+          "temp_C": -4,
+          "wind_kmh": 27
+        },
+        "insulation": {
+          "material": "elastomeric_foam",
+          "thickness_mm": 63
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 68.3,
+          "pressure_drop_kPa": 238.8,
+          "heat_loss_W": 114,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 68,
+      "description": "Cas LHS 38: stainless_steel 80S 4\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "80S",
+          "nps": 4,
+          "length_m": 51
+        },
+        "fluid": {
+          "temp_C": 39.6,
+          "flow_m3h": 9.2,
+          "pressure_kPag": 468
+        },
+        "ambient": {
+          "temp_C": -8,
+          "wind_kmh": 6
+        },
+        "insulation": {
+          "material": "elastomeric_foam",
+          "thickness_mm": 40
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 39.5,
+          "pressure_drop_kPa": 0.8,
+          "heat_loss_W": 1081,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 69,
+      "description": "Cas LHS 39: steel 80 30\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "80",
+          "nps": 24,
+          "length_m": 244
+        },
+        "fluid": {
+          "temp_C": 33.6,
+          "flow_m3h": 47.2,
+          "pressure_kPag": 756
+        },
+        "ambient": {
+          "temp_C": -27,
+          "wind_kmh": 7
+        },
+        "insulation": {
+          "material": "fiberglass",
+          "thickness_mm": 36
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 33,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 30285,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 70,
+      "description": "Cas LHS 40: steel 80 1\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "80",
+          "nps": 1,
+          "length_m": 23
+        },
+        "fluid": {
+          "temp_C": 28.1,
+          "flow_m3h": 0.9,
+          "pressure_kPag": 380
+        },
+        "ambient": {
+          "temp_C": -23,
+          "wind_kmh": 7
+        },
+        "insulation": {
+          "material": "fiberglass",
+          "thickness_mm": 39
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 27.9,
+          "pressure_drop_kPa": 5.6,
+          "heat_loss_W": 237,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 71,
+      "description": "Cas LHS 41: stainless_steel 40S 0.125\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "40S",
+          "nps": 2,
+          "length_m": 50
+        },
+        "fluid": {
+          "temp_C": 89.1,
+          "flow_m3h": 0.6,
+          "pressure_kPag": 903
+        },
+        "ambient": {
+          "temp_C": 2,
+          "wind_kmh": 8
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 65.5,
+          "pressure_drop_kPa": 0.1,
+          "heat_loss_W": 15936,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 72,
+      "description": "Cas LHS 42: steel 160 24\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "160",
+          "nps": 24,
+          "length_m": 34
+        },
+        "fluid": {
+          "temp_C": 44.1,
+          "flow_m3h": 37,
+          "pressure_kPag": 870
+        },
+        "ambient": {
+          "temp_C": -13,
+          "wind_kmh": 3
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 43.4,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 31816,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 73,
+      "description": "Cas LHS 43: copper K 10\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "K",
+          "nps": 10,
+          "length_m": 41
+        },
+        "fluid": {
+          "temp_C": 47.7,
+          "flow_m3h": 5.7,
+          "pressure_kPag": 512
+        },
+        "ambient": {
+          "temp_C": -17,
+          "wind_kmh": 29
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 39.2,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 55823,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 74,
+      "description": "Cas LHS 44: copper M 0.5\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "M",
+          "nps": 1,
+          "length_m": 10
+        },
+        "fluid": {
+          "temp_C": 21.4,
+          "flow_m3h": 20,
+          "pressure_kPag": 800
+        },
+        "ambient": {
+          "temp_C": -5,
+          "wind_kmh": 23
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 21.3,
+          "pressure_drop_kPa": 282,
+          "heat_loss_W": 1379,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 75,
+      "description": "Cas LHS 45: stainless_steel 80S 0.75\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "80S",
+          "nps": 0.75,
+          "length_m": 207
+        },
+        "fluid": {
+          "temp_C": 32.2,
+          "flow_m3h": 0.9,
+          "pressure_kPag": 488
+        },
+        "ambient": {
+          "temp_C": -4,
+          "wind_kmh": 20
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 11.4,
+          "pressure_drop_kPa": 173.5,
+          "heat_loss_W": 21681,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 76,
+      "description": "Cas LHS 46: steel 80 3\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "80",
+          "nps": 3,
+          "length_m": 23
+        },
+        "fluid": {
+          "temp_C": 49.8,
+          "flow_m3h": 44.8,
+          "pressure_kPag": 189
+        },
+        "ambient": {
+          "temp_C": 5,
+          "wind_kmh": 16
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 49.6,
+          "pressure_drop_kPa": 30.3,
+          "heat_loss_W": 9101,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 77,
+      "description": "Cas LHS 47: steel 120 36\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "120",
+          "nps": 24,
+          "length_m": 19
+        },
+        "fluid": {
+          "temp_C": 16.1,
+          "flow_m3h": 12.4,
+          "pressure_kPag": 178
+        },
+        "ambient": {
+          "temp_C": -6,
+          "wind_kmh": 15
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 15.4,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 10600,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 78,
+      "description": "Cas LHS 48: stainless_steel 10S 0.125\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 2,
+          "length_m": 76
+        },
+        "fluid": {
+          "temp_C": 28.6,
+          "flow_m3h": 1.1,
+          "pressure_kPag": 500
+        },
+        "ambient": {
+          "temp_C": 0,
+          "wind_kmh": 7
+        },
+        "insulation": {
+          "material": "elastomeric_foam",
+          "thickness_mm": 29
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 28,
+          "pressure_drop_kPa": 0.4,
+          "heat_loss_W": 754,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 79,
+      "description": "Cas LHS 49: copper L 1.25\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "L",
+          "nps": 1.25,
+          "length_m": 11
+        },
+        "fluid": {
+          "temp_C": 25,
+          "flow_m3h": 3.3,
+          "pressure_kPag": 763
+        },
+        "ambient": {
+          "temp_C": 7,
+          "wind_kmh": 23
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 24.7,
+          "pressure_drop_kPa": 4.6,
+          "heat_loss_W": 1142,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 80,
+      "description": "Cas LHS 50: stainless_steel 10S 18\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 18,
+          "length_m": 60
+        },
+        "fluid": {
+          "temp_C": 44.6,
+          "flow_m3h": 10.9,
+          "pressure_kPag": 627
+        },
+        "ambient": {
+          "temp_C": -23,
+          "wind_kmh": 14
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 38.4,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 77541,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 81,
+      "description": "Cas LHS 51: stainless_steel 80S 1\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "80S",
+          "nps": 1,
+          "length_m": 43
+        },
+        "fluid": {
+          "temp_C": 41.7,
+          "flow_m3h": 3.9,
+          "pressure_kPag": 806
+        },
+        "ambient": {
+          "temp_C": 1,
+          "wind_kmh": 4
+        },
+        "insulation": {
+          "material": "mineral_wool",
+          "thickness_mm": 20
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 41.6,
+          "pressure_drop_kPa": 134.9,
+          "heat_loss_W": 487,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 82,
+      "description": "Cas LHS 52: copper L 1\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "L",
+          "nps": 1,
+          "length_m": 11
+        },
+        "fluid": {
+          "temp_C": 81.9,
+          "flow_m3h": 6.2,
+          "pressure_kPag": 989
+        },
+        "ambient": {
+          "temp_C": -25,
+          "wind_kmh": 14
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 81.2,
+          "pressure_drop_kPa": 33.5,
+          "heat_loss_W": 4919,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 83,
+      "description": "Cas LHS 53: copper K 6\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "K",
+          "nps": 6,
+          "length_m": 54
+        },
+        "fluid": {
+          "temp_C": 88.1,
+          "flow_m3h": 17.8,
+          "pressure_kPag": 558
+        },
+        "ambient": {
+          "temp_C": -1,
+          "wind_kmh": 10
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 85.6,
+          "pressure_drop_kPa": 0.2,
+          "heat_loss_W": 50649,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 84,
+      "description": "Cas LHS 54: steel 120 1.25\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 3,
+          "length_m": 10
+        },
+        "fluid": {
+          "temp_C": 86.9,
+          "flow_m3h": 85.8,
+          "pressure_kPag": 515
+        },
+        "ambient": {
+          "temp_C": -10,
+          "wind_kmh": 26
+        },
+        "insulation": {
+          "material": "polyurethane_foam",
+          "thickness_mm": 77
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 86.9,
+          "pressure_drop_kPa": 27.5,
+          "heat_loss_W": 156,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 85,
+      "description": "Cas LHS 55: copper M 0.25\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "M",
+          "nps": 2,
+          "length_m": 50
+        },
+        "fluid": {
+          "temp_C": 38.2,
+          "flow_m3h": 2.9,
+          "pressure_kPag": 212
+        },
+        "ambient": {
+          "temp_C": -20,
+          "wind_kmh": 13
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 33.4,
+          "pressure_drop_kPa": 1.6,
+          "heat_loss_W": 15913,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 86,
+      "description": "Cas LHS 56: stainless_steel 10S 4\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 4,
+          "length_m": 38
+        },
+        "fluid": {
+          "temp_C": 58.9,
+          "flow_m3h": 22.6,
+          "pressure_kPag": 936
+        },
+        "ambient": {
+          "temp_C": -3,
+          "wind_kmh": 25
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 57.8,
+          "pressure_drop_kPa": 1.4,
+          "heat_loss_W": 28333,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 87,
+      "description": "Cas LHS 57: stainless_steel 10S 3\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 3,
+          "length_m": 175
+        },
+        "fluid": {
+          "temp_C": 75,
+          "flow_m3h": 42.2,
+          "pressure_kPag": 770
+        },
+        "ambient": {
+          "temp_C": 4,
+          "wind_kmh": 24
+        },
+        "insulation": {
+          "material": "mineral_wool",
+          "thickness_mm": 21
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 74.8,
+          "pressure_drop_kPa": 75.4,
+          "heat_loss_W": 7311,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 88,
+      "description": "Cas LHS 58: steel 120 0.75\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 3,
+          "length_m": 10
+        },
+        "fluid": {
+          "temp_C": 71.2,
+          "flow_m3h": 84.9,
+          "pressure_kPag": 588
+        },
+        "ambient": {
+          "temp_C": -21,
+          "wind_kmh": 25
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 71.1,
+          "pressure_drop_kPa": 27.3,
+          "heat_loss_W": 10614,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 89,
+      "description": "Cas LHS 59: copper L 0.5\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "L",
+          "nps": 0.5,
+          "length_m": 114
+        },
+        "fluid": {
+          "temp_C": 18.2,
+          "flow_m3h": 0.6,
+          "pressure_kPag": 488
+        },
+        "ambient": {
+          "temp_C": -15,
+          "wind_kmh": 8
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 8.3,
+          "pressure_drop_kPa": 147.8,
+          "heat_loss_W": 6930,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 90,
+      "description": "Cas LHS 60: stainless_steel 10S 16\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 16,
+          "length_m": 166
+        },
+        "fluid": {
+          "temp_C": 56.8,
+          "flow_m3h": 15.7,
+          "pressure_kPag": 314
+        },
+        "ambient": {
+          "temp_C": -30,
+          "wind_kmh": 4
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 49.1,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 138261,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 91,
+      "description": "Cas LHS 61: stainless_steel 10S 3\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 3,
+          "length_m": 212
+        },
+        "fluid": {
+          "temp_C": 11.5,
+          "flow_m3h": 6.8,
+          "pressure_kPag": 797
+        },
+        "ambient": {
+          "temp_C": -15,
+          "wind_kmh": 23
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 5.5,
+          "pressure_drop_kPa": 4.1,
+          "heat_loss_W": 47702,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 92,
+      "description": "Cas LHS 62: copper M 1\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "M",
+          "nps": 2,
+          "length_m": 62
+        },
+        "fluid": {
+          "temp_C": 23.9,
+          "flow_m3h": 20,
+          "pressure_kPag": 636
+        },
+        "ambient": {
+          "temp_C": -25,
+          "wind_kmh": 15
+        },
+        "insulation": {
+          "material": "elastomeric_foam",
+          "thickness_mm": 19
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 23.8,
+          "pressure_drop_kPa": 67.6,
+          "heat_loss_W": 1355,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 93,
+      "description": "Cas LHS 63: steel 120 0.75\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 3,
+          "length_m": 10
+        },
+        "fluid": {
+          "temp_C": 48.6,
+          "flow_m3h": 60.2,
+          "pressure_kPag": 609
+        },
+        "ambient": {
+          "temp_C": -24,
+          "wind_kmh": 1
+        },
+        "insulation": {
+          "material": "fiberglass",
+          "thickness_mm": 21
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 48.6,
+          "pressure_drop_kPa": 14.3,
+          "heat_loss_W": 403,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 94,
+      "description": "Cas LHS 64: stainless_steel 40S 1.25\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "40S",
+          "nps": 1.25,
+          "length_m": 183
+        },
+        "fluid": {
+          "temp_C": 27.4,
+          "flow_m3h": 2.8,
+          "pressure_kPag": 600
+        },
+        "ambient": {
+          "temp_C": 2,
+          "wind_kmh": 16
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 21.1,
+          "pressure_drop_kPa": 41.4,
+          "heat_loss_W": 20307,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 95,
+      "description": "Cas LHS 65: stainless_steel 10S 0.125\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 1,
+          "length_m": 10
+        },
+        "fluid": {
+          "temp_C": 20.4,
+          "flow_m3h": 25.5,
+          "pressure_kPag": 800
+        },
+        "ambient": {
+          "temp_C": -16,
+          "wind_kmh": 28
+        },
+        "insulation": {
+          "material": "polyurethane_foam",
+          "thickness_mm": 26
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 20.4,
+          "pressure_drop_kPa": 446.3,
+          "heat_loss_W": 62,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 96,
+      "description": "Cas LHS 66: steel 80 1.25\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "80",
+          "nps": 1.25,
+          "length_m": 369
+        },
+        "fluid": {
+          "temp_C": 56.2,
+          "flow_m3h": 1.2,
+          "pressure_kPag": 299
+        },
+        "ambient": {
+          "temp_C": -11,
+          "wind_kmh": 2
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 26.4,
+          "pressure_drop_kPa": 37.1,
+          "heat_loss_W": 40886,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 97,
+      "description": "Cas LHS 67: copper K 4\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "K",
+          "nps": 4,
+          "length_m": 49
+        },
+        "fluid": {
+          "temp_C": 79.5,
+          "flow_m3h": 0.5,
+          "pressure_kPag": 244
+        },
+        "ambient": {
+          "temp_C": -24,
+          "wind_kmh": 5
+        },
+        "insulation": {
+          "material": "mineral_wool",
+          "thickness_mm": 78
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 77.2,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 1278,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 98,
+      "description": "Cas LHS 68: stainless_steel 80S 14\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "80S",
+          "nps": 14,
+          "length_m": 54
+        },
+        "fluid": {
+          "temp_C": 35.9,
+          "flow_m3h": 8.4,
+          "pressure_kPag": 839
+        },
+        "ambient": {
+          "temp_C": -26,
+          "wind_kmh": 0
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 34.2,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 16430,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 99,
+      "description": "Cas LHS 69: stainless_steel 10S 0.75\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 0.75,
+          "length_m": 71
+        },
+        "fluid": {
+          "temp_C": 60.1,
+          "flow_m3h": 1.4,
+          "pressure_kPag": 297
+        },
+        "ambient": {
+          "temp_C": -28,
+          "wind_kmh": 20
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 44.2,
+          "pressure_drop_kPa": 35.6,
+          "heat_loss_W": 25361,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 100,
+      "description": "Cas LHS 70: stainless_steel 40S 1\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "40S",
+          "nps": 2,
+          "length_m": 86
+        },
+        "fluid": {
+          "temp_C": 16.6,
+          "flow_m3h": 17.4,
+          "pressure_kPag": 500
+        },
+        "ambient": {
+          "temp_C": 6,
+          "wind_kmh": 20
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 16.3,
+          "pressure_drop_kPa": 78.7,
+          "heat_loss_W": 6311,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 101,
+      "description": "Cas LHS 71: steel 160 0.75\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 2,
+          "length_m": 42
+        },
+        "fluid": {
+          "temp_C": 52.3,
+          "flow_m3h": 10.7,
+          "pressure_kPag": 500
+        },
+        "ambient": {
+          "temp_C": -1,
+          "wind_kmh": 3
+        },
+        "insulation": {
+          "material": "fiberglass",
+          "thickness_mm": 22
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 52.2,
+          "pressure_drop_kPa": 15.8,
+          "heat_loss_W": 936,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 102,
+      "description": "Cas LHS 72: stainless_steel 80S 0.25\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "80S",
+          "nps": 1,
+          "length_m": 16
+        },
+        "fluid": {
+          "temp_C": 35,
+          "flow_m3h": 9.5,
+          "pressure_kPag": 533
+        },
+        "ambient": {
+          "temp_C": -7,
+          "wind_kmh": 4
+        },
+        "insulation": {
+          "material": "mineral_wool",
+          "thickness_mm": 27
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 35,
+          "pressure_drop_kPa": 277,
+          "heat_loss_W": 157,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 103,
+      "description": "Cas LHS 73: stainless_steel 10S 3\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 3,
+          "length_m": 65
+        },
+        "fluid": {
+          "temp_C": 54.5,
+          "flow_m3h": 15.1,
+          "pressure_kPag": 580
+        },
+        "ambient": {
+          "temp_C": 1,
+          "wind_kmh": 13
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 53.1,
+          "pressure_drop_kPa": 4.3,
+          "heat_loss_W": 24434,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 104,
+      "description": "Cas LHS 74: stainless_steel 40S 0.5\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "40S",
+          "nps": 0.5,
+          "length_m": 25
+        },
+        "fluid": {
+          "temp_C": 42.2,
+          "flow_m3h": 0.5,
+          "pressure_kPag": 269
+        },
+        "ambient": {
+          "temp_C": -12,
+          "wind_kmh": 8
+        },
+        "insulation": {
+          "material": "polyurethane_foam",
+          "thickness_mm": 16
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 41.8,
+          "pressure_drop_kPa": 11.5,
+          "heat_loss_W": 230,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 105,
+      "description": "Cas LHS 75: stainless_steel 80S 4\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "80S",
+          "nps": 4,
+          "length_m": 493
+        },
+        "fluid": {
+          "temp_C": 12.4,
+          "flow_m3h": 57.4,
+          "pressure_kPag": 918
+        },
+        "ambient": {
+          "temp_C": -14,
+          "wind_kmh": 9
+        },
+        "insulation": {
+          "material": "elastomeric_foam",
+          "thickness_mm": 49
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 12.3,
+          "pressure_drop_kPa": 237.7,
+          "heat_loss_W": 5067,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 106,
+      "description": "Cas LHS 76: stainless_steel 10S 2.5\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 2.5,
+          "length_m": 13
+        },
+        "fluid": {
+          "temp_C": 50.1,
+          "flow_m3h": 2.4,
+          "pressure_kPag": 939
+        },
+        "ambient": {
+          "temp_C": -22,
+          "wind_kmh": 17
+        },
+        "insulation": {
+          "material": "polyurethane_foam",
+          "thickness_mm": 58
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 50,
+          "pressure_drop_kPa": 0.1,
+          "heat_loss_W": 159,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 107,
+      "description": "Cas LHS 77: stainless_steel 80S 8\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "80S",
+          "nps": 8,
+          "length_m": 130
+        },
+        "fluid": {
+          "temp_C": 40.9,
+          "flow_m3h": 29.3,
+          "pressure_kPag": 567
+        },
+        "ambient": {
+          "temp_C": -11,
+          "wind_kmh": 6
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 39.3,
+          "pressure_drop_kPa": 0.6,
+          "heat_loss_W": 54447,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 108,
+      "description": "Cas LHS 78: copper K 10\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "K",
+          "nps": 10,
+          "length_m": 18
+        },
+        "fluid": {
+          "temp_C": 29.5,
+          "flow_m3h": 98.5,
+          "pressure_kPag": 262
+        },
+        "ambient": {
+          "temp_C": -3,
+          "wind_kmh": 3
+        },
+        "insulation": {
+          "material": "elastomeric_foam",
+          "thickness_mm": 67
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 29.5,
+          "pressure_drop_kPa": 0.2,
+          "heat_loss_W": 334,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 109,
+      "description": "Cas LHS 79: steel 40 24\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 24,
+          "length_m": 63
+        },
+        "fluid": {
+          "temp_C": 37.6,
+          "flow_m3h": 0.7,
+          "pressure_kPag": 415
+        },
+        "ambient": {
+          "temp_C": -18,
+          "wind_kmh": 30
+        },
+        "insulation": {
+          "material": "mineral_wool",
+          "thickness_mm": 15
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 23.4,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 11451,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 110,
+      "description": "Cas LHS 80: steel 160 30\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 30,
+          "length_m": 204
+        },
+        "fluid": {
+          "temp_C": 20.8,
+          "flow_m3h": 2,
+          "pressure_kPag": 632
+        },
+        "ambient": {
+          "temp_C": -21,
+          "wind_kmh": 11
+        },
+        "insulation": {
+          "material": "polyurethane_foam",
+          "thickness_mm": 53
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 16.7,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 9472,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 111,
+      "description": "Cas LHS 81: stainless_steel 80S 1.5\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "80S",
+          "nps": 1.5,
+          "length_m": 20
+        },
+        "fluid": {
+          "temp_C": 64.1,
+          "flow_m3h": 24.6,
+          "pressure_kPag": 312
+        },
+        "ambient": {
+          "temp_C": 6,
+          "wind_kmh": 1
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 64,
+          "pressure_drop_kPa": 210.7,
+          "heat_loss_W": 1739,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 112,
+      "description": "Cas LHS 82: stainless_steel 40S 3\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "40S",
+          "nps": 3,
+          "length_m": 321
+        },
+        "fluid": {
+          "temp_C": 86.7,
+          "flow_m3h": 4.3,
+          "pressure_kPag": 965
+        },
+        "ambient": {
+          "temp_C": -2,
+          "wind_kmh": 21
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 46.3,
+          "pressure_drop_kPa": 2.7,
+          "heat_loss_W": 195470,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 113,
+      "description": "Cas LHS 83: stainless_steel 40S 3\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "40S",
+          "nps": 3,
+          "length_m": 23
+        },
+        "fluid": {
+          "temp_C": 19,
+          "flow_m3h": 7.8,
+          "pressure_kPag": 153
+        },
+        "ambient": {
+          "temp_C": -25,
+          "wind_kmh": 12
+        },
+        "insulation": {
+          "material": "fiberglass",
+          "thickness_mm": 23
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 18.9,
+          "pressure_drop_kPa": 0.7,
+          "heat_loss_W": 570,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 114,
+      "description": "Cas LHS 84: steel 160 4\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 4,
+          "length_m": 12
+        },
+        "fluid": {
+          "temp_C": 22.2,
+          "flow_m3h": 0.8,
+          "pressure_kPag": 471
+        },
+        "ambient": {
+          "temp_C": -11,
+          "wind_kmh": 16
+        },
+        "insulation": {
+          "material": "mineral_wool",
+          "thickness_mm": 35
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 22,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 190,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 115,
+      "description": "Cas LHS 85: stainless_steel 40S 0.5\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "40S",
+          "nps": 0.5,
+          "length_m": 10
+        },
+        "fluid": {
+          "temp_C": 70.6,
+          "flow_m3h": 1.5,
+          "pressure_kPag": 165
+        },
+        "ambient": {
+          "temp_C": 9,
+          "wind_kmh": 25
+        },
+        "insulation": {
+          "material": "mineral_wool",
+          "thickness_mm": 32
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 70.5,
+          "pressure_drop_kPa": 32,
+          "heat_loss_W": 104,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 116,
+      "description": "Cas LHS 86: copper M 6\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "M",
+          "nps": 6,
+          "length_m": 28
+        },
+        "fluid": {
+          "temp_C": 78.3,
+          "flow_m3h": 67.1,
+          "pressure_kPag": 277
+        },
+        "ambient": {
+          "temp_C": -2,
+          "wind_kmh": 26
+        },
+        "insulation": {
+          "material": "mineral_wool",
+          "thickness_mm": 26
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 78.3,
+          "pressure_drop_kPa": 1.2,
+          "heat_loss_W": 1791,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 117,
+      "description": "Cas LHS 87: steel 40 14\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 14,
+          "length_m": 81
+        },
+        "fluid": {
+          "temp_C": 76.2,
+          "flow_m3h": 93.2,
+          "pressure_kPag": 778
+        },
+        "ambient": {
+          "temp_C": -26,
+          "wind_kmh": 15
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 74.4,
+          "pressure_drop_kPa": 0.2,
+          "heat_loss_W": 191798,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 118,
+      "description": "Cas LHS 88: stainless_steel 10S 3\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 3,
+          "length_m": 21
+        },
+        "fluid": {
+          "temp_C": 62.5,
+          "flow_m3h": 35.2,
+          "pressure_kPag": 373
+        },
+        "ambient": {
+          "temp_C": -22,
+          "wind_kmh": 24
+        },
+        "insulation": {
+          "material": "polyurethane_foam",
+          "thickness_mm": 19
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 62.5,
+          "pressure_drop_kPa": 6.6,
+          "heat_loss_W": 787,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 119,
+      "description": "Cas LHS 89: copper M 0.75\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "M",
+          "nps": 2,
+          "length_m": 39
+        },
+        "fluid": {
+          "temp_C": 32.5,
+          "flow_m3h": 20,
+          "pressure_kPag": 737
+        },
+        "ambient": {
+          "temp_C": 2,
+          "wind_kmh": 14
+        },
+        "insulation": {
+          "material": "elastomeric_foam",
+          "thickness_mm": 48
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 32.5,
+          "pressure_drop_kPa": 40.9,
+          "heat_loss_W": 286,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 120,
+      "description": "Cas LHS 90: steel 120 4\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "120",
+          "nps": 4,
+          "length_m": 122
+        },
+        "fluid": {
+          "temp_C": 60.7,
+          "flow_m3h": 1.9,
+          "pressure_kPag": 789
+        },
+        "ambient": {
+          "temp_C": -8,
+          "wind_kmh": 10
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 36,
+          "pressure_drop_kPa": 0.2,
+          "heat_loss_W": 53496,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 121,
+      "description": "Cas LHS 91: stainless_steel 80S 0.5\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "80S",
+          "nps": 0.5,
+          "length_m": 75
+        },
+        "fluid": {
+          "temp_C": 67.4,
+          "flow_m3h": 0.7,
+          "pressure_kPag": 329
+        },
+        "ambient": {
+          "temp_C": -19,
+          "wind_kmh": 8
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 49.7,
+          "pressure_drop_kPa": 148,
+          "heat_loss_W": 14066,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 122,
+      "description": "Cas LHS 92: stainless_steel 40S 0.25\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "40S",
+          "nps": 1,
+          "length_m": 10
+        },
+        "fluid": {
+          "temp_C": 61.4,
+          "flow_m3h": 20,
+          "pressure_kPag": 402
+        },
+        "ambient": {
+          "temp_C": 5,
+          "wind_kmh": 18
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 61.3,
+          "pressure_drop_kPa": 330.7,
+          "heat_loss_W": 2674,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 123,
+      "description": "Cas LHS 93: copper K 2\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "K",
+          "nps": 2,
+          "length_m": 257
+        },
+        "fluid": {
+          "temp_C": 14.6,
+          "flow_m3h": 3.4,
+          "pressure_kPag": 130
+        },
+        "ambient": {
+          "temp_C": -9,
+          "wind_kmh": 18
+        },
+        "insulation": {
+          "material": "mineral_wool",
+          "thickness_mm": 32
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 14.1,
+          "pressure_drop_kPa": 14.1,
+          "heat_loss_W": 1784,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 124,
+      "description": "Cas LHS 94: steel 80 2\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "80",
+          "nps": 2,
+          "length_m": 13
+        },
+        "fluid": {
+          "temp_C": 55.4,
+          "flow_m3h": 2.5,
+          "pressure_kPag": 152
+        },
+        "ambient": {
+          "temp_C": -28,
+          "wind_kmh": 19
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 52.6,
+          "pressure_drop_kPa": 0.6,
+          "heat_loss_W": 7989,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 125,
+      "description": "Cas LHS 95: copper K 6\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "K",
+          "nps": 6,
+          "length_m": 142
+        },
+        "fluid": {
+          "temp_C": 65,
+          "flow_m3h": 34,
+          "pressure_kPag": 538
+        },
+        "ambient": {
+          "temp_C": -10,
+          "wind_kmh": 27
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 60.4,
+          "pressure_drop_kPa": 2,
+          "heat_loss_W": 178964,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 126,
+      "description": "Cas LHS 96: copper M 6\"",
+      "inputs": {
+        "pipe": {
+          "material": "copper",
+          "schedule": "M",
+          "nps": 6,
+          "length_m": 188
+        },
+        "fluid": {
+          "temp_C": 52.5,
+          "flow_m3h": 13.6,
+          "pressure_kPag": 947
+        },
+        "ambient": {
+          "temp_C": -7,
+          "wind_kmh": 30
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 41,
+          "pressure_drop_kPa": 0.5,
+          "heat_loss_W": 179543,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 127,
+      "description": "Cas LHS 97: steel 80 20\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "80",
+          "nps": 20,
+          "length_m": 35
+        },
+        "fluid": {
+          "temp_C": 70,
+          "flow_m3h": 1.6,
+          "pressure_kPag": 527
+        },
+        "ambient": {
+          "temp_C": -28,
+          "wind_kmh": 19
+        },
+        "insulation": {
+          "material": "polyurethane_foam",
+          "thickness_mm": 36
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 67.8,
+          "pressure_drop_kPa": 0,
+          "heat_loss_W": 3929,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 128,
+      "description": "Cas LHS 98: stainless_steel 10S 0.5\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "10S",
+          "nps": 2,
+          "length_m": 44
+        },
+        "fluid": {
+          "temp_C": 84.7,
+          "flow_m3h": 10.1,
+          "pressure_kPag": 500
+        },
+        "ambient": {
+          "temp_C": -20,
+          "wind_kmh": 1
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 84,
+          "pressure_drop_kPa": 9.8,
+          "heat_loss_W": 7932,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 129,
+      "description": "Cas LHS 99: stainless_steel 40S 2\"",
+      "inputs": {
+        "pipe": {
+          "material": "stainless_steel",
+          "schedule": "40S",
+          "nps": 2,
+          "length_m": 401
+        },
+        "fluid": {
+          "temp_C": 74.7,
+          "flow_m3h": 13,
+          "pressure_kPag": 364
+        },
+        "ambient": {
+          "temp_C": -17,
+          "wind_kmh": 28
+        },
+        "insulation": {
+          "material": "fiberglass",
+          "thickness_mm": 30
+        }
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 73.8,
+          "pressure_drop_kPa": 181.4,
+          "heat_loss_W": 12970,
+          "notes": ""
+        }
+      }
+    },
+    {
+      "case_id": 130,
+      "description": "Cas LHS 100: steel 120 0.5\"",
+      "inputs": {
+        "pipe": {
+          "material": "steel",
+          "schedule": "40",
+          "nps": 3,
+          "length_m": 10
+        },
+        "fluid": {
+          "temp_C": 81,
+          "flow_m3h": 4.1,
+          "pressure_kPag": 800
+        },
+        "ambient": {
+          "temp_C": 8,
+          "wind_kmh": 23
+        },
+        "insulation": null
+      },
+      "outputs": {
+        "aspen_hysys": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "aft_fathom": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "dwsim": {
+          "status": "not_run",
+          "T_out_C": null,
+          "pressure_drop_kPa": null,
+          "heat_loss_W": null,
+          "notes": ""
+        },
+        "thermaflow": {
+          "status": "ok",
+          "T_out_C": 79.3,
+          "pressure_drop_kPa": 0.1,
+          "heat_loss_W": 7710,
+          "notes": ""
+        }
+      }
+    }
+  ]
+}

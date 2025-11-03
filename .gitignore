@@ -1,0 +1,40 @@
+# Memory bank (documentation privée de travail)
+memory-bank/
+
+# Documentation interdite à la racine (sauf README.md)
+# Suivre la stratégie Memory Bank uniquement!
+/INDEX.md
+/ARCHITECTURE.md
+/OVERVIEW.md
+/SUMMARY.md
+/STATUS.md
+/CHANGELOG.md
+/PEER_REVIEW.md
+/REVUE_*.md
+/*.plan.md
+
+# Documentation interdite dans docs/
+/docs/README.md
+/docs/INDEX.md
+/docs/OVERVIEW.md
+/docs/SUMMARY.md
+
+# Node modules (si tests ajoutent des dépendances)
+node_modules/
+
+# Fichiers protégés par copyright (manuels commerciaux)
+docs/references/*.pdf
+
+# Fichiers temporaires
+*.tmp
+*.log
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+.cursor/
+
+# Build artifacts (ne devrait pas exister, mais par sécurité)
+dist/
+build/

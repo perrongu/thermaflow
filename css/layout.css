@@ -1,0 +1,266 @@
+/**
+ * layout.css
+ * 
+ * Mise en page, grilles et containers pour ThermaFlow
+ */
+
+/* ========== CONTAINER ========== */
+.container {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-4);
+  padding-right: var(--spacing-4);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-left: var(--spacing-6);
+    padding-right: var(--spacing-6);
+  }
+}
+
+/* ========== HEADER ========== */
+.header {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: var(--color-white);
+  padding: var(--spacing-8) 0;
+  box-shadow: var(--shadow-md);
+}
+
+.header .container {
+  position: relative;
+}
+
+.header__title {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  margin-bottom: var(--spacing-2);
+}
+
+.header__subtitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-normal);
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 0;
+}
+
+.header__status-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+@media (max-width: 767px) {
+  .header__title {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .header__subtitle {
+    font-size: var(--font-size-base);
+  }
+  
+  .header__status-container {
+    position: static;
+    margin-top: var(--spacing-4);
+    justify-content: flex-end;
+  }
+}
+
+/* ========== MAIN ========== */
+.main {
+  flex: 1;
+  padding: var(--spacing-6) 0;
+}
+
+/* ========== SECTIONS ========== */
+.intro {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-6);
+  margin-bottom: var(--spacing-8);
+  box-shadow: var(--shadow-sm);
+}
+
+.intro__text {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-gray-700);
+  margin: 0;
+}
+
+.form-section {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-6);
+  margin-bottom: var(--spacing-8);
+  box-shadow: var(--shadow);
+}
+
+.results-section {
+  margin-bottom: var(--spacing-8);
+}
+
+/* ========== GRILLES ========== */
+.results-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-6);
+  margin-bottom: var(--spacing-8);
+}
+
+@media (min-width: 768px) {
+  .results-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .card--full {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ========== FOOTER ========== */
+.footer {
+  background-color: var(--color-gray-800);
+  color: var(--color-gray-300);
+  padding: var(--spacing-8) 0;
+  margin-top: auto;
+}
+
+.footer__text {
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-2);
+}
+
+.footer__text a {
+  color: var(--color-white);
+}
+
+.footer__text a:hover {
+  color: var(--color-primary-light);
+}
+
+.footer__credits {
+  font-size: var(--font-size-xs);
+  color: var(--color-gray-400);
+  margin: 0;
+}
+
+/* ========== SECTIONS NUMÉROTÉES ========== */
+.section {
+  background: white;
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-6);
+  margin-bottom: var(--spacing-8);
+  box-shadow: var(--shadow);
+}
+
+.section__title {
+  font-size: var(--font-size-2xl);
+  color: var(--color-gray-900);
+  border-bottom: 3px solid var(--color-primary);
+  padding-bottom: var(--spacing-3);
+  margin-bottom: var(--spacing-6);
+}
+
+.under-development {
+  text-align: center;
+  padding: var(--spacing-10);
+  background: var(--color-gray-50);
+  border: 2px dashed var(--color-gray-300);
+  border-radius: var(--border-radius);
+  color: var(--color-gray-600);
+}
+
+.under-development p {
+  margin-bottom: var(--spacing-2);
+}
+
+.under-development p:last-child {
+  margin-bottom: 0;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 767px) {
+  .main {
+    padding: var(--spacing-6) 0;
+  }
+  
+  .intro {
+    padding: var(--spacing-4);
+    margin-bottom: var(--spacing-6);
+  }
+  
+  .form-section {
+    padding: var(--spacing-4);
+    margin-bottom: var(--spacing-6);
+  }
+  
+  .results-section {
+    margin-bottom: var(--spacing-6);
+  }
+  
+  .results-grid {
+    gap: var(--spacing-4);
+    margin-bottom: var(--spacing-6);
+  }
+  
+  .section {
+    padding: var(--spacing-4);
+    margin-bottom: var(--spacing-6);
+  }
+}
+
+/* ========== STYLES IMPRESSION PDF ========== */
+@media print {
+  @page {
+    size: A4;
+    margin: 1.5cm;
+  }
+  
+  body {
+    background: white;
+  }
+  
+  .header, .footer, 
+  .diagram-wrapper,
+  .form-section,
+  .results-actions {
+    display: none !important;
+  }
+  
+  .section {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid var(--color-gray-300);
+    margin-bottom: var(--spacing-6);
+  }
+  
+  .config-summary {
+    display: block !important;
+    page-break-inside: avoid;
+  }
+  
+  .section-2 {
+    page-break-before: always;
+  }
+  
+  .verdict-card {
+    page-break-inside: avoid;
+  }
+  
+  .chart-container {
+    page-break-inside: avoid;
+  }
+  
+  .under-development {
+    border: 1px solid var(--color-gray-300);
+  }
+}
+

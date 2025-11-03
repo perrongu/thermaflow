@@ -1,0 +1,375 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "date": "2025-10-31",
+    "source": "Perry's Chemical Engineers' Handbook 9th Ed. + CODATA 2018 + PINT",
+    "note": "Constantes extractibles automatiquement. Autres constantes validées par tests unitaires. Conversions d'unités UI validées avec PINT.",
+    "changelog": "2025-10-31: Ajout conversions d'unités UI (USGPM, psig) et module unit-converter.js"
+  },
+  
+  "physical_constants": {
+    "STEFAN_BOLTZMANN": {
+      "value": 5.670374419e-8,
+      "unit": "W/(m²·K⁴)",
+      "source": "CODATA 2018",
+      "file": "js/correlations/radiation.js",
+      "tolerance": 0.0001
+    },
+    "GRAVITY": {
+      "value": 9.81,
+      "unit": "m/s²",
+      "source": "Standard (rounded from 9.80665)",
+      "file": "js/formulas/pressure-basic.js",
+      "tolerance": 0.01
+    },
+    "RE_LAMINAR_MAX": {
+      "value": 2300,
+      "unit": "dimensionless",
+      "source": "Perry's Section 6-3",
+      "file": "js/constants/flow-regimes.js",
+      "tolerance": 0
+    },
+    "RE_TURBULENT_MIN": {
+      "value": 4000,
+      "unit": "dimensionless",
+      "source": "Perry's Section 6-3",
+      "file": "js/constants/flow-regimes.js",
+      "tolerance": 0
+    },
+    "FRICTION_LAMINAR_CONSTANT": {
+      "value": 64,
+      "unit": "dimensionless",
+      "source": "Perry's Section 6-4, Table 6-7",
+      "file": "js/correlations/friction-factor.js",
+      "tolerance": 0
+    },
+    "COLEBROOK_CONSTANT_3_7": {
+      "value": 3.7,
+      "unit": "dimensionless",
+      "source": "Perry's Section 6-4",
+      "file": "js/correlations/friction-factor.js",
+      "tolerance": 0.01
+    },
+    "COLEBROOK_CONSTANT_2_51": {
+      "value": 2.51,
+      "unit": "dimensionless",
+      "source": "Perry's Section 6-4",
+      "file": "js/correlations/friction-factor.js",
+      "tolerance": 0.01
+    },
+    "GNIELINSKI_CONSTANT_12_7": {
+      "value": 12.7,
+      "unit": "dimensionless",
+      "source": "Perry's Section 5-12",
+      "file": "js/correlations/nusselt-internal.js",
+      "tolerance": 0.01,
+      "critical": true
+    },
+    "GNIELINSKI_CONSTANT_1000": {
+      "value": 1000,
+      "unit": "dimensionless",
+      "source": "Perry's Section 5-12",
+      "file": "js/correlations/nusselt-internal.js",
+      "tolerance": 0
+    },
+    "DITTUS_BOELTER_CONSTANT": {
+      "value": 0.023,
+      "unit": "dimensionless",
+      "source": "Perry's Section 5-12",
+      "file": "js/correlations/nusselt-internal.js",
+      "tolerance": 0.001,
+      "critical": true
+    },
+    "NUSSELT_LAMINAR_CONSTANT_T": {
+      "value": 3.66,
+      "unit": "dimensionless",
+      "source": "Perry's Section 5-12",
+      "file": "js/correlations/nusselt-internal.js",
+      "tolerance": 0.01
+    },
+    "NUSSELT_LAMINAR_CONSTANT_Q": {
+      "value": 4.36,
+      "unit": "dimensionless",
+      "source": "Perry's Section 5-12",
+      "file": "js/correlations/nusselt-internal.js",
+      "tolerance": 0.01
+    },
+    "CHURCHILL_BERNSTEIN_282000": {
+      "value": 282000,
+      "unit": "dimensionless",
+      "source": "Churchill & Bernstein (1977)",
+      "file": "js/correlations/nusselt-external.js",
+      "tolerance": 0
+    },
+    "TEMP_CONVERSION_CONSTANT": {
+      "value": 273.15,
+      "unit": "K",
+      "source": "Definition (absolute zero)",
+      "file": "js/correlations/radiation.js",
+      "tolerance": 0
+    }
+  },
+  
+  "unit_conversions": {
+    "BAR_TO_PA": {
+      "factor": 100000,
+      "description": "1 bar = 100000 Pa",
+      "test_cases": [
+        {"input": 1, "expected": 100000},
+        {"input": 5, "expected": 500000},
+        {"input": 2.5, "expected": 250000}
+      ]
+    },
+    "CELSIUS_TO_KELVIN": {
+      "factor": 273.15,
+      "operation": "add",
+      "description": "T[K] = T[°C] + 273.15",
+      "test_cases": [
+        {"input": 0, "expected": 273.15},
+        {"input": 20, "expected": 293.15},
+        {"input": -10, "expected": 263.15},
+        {"input": 100, "expected": 373.15}
+      ]
+    },
+    "LMIN_TO_M3S": {
+      "factor": 0.000016666666666666667,
+      "description": "1 L/min = 1/60000 m³/s",
+      "test_cases": [
+        {"input": 1, "expected": 1.6667e-5, "tolerance": 1e-9},
+        {"input": 60, "expected": 0.001, "tolerance": 1e-6},
+        {"input": 100, "expected": 1.6667e-3, "tolerance": 1e-7}
+      ]
+    },
+    "MM_TO_M": {
+      "factor": 0.001,
+      "description": "1 mm = 0.001 m",
+      "test_cases": [
+        {"input": 1, "expected": 0.001},
+        {"input": 0.045, "expected": 4.5e-5},
+        {"input": 50, "expected": 0.05}
+      ]
+    },
+    "M3H_TO_USGPM": {
+      "factor": 4.40286745,
+      "description": "1 m³/h = 4.40286745 USGPM (US Gallons per Minute)",
+      "source": "PINT (Python unit conversion library)",
+      "file": "js/ui/unit-converter.js",
+      "test_cases": [
+        {"input": 1, "expected": 4.40286745, "tolerance": 1e-6},
+        {"input": 10, "expected": 44.0286745, "tolerance": 1e-5},
+        {"input": 7.2, "expected": 31.700646, "tolerance": 1e-5}
+      ],
+      "note": "Conversion d'interface utilisateur pour le débit volumique"
+    },
+    "USGPM_TO_M3H": {
+      "factor": 0.227124707,
+      "description": "1 USGPM = 0.227124707 m³/h",
+      "source": "PINT (Python unit conversion library)",
+      "file": "js/ui/unit-converter.js",
+      "test_cases": [
+        {"input": 1, "expected": 0.227124707, "tolerance": 1e-6},
+        {"input": 20, "expected": 4.54249414, "tolerance": 1e-5},
+        {"input": 44.0286745, "expected": 10.0, "tolerance": 1e-5}
+      ],
+      "note": "Conversion inverse pour cohérence round-trip"
+    },
+    "KPAG_TO_PSIG": {
+      "factor": 0.145037738,
+      "description": "1 kPa(g) = 0.145037738 psi(g)",
+      "source": "PINT (Python unit conversion library)",
+      "file": "js/ui/unit-converter.js",
+      "test_cases": [
+        {"input": 1, "expected": 0.145037738, "tolerance": 1e-6},
+        {"input": 100, "expected": 14.5037738, "tolerance": 1e-5},
+        {"input": 300, "expected": 43.5113214, "tolerance": 1e-5}
+      ],
+      "note": "Conversion d'interface utilisateur pour la pression gauge"
+    },
+    "PSIG_TO_KPAG": {
+      "factor": 6.89475729,
+      "description": "1 psi(g) = 6.89475729 kPa(g)",
+      "source": "PINT (Python unit conversion library)",
+      "file": "js/ui/unit-converter.js",
+      "test_cases": [
+        {"input": 1, "expected": 6.89475729, "tolerance": 1e-6},
+        {"input": 50, "expected": 344.737865, "tolerance": 1e-4},
+        {"input": 14.5037738, "expected": 100.0, "tolerance": 1e-4}
+      ],
+      "note": "Conversion inverse pour cohérence round-trip"
+    }
+  },
+  
+  "equations": {
+    "reynolds": {
+      "formula": "Re = (rho * V * D) / mu",
+      "file": "js/formulas/reynolds.js",
+      "reference": "Perry's Section 6-3",
+      "test_case": {
+        "inputs": {"rho": 998, "V": 1.0, "D": 0.0525, "mu": 0.001002},
+        "expected": 52275,
+        "tolerance": 100
+      }
+    },
+    "darcy_weisbach": {
+      "formula": "dP = f * (L/D) * (rho * V^2 / 2)",
+      "file": "js/formulas/pressure-basic.js",
+      "reference": "Perry's Section 6-4, Eq. 6-44",
+      "test_case": {
+        "inputs": {"f": 0.02, "L": 100, "D": 0.0525, "rho": 998, "V": 1.0},
+        "expected": 19000,
+        "tolerance": 500
+      }
+    },
+    "friction_laminar": {
+      "formula": "f = 64 / Re",
+      "file": "js/correlations/friction-factor.js",
+      "reference": "Perry's Section 6-4, Table 6-7",
+      "test_case": {
+        "inputs": {"Re": 1000},
+        "expected": 0.064,
+        "tolerance": 0.0001
+      }
+    },
+    "ntu": {
+      "formula": "NTU = UA / (m_dot * cp)",
+      "file": "js/calculations/heat-transfer.js",
+      "reference": "Perry's Section 5-28",
+      "test_case": {
+        "inputs": {"UA": 6.25, "m_dot": 2.16, "cp": 4184},
+        "expected": 0.00069,
+        "tolerance": 0.00001
+      }
+    },
+    "stefan_boltzmann": {
+      "formula": "Q = epsilon * sigma * A * (T_surf^4 - T_amb^4)",
+      "file": "js/correlations/radiation.js",
+      "reference": "Perry's Section 5-20",
+      "test_case": {
+        "inputs": {"epsilon": 0.79, "A": 1.0, "T_surf_K": 333.15, "T_amb_K": 263.15},
+        "expected": 230,
+        "tolerance": 10
+      }
+    }
+  },
+  
+  "modules": {
+    "js/formulas/reynolds.js": {
+      "category": "formulas",
+      "critical_functions": ["calculateReynolds", "getFlowRegime"],
+      "dependencies": []
+    },
+    "js/formulas/geometry.js": {
+      "category": "formulas",
+      "critical_functions": ["crossSectionalArea", "velocityFromFlowrate"],
+      "dependencies": []
+    },
+    "js/formulas/pressure-basic.js": {
+      "category": "formulas",
+      "critical_functions": ["pressureDropDarcy"],
+      "dependencies": []
+    },
+    "js/correlations/friction-factor.js": {
+      "category": "correlations",
+      "critical_functions": ["frictionFactorLaminar", "frictionFactorColebrook", "frictionFactorChurchill"],
+      "dependencies": []
+    },
+    "js/correlations/nusselt-internal.js": {
+      "category": "correlations",
+      "critical_functions": ["nusseltGnielinski", "nusseltDittusBoelter"],
+      "dependencies": []
+    },
+    "js/correlations/nusselt-external.js": {
+      "category": "correlations",
+      "critical_functions": ["nusseltChurchillBernstein"],
+      "dependencies": []
+    },
+    "js/correlations/radiation.js": {
+      "category": "correlations",
+      "critical_functions": ["radiativeHeatTransfer", "radiationCoefficient"],
+      "dependencies": []
+    },
+    "js/calculations/pressure-drop.js": {
+      "category": "calculations",
+      "critical_functions": ["calculatePressureDrop"],
+      "dependencies": ["reynolds", "friction-factor", "pressure-basic"]
+    },
+    "js/calculations/heat-transfer.js": {
+      "category": "calculations",
+      "critical_functions": ["calculateNTU", "calculateEffectiveness"],
+      "dependencies": []
+    },
+    "js/calculations/thermal-resistance.js": {
+      "category": "calculations",
+      "critical_functions": ["convectionResistanceCylinder", "conductionResistanceCylinder"],
+      "dependencies": []
+    },
+    "js/properties/water-properties.js": {
+      "category": "properties",
+      "critical_functions": ["getWaterProperties"],
+      "dependencies": []
+    },
+    "js/properties/air-properties.js": {
+      "category": "properties",
+      "critical_functions": ["getAirProperties"],
+      "dependencies": []
+    },
+    "js/properties/material-properties.js": {
+      "category": "properties",
+      "critical_functions": ["getMaterialProperties"],
+      "dependencies": []
+    },
+    "js/engine/pipe-segment.js": {
+      "category": "engine",
+      "critical_functions": ["calculatePipeSegment"],
+      "dependencies": ["all"]
+    },
+    "js/engine/pipe-network.js": {
+      "category": "engine",
+      "critical_functions": ["calculatePipeNetwork"],
+      "dependencies": ["pipe-segment"]
+    },
+    "js/engine/freeze-detector.js": {
+      "category": "engine",
+      "critical_functions": ["detectFreeze"],
+      "dependencies": []
+    },
+    "data/materials/properties.js": {
+      "category": "data",
+      "critical_data": ["materialPropertiesData"],
+      "dependencies": []
+    },
+    "js/ui/unit-converter.js": {
+      "category": "ui",
+      "critical_functions": ["toSI", "fromSI", "convert", "format", "getRanges"],
+      "dependencies": [],
+      "note": "Système de conversion d'unités pour interface utilisateur (USGPM/psig)"
+    }
+  },
+  
+  "validation_limits": {
+    "gnielinski": {
+      "Re_min": 3000,
+      "Re_max": 5000000,
+      "Pr_min": 0.5,
+      "Pr_max": 2000,
+      "source": "Perry's Section 5-12"
+    },
+    "churchill_bernstein": {
+      "Re_Pr_min": 0.2,
+      "source": "Perry's Section 5-13"
+    },
+    "water_properties": {
+      "T_min": 0,
+      "T_max": 100,
+      "P_min": 1,
+      "P_max": 10,
+      "source": "IAPWS-97 tables (subset)"
+    },
+    "air_properties": {
+      "T_min": -40,
+      "T_max": 50,
+      "source": "Standard atmospheric conditions"
+    }
+  }
+}
+
