@@ -170,7 +170,7 @@ js/
 - **Température eau**: 1 à 100°C
 - **Température air**: -50 à +30°C
 - **Pression**: 1 à 10 bar
-- **Longueur**: 1 à 1000 m
+- **Longueur**: 1 à 2500 m
 
 ### Hypothèses
 - Fluide: Eau pure (sans glycol ni additifs)

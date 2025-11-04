@@ -13,7 +13,7 @@
     "ranges": {
       "length_m": {
         "min": 1,
-        "max": 1000
+        "max": 2500
       },
       "temp_C": {
         "min": 1,

@@ -436,7 +436,7 @@ Les conversions °C → K sont appliquées **uniquement quand nécessaire**:
 - Température eau: 1-100°C (limite IAPWS-97)
 - Température air: -50 à +30°C (limite tables air)
 - Pression: 1-10 bar (limite IAPWS-97)
-- Longueur: 1-1000 m (pratique)
+- Longueur: 1-2500 m (pratique)
 - Débit: > 0 kg/s
 - Diamètres: Standards sélection (DN15-DN300)
 - Épaisseur isolation: 0-200 mm (pratique)

@@ -29,7 +29,7 @@ L'échantillon a été généré selon une approche combinée pour garantir une 
 |-----------|----------------|--------------|
 | **Matériaux** | Steel (46%), Copper (18%), SS (36%) | Catégorielle |
 | **NPS** | Steel 0.5-36", Copper 0.25-12", SS 0.125-24" | Log-normale |
-| **Longueur** | 1-1000 m | Log-normale |
+| **Longueur** | 1-2500 m | Log-normale |
 | **T_eau** | 1-100°C (focus 10-90°C) | LHS uniforme |
 | **Débit** | 0.1-6000 m³/h (focus 0.5-100) | Log-normale |
 | **Pression** | 100-1000 kPag | Uniforme |
@@ -61,7 +61,7 @@ L'échantillon a été généré selon une approche combinée pour garantir une 
           "material": "steel|copper|stainless_steel",
           "schedule": "40|80|120|160|K|L|M|5S|10S|40S|80S",
           "nps": 0.125-36,
-          "length_m": 1-1000
+          "length_m": 1-2500
         },
         "fluid": {
           "temp_C": 1-100,
