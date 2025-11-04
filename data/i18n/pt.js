@@ -334,7 +334,7 @@
     },
   validation: {
     requiredMissing: 'Campo obrigatório ausente: {label}',
-    lengthRange: 'Comprimento deve estar entre 1 e 1000 m',
+    lengthRange: 'Comprimento deve estar entre 1 e 2500 m',
     waterTempRange: 'Temperatura da água deve estar entre 1 e 100°C',
     airTempRange: 'Temperatura do ar deve estar entre -50 e 30°C',
     waterPressureRange: 'Pressão da água deve estar entre 100 e 1000 kPag',

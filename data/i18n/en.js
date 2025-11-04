@@ -334,7 +334,7 @@
     },
   validation: {
     requiredMissing: 'Required field missing: {label}',
-    lengthRange: 'Length must be between 1 and 1000 m',
+    lengthRange: 'Length must be between 1 and 2500 m',
     waterTempRange: 'Water temperature must be between 1 and 100°C',
     airTempRange: 'Air temperature must be between -50 and 30°C',
     waterPressureRange: 'Water pressure must be between 100 and 1000 kPag',

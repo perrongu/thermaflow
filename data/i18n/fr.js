@@ -336,7 +336,7 @@
     },
   validation: {
     requiredMissing: 'Champ requis manquant: {label}',
-    lengthRange: 'Longueur doit être entre 1 et 1000 m',
+    lengthRange: 'Longueur doit être entre 1 et 2500 m',
     waterTempRange: 'Température eau doit être entre 1 et 100°C',
     airTempRange: 'Température air doit être entre -50 et 30°C',
     waterPressureRange: 'Pression eau doit être entre 100 et 1000 kPag',
