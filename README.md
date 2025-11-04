@@ -2,7 +2,7 @@
 
 **Analyse du risque de gel dans les conduites d'eau**
 
-[![Version](https://img.shields.io/badge/version-1.0.1-blue.svg)](https://github.com/perrongu/thermaflow)
+[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/perrongu/thermaflow)
 [![Licence](https://img.shields.io/badge/licence-MIT-green.svg)](LICENSE)
 
 > **Déterminez en quelques secondes si votre conduite d'eau risque de geler**
@@ -228,6 +228,6 @@ MIT License - Voir [LICENSE](LICENSE) pour détails.
 
 ---
 
-**ThermaFlow v1.0.1** | Calculs scientifiques rigoureux | 100% open source
+**ThermaFlow v1.1.0** | Calculs scientifiques rigoureux | 100% open source
 
 Pour questions ou support: [Ouvrez une issue sur GitHub](https://github.com/perrongu/thermaflow/issues)

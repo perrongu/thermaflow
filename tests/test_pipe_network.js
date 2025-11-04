@@ -501,6 +501,48 @@ assert(
   "Air très froid devrait refroidir davantage",
 );
 
+// Test 9.4: Cas critique 2500m avec diamètre moyen (convergence numérique)
+const configExtreme = {
+  geometry: {
+    D_inner: 0.0525, // NPS 2" (DN50)
+    D_outer: 0.0603,
+    roughness: 0.045e-3,
+    material: "steel",
+  },
+  totalLength: 2500,
+  numSegments: 50,
+  fluid: {
+    T_in: 10,
+    P: 8.0, // Pression élevée pour longue distance
+    m_dot: 0.3, // Débit faible
+  },
+  ambient: {
+    T_amb: -30,
+    V_wind: 20,
+  },
+  insulation: {
+    material: "fiberglass",
+    thickness: 0.025,
+  },
+};
+
+const resultExtreme = pipeNetwork.calculatePipeNetwork(configExtreme);
+// Vérifier que le calcul converge (pas de NaN)
+assert(
+  !isNaN(resultExtreme.T_final) && isFinite(resultExtreme.T_final),
+  "Cas extrême (2500m, NPS 2\", débit faible) devrait converger sans NaN",
+);
+// L/D ≈ 47,600 - Valider refroidissement significatif
+assert(
+  resultExtreme.T_final < configExtreme.fluid.T_in,
+  "Cas extrême devrait refroidir",
+);
+// Vérifier pression finale positive (pas de pression négative)
+assert(
+  resultExtreme.P_profile[resultExtreme.P_profile.length - 1] >= 1.0,
+  "Pression finale devrait rester >= 1 bar même avec 2500m",
+);
+
 console.log(
   `  ℹ️  Base (100m, 2.0 kg/s, -10°C):  T_final = ${result10seg.T_final.toFixed(2)}°C`,
 );
@@ -512,6 +554,9 @@ console.log(
 );
 console.log(
   `  ℹ️  Air froid (-40°C):             T_final = ${resultColdAir.T_final.toFixed(2)}°C`,
+);
+console.log(
+  `  ℹ️  Extrême (2500m, NPS 2", 0.3 kg/s, -30°C): T_final = ${resultExtreme.T_final.toFixed(2)}°C, P_final = ${resultExtreme.P_profile[resultExtreme.P_profile.length - 1].toFixed(2)} bar`,
 );
 
 // ========== RÉSUMÉ ==========

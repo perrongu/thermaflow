@@ -1,5 +1,32 @@
 # Historique des versions - ThermaFlow
 
+## Version 1.1.0 (4 novembre 2025)
+
+### Nouvelles fonctionnalités
+
+- Extension longueur maximale conduite: 1000m → 2500m (demande client)
+- Amélioration détection plage effective analyse sensibilité 1D
+- Amélioration visualisation points critiques (freeze/safety)
+- Amélioration rendu heatmap analyse sensibilité 2D
+
+### Améliorations
+
+- Test cas critique ajouté: L=2500m, NPS 2", débit faible, T_amb=-30°C
+- Validation convergence numérique pour ratio L/D ≈ 47,600
+- Mise à jour cohérente documentation, i18n (FR/EN/ES/PT), validation
+
+### Corrections
+
+- Chemin fichier validation externe dans automated_verification.js
+
+### Tests
+
+- 304/304 tests principaux passent (100%)
+- Nouveau test 9.4 dans test_pipe_network.js (67/67)
+- Rapport vérification automatique complet: AUTOMATED_VERIFICATION_2025-11-04.md
+
+---
+
 ## Version 1.0.1 (3 novembre 2025)
 
 ### Modifications

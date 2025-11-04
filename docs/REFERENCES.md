@@ -216,7 +216,7 @@ Si vous utilisez ThermaFlow dans un rapport d'ingénierie ou une publication:
 
 ```
 Perron, G. (2025). ThermaFlow - Outil de simulation d'écoulement thermique en conduites.
-Version 1.0.1. Disponible: https://github.com/perrongu/thermaflow
+Version 1.1.0. Disponible: https://github.com/perrongu/thermaflow
 ```
 
 **Note importante**: ThermaFlow implémente des corrélations standards de l'industrie. Dans un rapport technique, **citez toujours les sources originales** (Perry's, IAPWS-97, etc.) et non ThermaFlow lui-même.
