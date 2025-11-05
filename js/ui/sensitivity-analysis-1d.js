@@ -991,10 +991,10 @@
     displayMax,
     baseConfig
   ) {
-    // Couleurs des zones (mêmes que profil température)
-    const COLOR_SAFE = '#DFFFD6'; // Vert: T ≥ 5°C
-    const COLOR_WARNING = '#FFF4CC'; // Jaune: 0°C < T < 5°C
-    const COLOR_FREEZE = '#FFD6D6'; // Rouge: T ≤ 0°C
+    // Couleurs des zones (palette BBA)
+    const COLOR_SAFE = '#d0f5f9'; // Turquoise: T ≥ 5°C
+    const COLOR_WARNING = '#f5ebdf'; // Sable: 0°C < T < 5°C
+    const COLOR_FREEZE = '#f5dfdf'; // Rouge doux: T ≤ 0°C
     const COLOR_UNKNOWN = '#e5e7eb'; // Gris: données manquantes
 
     // Si displayMin/Max diffèrent des bornes originales dans result (troncature),
@@ -1042,7 +1042,7 @@
 
       // Ajouter texte explicatif
       ctx.fillStyle = '#6b7280';
-      ctx.font = 'italic 10px sans-serif';
+      ctx.font = 'italic 10px Inter, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       const invalidText = window.I18n ? I18n.t('detailedCalcs.outOfRange') : 'Hors plage';
@@ -1165,46 +1165,46 @@
 
     // Ligne de base (valeur actuelle) - NOIRE
     const baseX = xScale(result.baseValue);
-    ctx.strokeStyle = '#000000';
+    ctx.strokeStyle = '#002952';
     ctx.lineWidth = 2.5;
     ctx.beginPath();
     ctx.moveTo(baseX, lineTop);
     ctx.lineTo(baseX, lineBottom);
     ctx.stroke();
 
-    labels.push({
-      x: baseX,
-      text: 'Base',
-      color: '#000000',
-      font: 'bold 9px sans-serif',
-      priority: 1,
-    });
-
-    // Ligne 0°C (point de gel) - ROUGE
-    if (result.criticalValueFreeze !== null) {
-      const freezeX = xScale(result.criticalValueFreeze);
-      ctx.strokeStyle = '#dc2626';
-      ctx.lineWidth = 1.5;
-      ctx.setLineDash([4, 2]);
-      ctx.beginPath();
-      ctx.moveTo(freezeX, lineTop);
-      ctx.lineTo(freezeX, lineBottom);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
       labels.push({
-        x: freezeX,
-        text: '0°C',
-        color: '#dc2626',
-        font: '8px sans-serif',
-        priority: 2,
+        x: baseX,
+        text: 'Base',
+        color: '#002952',
+        font: 'bold 9px Inter, sans-serif',
+        priority: 1,
       });
-    }
+
+      // Ligne 0°C (point de gel) - ROUGE
+      if (result.criticalValueFreeze !== null) {
+        const freezeX = xScale(result.criticalValueFreeze);
+        ctx.strokeStyle = '#cb5d5d';
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([4, 2]);
+        ctx.beginPath();
+        ctx.moveTo(freezeX, lineTop);
+        ctx.lineTo(freezeX, lineBottom);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        labels.push({
+          x: freezeX,
+          text: '0°C',
+          color: '#cb5d5d',
+          font: '8px Inter, sans-serif',
+          priority: 2,
+        });
+      }
 
     // Ligne 5°C (seuil sécurité) - ORANGE
     if (result.criticalValueSafety !== null) {
       const safetyX = xScale(result.criticalValueSafety);
-      ctx.strokeStyle = '#f59e0b';
+      ctx.strokeStyle = '#cb9b5d';
       ctx.lineWidth = 1.5;
       ctx.setLineDash([4, 2]);
       ctx.beginPath();
@@ -1216,8 +1216,8 @@
       labels.push({
         x: safetyX,
         text: '5°C',
-        color: '#f59e0b',
-        font: '8px sans-serif',
+        color: '#cb9b5d',
+        font: '8px Inter, sans-serif',
         priority: 3,
       });
     }
@@ -1256,7 +1256,7 @@
   function drawValueLabels(ctx, barY, barHeight, result, xScale, _paddingBottom) {
     const labelY = barY + barHeight + 14;
 
-    ctx.font = '9px sans-serif';
+    ctx.font = '9px Inter, sans-serif';
     ctx.fillStyle = '#4b5563';
 
     // Valeur MIN à gauche
@@ -1276,7 +1276,7 @@
    * Dessine les limites épaisses aux extrémités - VERSION COMPACTE
    */
   function drawLimits(ctx, startX, barY, barWidth, barHeight) {
-    ctx.strokeStyle = '#1f2937';
+    ctx.strokeStyle = '#002952';
     ctx.lineWidth = 3;
 
     // Limite gauche

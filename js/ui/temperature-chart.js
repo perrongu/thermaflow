@@ -20,22 +20,22 @@
   const config = {
     padding: { top: 40, right: 40, bottom: 60, left: 80 },
     colors: {
-      line: '#2563eb',
-      freezeLine: '#dc2626',
-      marginLine: '#f59e0b',
-      dangerZone: 'rgba(220, 38, 38, 0.1)',
+      line: '#002952',
+      freezeLine: '#cb5d5d',
+      marginLine: '#cb9b5d',
+      dangerZone: 'rgba(203, 93, 93, 0.2)',
       grid: '#e5e7eb',
       axis: '#374151',
       text: '#6b7280',
       // Zones de risque
-      zoneGreen: '#DFFFD6',
-      zoneYellow: '#FFF4CC',
-      zoneRed: '#FFD6D6',
+      zoneGreen: 'rgba(34, 183, 197, 0.1)',
+      zoneYellow: 'rgba(203, 155, 93, 0.15)',
+      zoneRed: 'rgba(203, 93, 93, 0.2)',
     },
     lineWidth: 3,
     gridLineWidth: 1,
     fontSize: 12,
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
   };
 
   // ========== FONCTION PRINCIPALE ==========
