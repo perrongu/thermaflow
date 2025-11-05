@@ -26,6 +26,7 @@ data/
 ## Principe
 
 Les fichiers dans `data/` sont des **tables statiques pures**:
+
 - ✅ Aucune fonction de calcul
 - ✅ Données figées (Object.freeze)
 - ✅ Validation croisée avec sources scientifiques
@@ -50,19 +51,19 @@ Voir: `js/properties/README.md`
 
 Les matériaux d'isolation suivants sont validés scientifiquement (voir `docs/references/INSULATION_PROPERTIES_VALIDATION.md`):
 
-| ID technique | Nom français | k [W/(m·K)] | Densité [kg/m³] | Application |
-|--------------|--------------|-------------|-----------------|-------------|
-| `fiberglass` | Laine de verre | 0.040 | 32 | Standard, bon isolant |
-| `mineral_wool` | Laine de roche | 0.038 | 100 | Excellent isolant, haute densité |
-| `polyurethane_foam` | Mousse polyuréthane | 0.026 | 40 | Meilleur isolant (cellules fermées) |
-| `polystyrene_extruded` | Polystyrène extrudé (XPS) | 0.029 | 35 | Très bon (cellules fermées) |
-| `elastomeric_foam` | Mousse élastomère | 0.040 | 70 | Flexible (type Armaflex) |
+| ID technique           | Nom français              | k [W/(m·K)] | Densité [kg/m³] | Application                         |
+| ---------------------- | ------------------------- | ----------- | --------------- | ----------------------------------- |
+| `fiberglass`           | Laine de verre            | 0.040       | 32              | Standard, bon isolant               |
+| `mineral_wool`         | Laine de roche            | 0.038       | 100             | Excellent isolant, haute densité    |
+| `polyurethane_foam`    | Mousse polyuréthane       | 0.026       | 40              | Meilleur isolant (cellules fermées) |
+| `polystyrene_extruded` | Polystyrène extrudé (XPS) | 0.029       | 35              | Très bon (cellules fermées)         |
+| `elastomeric_foam`     | Mousse élastomère         | 0.040       | 70              | Flexible (type Armaflex)            |
 
-**Références de validation**: 
+**Références de validation**:
+
 - Perry's Handbook Table 5-17
 - ASHRAE Fundamentals Chapter 26
 - Incropera & DeWitt Appendix A
 - fluids.readthedocs.io
 
 **Note importante**: Les valeurs correspondent à des isolants **secs** à température ambiante (20-25°C). L'humidité peut réduire drastiquement la performance (facteur 2-3× sur k).
-

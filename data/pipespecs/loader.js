@@ -1,18 +1,18 @@
 /**
  * loader.js
- * 
+ *
  * Module de chargement et d'accès aux spécifications de tuyauterie
  * Fonctionne dans le browser uniquement (pas de require/module.exports)
  */
 
-(function() {
+(function () {
   'use strict';
 
   // ========== FONCTIONS PUBLIQUES ==========
 
   /**
    * Récupère les spécifications d'un tuyau
-   * 
+   *
    * @param {string} material - 'steel', 'copper', ou 'stainless_steel'
    * @param {string|number} scheduleOrType - Schedule (ex: '40') ou Type (ex: 'K')
    * @param {number} nps - Taille nominale en pouces
@@ -50,8 +50,8 @@
     }
 
     // Trouver le NPS
-    const pipe = specs.find(p => p.NPS === nps);
-    
+    const pipe = specs.find((p) => p.NPS === nps);
+
     if (!pipe) {
       console.error(`NPS ${nps}" non trouvé pour ${material} ${key}`);
       return null;
@@ -61,13 +61,13 @@
       OD: pipe.OD,
       ID: pipe.ID,
       WT: pipe.WT,
-      NPS: pipe.NPS
+      NPS: pipe.NPS,
     };
   }
 
   /**
    * Récupère la liste des schedules/types disponibles pour un matériau
-   * 
+   *
    * @param {string} material - 'steel', 'copper', ou 'stainless_steel'
    * @returns {Array<string>} Liste des schedules/types
    */
@@ -93,7 +93,7 @@
 
   /**
    * Récupère la liste des NPS disponibles pour un matériau et schedule/type
-   * 
+   *
    * @param {string} material - 'steel', 'copper', ou 'stainless_steel'
    * @param {string|number} scheduleOrType - Schedule ou Type
    * @returns {Array<number>} Liste des NPS triés
@@ -122,27 +122,27 @@
     }
 
     // Extraire et trier les NPS
-    return specs.map(p => p.NPS).sort((a, b) => a - b);
+    return specs.map((p) => p.NPS).sort((a, b) => a - b);
   }
 
   /**
    * Récupère le nom d'affichage pour un matériau
-   * 
+   *
    * @param {string} material - Code matériau
    * @returns {string} Nom d'affichage
    */
   function getMaterialName(material) {
     const names = {
-      'steel': 'Acier',
-      'copper': 'Cuivre',
-      'stainless_steel': 'Acier inoxydable'
+      steel: 'Acier',
+      copper: 'Cuivre',
+      stainless_steel: 'Acier inoxydable',
     };
     return names[material] || material;
   }
 
   /**
    * Détermine si le matériau utilise des "types" plutôt que des "schedules"
-   * 
+   *
    * @param {string} material - Code matériau
    * @returns {boolean} True si utilise des types (copper)
    */
@@ -156,10 +156,8 @@
     getAvailableSchedules,
     getAvailableNPS,
     getMaterialName,
-    usesTypes
+    usesTypes,
   };
 
   console.log('✅ PipeSpecsLoader chargé');
-
 })();
-

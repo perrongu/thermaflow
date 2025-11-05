@@ -5,15 +5,19 @@
 ## Modules
 
 ### reynolds.js
+
 Nombre de Reynolds et régimes d'écoulement.
+
 ```javascript
-Re = ρVD/μ
+Re = ρVD / μ;
 const Re = calculateReynolds(rho, V, D, mu);
 const regime = getFlowRegime(Re); // 'laminar', 'transitional', 'turbulent'
 ```
 
 ### geometry.js
+
 Relations géométriques conduite circulaire.
+
 ```javascript
 A = πD²/4
 Q = VA
@@ -21,7 +25,9 @@ Q = VA
 ```
 
 ### pressure-basic.js
+
 Équation de Darcy-Weisbach et pression dynamique.
+
 ```javascript
 ΔP = f × (L/D) × (ρV²/2)
 h_L = ΔP/(ρg)
@@ -41,4 +47,3 @@ Ces formules sont les **équations classiques** que tu reconnais.
 Elles sont isolées ici pour faciliter la compréhension et les tests.
 
 Pour des calculs plus complexes → voir `js/correlations/` et `js/calculations/`
-

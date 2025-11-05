@@ -1,15 +1,15 @@
 // Dictionnaire FR (UI uniquement)
-(function() {
+(function () {
   'use strict';
 
   window.I18N_FR = Object.freeze({
     lang: 'fr',
     app: {
       title: '❄️ ThermaFlow',
-      subtitle: "Détection du risque de gel dans les conduites d'eau"
+      subtitle: "Détection du risque de gel dans les conduites d'eau",
     },
     header: {
-      langAria: 'Langue'
+      langAria: 'Langue',
     },
     diagram: {
       water: 'EAU',
@@ -17,23 +17,23 @@
       temperature: 'Température (°C):',
       pressure: 'Pression (kPag):',
       flowRate: 'Débit (m³/hr):',
-      windSpeed: 'Vitesse du vent (km/h):'
+      windSpeed: 'Vitesse du vent (km/h):',
     },
     units: {
       flowRate: {
         m3_h: 'm³/h',
-        usgpm: 'USGPM'
+        usgpm: 'USGPM',
       },
       pressure: {
         kPag: 'kPag',
-        psig: 'psig'
-      }
+        psig: 'psig',
+      },
     },
     controls: {
       material: 'MATÉRIEL:',
       schedule: 'SCHEDULE:',
       type: 'TYPE:',
-      nps: 'NPS:'
+      nps: 'NPS:',
     },
     insulation: {
       sectionTitle: '🧤 Isolation (optionnel)',
@@ -45,8 +45,8 @@
         rockwool: 'Laine de roche',
         foam: 'Mousse polyuréthane',
         polystyrene: 'Polystyrène extrudé (XPS)',
-        elastomeric: 'Mousse élastomère'
-      }
+        elastomeric: 'Mousse élastomère',
+      },
     },
     sections: {
       s1: '1. Paramètres et résultats',
@@ -54,7 +54,7 @@
       s21: '2.1 Analyse paramétrique (graphiques tornado)',
       s22: '2.2 Analyse combinée (heatmap 2D)',
       s3: '3. Explication des calculs',
-      toggleDetails: 'Afficher les détails techniques'
+      toggleDetails: 'Afficher les détails techniques',
     },
     configSummary: {
       title: 'Configuration analysée',
@@ -72,7 +72,7 @@
       insulation: 'Isolation',
       insulationType: 'Type:',
       insulationThickness: 'Épaisseur:',
-      none: 'Aucune'
+      none: 'Aucune',
     },
     chart: {
       title: '📊 Profil de température',
@@ -85,7 +85,7 @@
       freezeLine: 'Gel',
       safetyLine: 'Seuil sécuritaire',
       freezeBadge: 'GEL',
-      legendTitle: 'Légende:'
+      legendTitle: 'Légende:',
     },
     results: {
       thermalTitle: '🌡️ Résultats thermiques',
@@ -97,20 +97,24 @@
       regime: "Régime d'écoulement",
       reynolds: 'Nombre de Reynolds',
       pressureDrop: 'Perte de charge',
-      velocity: 'Vitesse moyenne'
+      velocity: 'Vitesse moyenne',
     },
     sensitivity: {
       interpTitle: '📖 Interprétation',
-      interp1: "Analyse individuelle : Chaque graphique montre l'impact d'un seul paramètre qui varie sur toute sa plage, ",
-      interp2: "tous les autres paramètres restant fixés à leur valeur actuelle. ",
-      interp3: 'Cela permet d\'identifier quels paramètres ont le plus d\'influence sur le risque de gel.',
+      interp1:
+        "Analyse individuelle : Chaque graphique montre l'impact d'un seul paramètre qui varie sur toute sa plage, ",
+      interp2: 'tous les autres paramètres restant fixés à leur valeur actuelle. ',
+      interp3:
+        "Cela permet d'identifier quels paramètres ont le plus d'influence sur le risque de gel.",
       legendBase: 'Valeur de base (actuelle)',
       legendFreeze: 'Point critique gel (0°C)',
       legendSafety: 'Point critique sécurité (5°C)',
       legendLimit: 'Limites de la plage du paramètre',
-      interp2d1: 'Analyse combinée : La carte thermique (heatmap) montre la plage complète des résultats possibles ',
+      interp2d1:
+        'Analyse combinée : La carte thermique (heatmap) montre la plage complète des résultats possibles ',
       interp2d2: "lorsque deux paramètres varient simultanément sur l'ensemble de leur spectre, ",
-      interp2d3: 'tous les autres paramètres restant fixés. Cela permet d\'identifier les combinaisons critiques et les marges de sécurité disponibles.',
+      interp2d3:
+        "tous les autres paramètres restant fixés. Cela permet d'identifier les combinaisons critiques et les marges de sécurité disponibles.",
       paramX: 'Paramètre X',
       paramY: 'Paramètre Y',
       min: 'Min',
@@ -120,7 +124,7 @@
       truncatedDetail: 'Centrée sur valeurs importantes',
       effectiveRange: 'Plage effective',
       theoreticalRange: 'Plage théorique',
-      exceedsLimits: 'dépasse limites physiques'
+      exceedsLimits: 'dépasse limites physiques',
     },
     diagram: {
       water: 'EAU',
@@ -128,10 +132,11 @@
       temperature: 'Température (°C):',
       pressure: 'Pression (kPag):',
       flowRate: 'Débit (m³/hr):',
-      windSpeed: 'Vitesse du vent (km/h):'
+      windSpeed: 'Vitesse du vent (km/h):',
     },
     calcDetails: {
-      introText: 'Cette section détaille la méthodologie de calcul permettant à un ingénieur de valider la rigueur des résultats obtenus.',
+      introText:
+        'Cette section détaille la méthodologie de calcul permettant à un ingénieur de valider la rigueur des résultats obtenus.',
       methodology: {
         title: '📋 Résumé de la méthodologie',
         pipe: 'La conduite de',
@@ -140,7 +145,8 @@
         of: 'de',
         each: 'm chacun. Pour chaque segment, le calcul suit 6 étapes séquentielles:',
         note: 'Note:',
-        noteText: 'La température de sortie d\'un segment devient la température d\'entrée du suivant, permettant de suivre l\'évolution thermique le long de la conduite.',
+        noteText:
+          "La température de sortie d'un segment devient la température d'entrée du suivant, permettant de suivre l'évolution thermique le long de la conduite.",
         step1Title: 'Propriétés des fluides',
         step1Desc: 'Interpolation dans tables IAPWS-97 (eau) et corrélations standards (air)',
         step2Title: 'Hydraulique',
@@ -152,47 +158,48 @@
         step5Title: 'Résistances thermiques',
         step5Desc: 'Somme des résistances en série, coefficient UA global',
         step6Title: 'Méthode NTU',
-        step6Desc: 'Calcul température de sortie et perte thermique du segment'
+        step6Desc: 'Calcul température de sortie et perte thermique du segment',
       },
       example: {
         title: '🔬 Exemple détaillé : Segment',
         position: 'Position:',
         note: 'Les segments suivants',
-        noteText: 'utilisent la même méthodologie avec leurs propres conditions d\'entrée. Consultez le tableau récapitulatif au bas de la page pour leurs résultats.'
+        noteText:
+          "utilisent la même méthodologie avec leurs propres conditions d'entrée. Consultez le tableau récapitulatif au bas de la page pour leurs résultats.",
       },
       step1: {
         title: 'Étape 1 : Propriétés des fluides',
         water: {
           title: '1.1 Eau (interpolation tables IAPWS-97)',
-          inputValues: 'Valeurs d\'entrée :',
+          inputValues: "Valeurs d'entrée :",
           avgTemp: 'Température moyenne : T =',
           pressure: 'Pression : P =',
           interpolation: 'Interpolation linéaire 2D dans les tables IAPWS-97 :',
-          result: '→ Propriétés de l\'eau à',
-          source: 'Source : Tables IAPWS-97 (Wagner & Pruß, 2002) - data/fluids/water-tables.js'
+          result: "→ Propriétés de l'eau à",
+          source: 'Source : Tables IAPWS-97 (Wagner & Pruß, 2002) - data/fluids/water-tables.js',
         },
         air: {
           title: '1.2 Air ambiant',
-          inputValue: 'Valeur d\'entrée :',
+          inputValue: "Valeur d'entrée :",
           ambTemp: 'Température ambiante : T',
           interpolation: 'Interpolation linéaire dans les tables air :',
-          result: '→ Propriétés de l\'air à',
-          source: 'Source : Corrélations air standard - data/fluids/air-tables.js'
-        }
+          result: "→ Propriétés de l'air à",
+          source: 'Source : Corrélations air standard - data/fluids/air-tables.js',
+        },
       },
       step2: {
         title: 'Étape 2 : Hydraulique',
         velocity: {
-          title: '2.1 Vitesse d\'écoulement',
-          inputValues: 'Valeurs d\'entrée :',
+          title: "2.1 Vitesse d'écoulement",
+          inputValues: "Valeurs d'entrée :",
           massFlow: 'Débit massique : ṁ =',
           density: 'Masse volumique : ρ =',
           diameter: 'Diamètre intérieur : D =',
           volumeFlow: 'Débit volumique :',
           crossSection: 'Section de passage :',
           avgVelocity: 'Vitesse moyenne :',
-          result: '→ Vitesse d\'écoulement : V =',
-          source: 'Source : Équation de continuité - js/formulas/geometry.js'
+          result: "→ Vitesse d'écoulement : V =",
+          source: 'Source : Équation de continuité - js/formulas/geometry.js',
         },
         reynolds: {
           title: '2.2 Nombre de Reynolds',
@@ -201,7 +208,7 @@
           turbulent: 'turbulent',
           laminar: 'laminaire',
           condition: '(Re > 4000)',
-          source: 'Source : Perry\'s Section 6-3 - js/formulas/reynolds.js'
+          source: "Source : Perry's Section 6-3 - js/formulas/reynolds.js",
         },
         friction: {
           title: '2.3 Facteur de friction',
@@ -210,38 +217,39 @@
           correlation: 'Corrélation de Churchill (turbulent, explicite) :',
           note: 'Note : Équation de Churchill résolue de façon explicite en fonction de Re et ε/D',
           result: '→ Facteur de friction de Darcy : f =',
-          source: 'Source : Churchill (1977) - Perry\'s Section 6-7 - js/correlations/friction-factor.js'
+          source:
+            "Source : Churchill (1977) - Perry's Section 6-7 - js/correlations/friction-factor.js",
         },
         pressureDrop: {
           title: '2.4 Perte de charge',
           segmentLength: 'Longueur segment : L =',
           equation: 'Équation de Darcy-Weisbach :',
           result: '→ Perte de charge : ΔP =',
-          source: 'Source : Darcy-Weisbach - Perry\'s Section 6-4 - js/formulas/pressure-basic.js'
-        }
+          source: "Source : Darcy-Weisbach - Perry's Section 6-4 - js/formulas/pressure-basic.js",
+        },
       },
       step3: {
         title: 'Étape 3 : Transfert thermique interne (eau → paroi)',
         prandtl: {
           title: '3.1 Nombre de Prandtl (eau)',
-          result: '→ Nombre de Prandtl de l\'eau : Pr ='
+          result: "→ Nombre de Prandtl de l'eau : Pr =",
         },
         nusselt: {
           title: '3.2 Nombre de Nusselt (convection interne)',
           correlation: 'Corrélation : Dittus-Boelter (turbulent)',
           result: '→ Nombre de Nusselt interne : Nu =',
-          source: 'Source : Perry\'s Section 5-12 - js/correlations/nusselt-internal.js'
+          source: "Source : Perry's Section 5-12 - js/correlations/nusselt-internal.js",
         },
         coefficient: {
           title: '3.3 Coefficient de convection interne',
           result: '→ Coefficient de convection interne : h',
-          source: 'Source calculé à partir du nombre de Nusselt'
+          source: 'Source calculé à partir du nombre de Nusselt',
         },
         correlations: {
-          hausen: 'Hausen (laminaire avec effet d\'entrée)',
+          hausen: "Hausen (laminaire avec effet d'entrée)",
           dittusBoelter: 'Dittus-Boelter (turbulent)',
-          gnielinski: 'Gnielinski (turbulent, 3000 < Re < 5×10⁶)'
-        }
+          gnielinski: 'Gnielinski (turbulent, 3000 < Re < 5×10⁶)',
+        },
       },
       step4: {
         title: 'Étape 4 : Transfert thermique externe (paroi → air)',
@@ -256,7 +264,7 @@
           result: '→ Coefficient de convection externe : h',
           source: 'Source : Churchill-Bernstein (1977) - js/correlations/nusselt-external.js',
           naturalConvection: 'Convection naturelle (cylindre horizontal)',
-          rayleighCorrelation: 'Nombre de Rayleigh puis corrélation pour convection naturelle'
+          rayleighCorrelation: 'Nombre de Rayleigh puis corrélation pour convection naturelle',
         },
         radiation: {
           title: '4.2 Rayonnement',
@@ -266,12 +274,12 @@
           surfaceTemp: 'Avec T',
           surfaceTempNote: '≈ température de surface estimée',
           result: '→ Coefficient de rayonnement : h',
-          source: 'Source : Loi de Stefan-Boltzmann - js/correlations/radiation.js'
+          source: 'Source : Loi de Stefan-Boltzmann - js/correlations/radiation.js',
         },
         total: {
           title: '4.3 Coefficient externe total',
-          result: '→ Coefficient externe total : h'
-        }
+          result: '→ Coefficient externe total : h',
+        },
       },
       step5: {
         title: 'Étape 5 : Résistances thermiques',
@@ -280,95 +288,97 @@
           convInternal: '(convection interne) :',
           condPipe: '(conduction paroi steel) :',
           condInsulation: '(conduction isolation',
-          convExternal: '(convection externe + rayonnement) :'
+          convExternal: '(convection externe + rayonnement) :',
         },
         total: {
           title: '5.2 Résistance totale',
-          result: '→ Résistance thermique totale : R'
+          result: '→ Résistance thermique totale : R',
         },
         ua: {
           title: '5.3 Coefficient global UA',
           result: '→ Coefficient UA :',
-          source: 'Source : Résistances en série - js/calculations/thermal-resistance.js'
-        }
+          source: 'Source : Résistances en série - js/calculations/thermal-resistance.js',
+        },
       },
       step6: {
         title: 'Étape 6 : Méthode NTU (température de sortie)',
         ntu: {
-          title: '6.1 Nombre d\'unités de transfert (NTU)',
+          title: "6.1 Nombre d'unités de transfert (NTU)",
           fluidCapacity: 'Capacité thermique du fluide :',
-          transferUnits: 'Nombre d\'unités de transfert :',
-          result: '→ NTU ='
+          transferUnits: "Nombre d'unités de transfert :",
+          result: '→ NTU =',
         },
         effectiveness: {
           title: '6.2 Efficacité thermique',
           exchanger: 'Pour un échangeur avec T',
           constant: 'constante (C',
           infinity: '= ∞) :',
-          result: '→ Efficacité : ε ='
+          result: '→ Efficacité : ε =',
         },
         outletTemp: {
           title: '6.3 Température de sortie',
-          result: '→ Température de sortie : T'
+          result: '→ Température de sortie : T',
         },
         heatLoss: {
           title: '6.4 Perte thermique',
           result: '→ Perte thermique : Q',
-          source: 'Source : Méthode NTU - Incropera & DeWitt, Perry\'s Section 5-10 - js/calculations/heat-transfer.js'
-        }
-      }
+          source:
+            "Source : Méthode NTU - Incropera & DeWitt, Perry's Section 5-10 - js/calculations/heat-transfer.js",
+        },
+      },
     },
     buttons: {
-      exportPDF: 'Exporter PDF'
+      exportPDF: 'Exporter PDF',
     },
     footer: {
       license: 'Licence MIT',
-      basedOn: "Calculs basés sur Perry's Handbook et IAPWS-97"
+      basedOn: "Calculs basés sur Perry's Handbook et IAPWS-97",
     },
-  errors: {
-    suggestionsTitle: 'Suggestions pour résoudre le problème :'
-  },
+    errors: {
+      suggestionsTitle: 'Suggestions pour résoudre le problème :',
+    },
     status: {
       modifying: 'Modification en cours...',
       recalculating: 'Recalcul en cours...',
       uptodate: 'Résultats à jour',
-      error: 'Erreur de calcul'
+      error: 'Erreur de calcul',
     },
-  validation: {
-    requiredMissing: 'Champ requis manquant: {label}',
-    lengthRange: 'Longueur doit être entre 1 et 2500 m',
-    waterTempRange: 'Température eau doit être entre 1 et 100°C',
-    airTempRange: 'Température air doit être entre -50 et 30°C',
-    waterPressureRange: 'Pression eau doit être entre 100 et 1000 kPag',
-    waterFlowRange: 'Débit eau doit être entre 0.06 et 30 m³/hr',
-    windSpeedRange: 'Vitesse vent doit être entre 0 et 108 km/h'
-  },
+    validation: {
+      requiredMissing: 'Champ requis manquant: {label}',
+      lengthRange: 'Longueur doit être entre 1 et 2500 m',
+      waterTempRange: 'Température eau doit être entre 1 et 100°C',
+      airTempRange: 'Température air doit être entre -50 et 30°C',
+      waterPressureRange: 'Pression eau doit être entre 100 et 1000 kPag',
+      waterFlowRange: 'Débit eau doit être entre 0.06 et 30 m³/hr',
+      windSpeedRange: 'Vitesse vent doit être entre 0 et 108 km/h',
+    },
     alerts: {
       modulesMissing: "Erreur: Certains modules n'ont pas pu être chargés. Rechargez la page.",
       noResultsToExport: "Aucun résultat à exporter. Effectuez d'abord une analyse.",
-      exportUnavailable: "Module d'export non disponible"
+      exportUnavailable: "Module d'export non disponible",
     },
     verdict: {
       frozen: {
         title: 'CONDITION DE GEL ATTEINTE',
-        msg: "La température de l'eau a atteint 0°C (point de congélation) à {distance} m de l'entrée. L'eau gèle dans la conduite.\n\n⚠️ Position critique: {distance} m de l'entrée\n❌ Marge de sécurité: 0.0°C (gel atteint)\n⚠️ Risque d'arrêt de production et de rupture de conduite"
+        msg: "La température de l'eau a atteint 0°C (point de congélation) à {distance} m de l'entrée. L'eau gèle dans la conduite.\n\n⚠️ Position critique: {distance} m de l'entrée\n❌ Marge de sécurité: 0.0°C (gel atteint)\n⚠️ Risque d'arrêt de production et de rupture de conduite",
       },
       critical: {
         title: 'RISQUE DE GEL DÉTECTÉ',
-        msg: 'Température minimale: {tmin}°C atteinte à {pos} m de l\'entrée.\n\n⚠️ Position critique: {freezePos} m (gel projeté)\n❌ Marge avant gel: {marginFreeze}°C (en-dessous de 0°C)\n❌ Écart vs seuil sécuritaire: {marginSafety}°C (sous {safety}°C)'
+        msg: "Température minimale: {tmin}°C atteinte à {pos} m de l'entrée.\n\n⚠️ Position critique: {freezePos} m (gel projeté)\n❌ Marge avant gel: {marginFreeze}°C (en-dessous de 0°C)\n❌ Écart vs seuil sécuritaire: {marginSafety}°C (sous {safety}°C)",
       },
       warning: {
         title: 'VIGILANCE : SOUS LA MARGE DE SÉCURITÉ',
-        msg: 'Température minimale: {tmin}°C atteinte à {pos} m de l\'entrée.\n\n⚠️ Position la plus froide: {pos} m\n⚠️ Marge avant gel: +{marginFreeze}°C (au-dessus de 0°C)\n⚠️ Écart vs seuil sécuritaire: {marginSafety}°C (sous {safety}°C)'
+        msg: "Température minimale: {tmin}°C atteinte à {pos} m de l'entrée.\n\n⚠️ Position la plus froide: {pos} m\n⚠️ Marge avant gel: +{marginFreeze}°C (au-dessus de 0°C)\n⚠️ Écart vs seuil sécuritaire: {marginSafety}°C (sous {safety}°C)",
       },
       ok: {
         title: 'PAS DE RISQUE DE GEL',
-        msg: 'La conduite est protégée. Température minimale: {tmin}°C atteinte à {pos} m.\n\n✅ Marge avant gel: +{marginFreeze}°C (au-dessus de 0°C)\n✅ Marge de sécurité: +{marginSafety}°C (au-dessus de {safety}°C)'
-      }
+        msg: 'La conduite est protégée. Température minimale: {tmin}°C atteinte à {pos} m.\n\n✅ Marge avant gel: +{marginFreeze}°C (au-dessus de 0°C)\n✅ Marge de sécurité: +{marginSafety}°C (au-dessus de {safety}°C)',
+      },
     },
     corrective: {
       warningTitle: '⚠️ Configuration proche des limites physiques',
-      warningNote: "Note: Votre configuration ACTUELLE a produit des résultats valides. Cet avertissement concerne les valeurs MIN/MAX testées dans l'analyse de sensibilité.",
+      warningNote:
+        "Note: Votre configuration ACTUELLE a produit des résultats valides. Cet avertissement concerne les valeurs MIN/MAX testées dans l'analyse de sensibilité.",
       pressureCritical: '🚨 Erreurs de pression critiques:',
       tempErrors: '⚠️ Erreurs de température:',
       otherLimits: 'Autres limitations:',
@@ -380,14 +390,14 @@
       adjustTemps: 'Ajuster les températures pour rester dans les plages de validité',
       verifyAmbient: 'Vérifier que les conditions ambiantes sont réalistes',
       reviewInputs: "Réviser les paramètres d'entrée pour rester dans les plages de validité",
-      consultDocs: 'Consulter la documentation technique pour les limites de chaque corrélation'
+      consultDocs: 'Consulter la documentation technique pour les limites de chaque corrélation',
     },
     detailed: {
       atPosition: 'à {pos}m',
       gelAtteint: 'Gel atteint',
       secure: 'sécuritaire',
       underMargin: 'sous marge',
-      gel: 'gel'
+      gel: 'gel',
     },
     sensitivityTable: {
       parameter: 'Paramètre',
@@ -401,12 +411,12 @@
       waterFlow: 'Débit eau',
       waterTempIn: 'Température eau entrée',
       airTemp: 'Température air',
-      windSpeed: 'Vitesse vent'
+      windSpeed: 'Vitesse vent',
     },
     materials: {
       steel: 'Acier',
       copper: 'Cuivre',
-      stainless_steel: 'Acier inoxydable'
+      stainless_steel: 'Acier inoxydable',
     },
     diagram: {
       water: 'EAU',
@@ -414,11 +424,11 @@
       temperature: 'Température (°C):',
       pressure: 'Pression (kPag):',
       flowRate: 'Débit (m³/hr):',
-      windSpeed: 'Vitesse du vent (km/h):'
+      windSpeed: 'Vitesse du vent (km/h):',
     },
     common: {
       od: 'OD',
-      id: 'ID'
+      id: 'ID',
     },
     sensitivityTable: {
       parameter: 'Paramètre',
@@ -437,7 +447,7 @@
       paramY: 'Paramètre Y',
       min: 'Min',
       max: 'Max',
-      to: 'à'
+      to: 'à',
     },
     detailedCalcs: {
       outputTemp: 'Température de sortie :',
@@ -454,14 +464,13 @@
       segment1Note: 'Segment 1 :',
       segment1Text: 'Calculs détaillés affichés ci-dessus',
       fluidPropertiesNote: 'Note :',
-      fluidPropertiesText: 'Les propriétés des fluides sont recalculées à chaque segment en fonction de T<sub>avg</sub> = (T<sub>in</sub> + T<sub>out</sub>)/2 pour une précision optimale.'
+      fluidPropertiesText:
+        'Les propriétés des fluides sont recalculées à chaque segment en fonction de T<sub>avg</sub> = (T<sub>in</sub> + T<sub>out</sub>)/2 pour une précision optimale.',
     },
     disclaimer: {
-      title: 'Avertissement et conditions d\'utilisation',
-      text: 'Cette application fournit une estimation du risque de gel dans des conduites d\'eau à partir de modèles thermiques et hydrauliques validés.<br><br>Malgré des essais réalisés dans des conditions variées, les résultats obtenus ne doivent être utilisés qu\'à titre <strong>indicatif</strong> et <strong>d\'aide à la décision</strong>. Ils ne remplacent pas l\'analyse d\'un professionnel qualifié ni les validations nécessaires avant toute décision opérationnelle.<br><br>L\'utilisateur demeure <strong>seul responsable</strong> de la vérification des données d\'entrée, de l\'interprétation des résultats et de la mise en œuvre de mesures de protection et de contingence appropriées.<br><br>L\'utilisation de cette application implique l\'<strong>acceptation de ces conditions</strong>.',
-      accept: 'J\'accepte'
-    }
+      title: "Avertissement et conditions d'utilisation",
+      text: "Cette application fournit une estimation du risque de gel dans des conduites d'eau à partir de modèles thermiques et hydrauliques validés.<br><br>Malgré des essais réalisés dans des conditions variées, les résultats obtenus ne doivent être utilisés qu'à titre <strong>indicatif</strong> et <strong>d'aide à la décision</strong>. Ils ne remplacent pas l'analyse d'un professionnel qualifié ni les validations nécessaires avant toute décision opérationnelle.<br><br>L'utilisateur demeure <strong>seul responsable</strong> de la vérification des données d'entrée, de l'interprétation des résultats et de la mise en œuvre de mesures de protection et de contingence appropriées.<br><br>L'utilisation de cette application implique l'<strong>acceptation de ces conditions</strong>.",
+      accept: "J'accepte",
+    },
   });
 })();
-
-

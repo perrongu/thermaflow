@@ -1,8 +1,8 @@
 /**
  * calculation-manager.js
- * 
+ *
  * Gestionnaire centralisé des recalculs pour ThermaFlow
- * 
+ *
  * Responsabilités:
  * - Gérer la file d'attente des demandes de calcul
  * - Annuler les calculs obsolètes
@@ -11,60 +11,62 @@
  * - Exposer API unifiée pour tous les modules UI
  */
 
-(function() {
+(function () {
   'use strict';
 
   // ========== MODE DEBUG ==========
   const DEBUG = false; // Activer pour logs détaillés
-  
+
   // ========== ÉTATS POSSIBLES ==========
   const States = {
-    IDLE: 'idle',           // Aucun calcul en cours ou en attente
-    PENDING: 'pending',     // Calcul en attente (debounce)
+    IDLE: 'idle', // Aucun calcul en cours ou en attente
+    PENDING: 'pending', // Calcul en attente (debounce)
     CALCULATING: 'calculating', // Calcul en cours d'exécution
-    COMPLETE: 'complete',   // Calcul terminé avec succès
-    ERROR: 'error'          // Calcul terminé avec erreur
+    COMPLETE: 'complete', // Calcul terminé avec succès
+    ERROR: 'error', // Calcul terminé avec erreur
   };
 
   // ========== PRIORITÉS ==========
   const Priorities = {
-    IMMEDIATE: 3,  // Bypass tout, exécute maintenant (Enter, bouton)
-    HIGH: 2,       // Haute priorité, cancel low (blur, change)
-    LOW: 1         // Basse priorité, peut être remplacée (input debounced)
+    IMMEDIATE: 3, // Bypass tout, exécute maintenant (Enter, bouton)
+    HIGH: 2, // Haute priorité, cancel low (blur, change)
+    LOW: 1, // Basse priorité, peut être remplacée (input debounced)
   };
 
   // ========== ÉTAT GLOBAL ==========
-  let state = {
+  const state = {
     current: States.IDLE,
-    pendingRequest: null,     // Requête en attente (avec timeout)
+    pendingRequest: null, // Requête en attente (avec timeout)
     currentCalculation: null, // Calcul en cours (avec cancel)
-    lastConfig: null,         // Dernière config calculée
-    lastResult: null          // Dernier résultat
+    lastConfig: null, // Dernière config calculée
+    lastResult: null, // Dernier résultat
   };
 
   // ========== CALLBACKS VISUELS ==========
   let callbacks = {
-    onStateChange: null,      // (state, data) => void
+    onStateChange: null, // (state, data) => void
     onCalculationStart: null, // (config) => void
     onCalculationComplete: null, // (result) => void
-    onCalculationError: null  // (error) => void
+    onCalculationError: null, // (error) => void
   };
 
   // ========== INITIALISATION ==========
   /**
    * Initialise le gestionnaire de calcul
-   * 
+   *
    * @param {Object} callbackHandlers - Handlers pour les événements
    */
   function init(callbackHandlers = {}) {
     callbacks = { ...callbacks, ...callbackHandlers };
-    if (DEBUG) console.log('✅ CalculationManager initialisé');
+    if (DEBUG) {
+      console.log('✅ CalculationManager initialisé');
+    }
   }
 
   // ========== DEMANDE DE RECALCUL ==========
   /**
    * Demande un recalcul avec priorité et raison
-   * 
+   *
    * @param {Object} config - Configuration de la simulation
    * @param {Object} options - Options de la requête
    * @param {string} options.priority - 'immediate', 'high', ou 'low'
@@ -72,15 +74,13 @@
    * @param {number} options.delay - Délai personnalisé (optionnel)
    */
   function requestRecalculation(config, options = {}) {
-    const {
-      priority = 'high',
-      reason = 'unknown',
-      delay = getPriorityDelay(priority)
-    } = options;
+    const { priority = 'high', reason = 'unknown', delay = getPriorityDelay(priority) } = options;
 
     const priorityLevel = Priorities[priority.toUpperCase()] || Priorities.HIGH;
 
-    if (DEBUG) console.log(`🔄 Recalcul demandé: priority=${priority}, reason=${reason}, delay=${delay}ms`);
+    if (DEBUG) {
+      console.log(`🔄 Recalcul demandé: priority=${priority}, reason=${reason}, delay=${delay}ms`);
+    }
 
     // Cas 1: IMMEDIATE - Exécuter maintenant, annuler tout
     if (priorityLevel === Priorities.IMMEDIATE) {
@@ -132,7 +132,7 @@
       config,
       priority,
       reason,
-      timeoutId
+      timeoutId,
     };
   }
 
@@ -140,14 +140,18 @@
   function cancelPendingRequest() {
     if (state.pendingRequest) {
       clearTimeout(state.pendingRequest.timeoutId);
-      if (DEBUG) console.log(`❌ Requête annulée: ${state.pendingRequest.reason}`);
+      if (DEBUG) {
+        console.log(`❌ Requête annulée: ${state.pendingRequest.reason}`);
+      }
       state.pendingRequest = null;
     }
   }
 
   // ========== EXÉCUTER CALCUL ==========
   function executeCalculation(config, reason) {
-    if (DEBUG) console.log(`🔬 Exécution calcul: reason=${reason}`);
+    if (DEBUG) {
+      console.log(`🔬 Exécution calcul: reason=${reason}`);
+    }
 
     setState(States.CALCULATING, { reason });
 
@@ -164,7 +168,7 @@
       try {
         // Calculer le réseau
         const networkResult = calculatePipeNetwork(config);
-        
+
         // Vérifier gel
         let freezeAnalysis;
         if (networkResult.frozenCondition) {
@@ -173,14 +177,10 @@
             T_min: 0.0,
             distance_gel: networkResult.frozenAtPosition,
             marge_avant_gel: 0,
-            isAtRisk: true
+            isAtRisk: true,
           };
         } else {
-          freezeAnalysis = detectFreeze(
-            networkResult.T_profile,
-            networkResult.x_profile,
-            0
-          );
+          freezeAnalysis = detectFreeze(networkResult.T_profile, networkResult.x_profile, 0);
         }
 
         // Succès
@@ -198,7 +198,6 @@
           state.pendingRequest = null;
           executeCalculation(pending.config, pending.reason);
         }
-
       } catch (error) {
         console.error('❌ Erreur calcul:', error);
         state.currentCalculation = null;
@@ -220,7 +219,7 @@
     state.currentCalculation = {
       timeoutId,
       config,
-      reason
+      reason,
     };
   }
 
@@ -228,7 +227,9 @@
   function cancelCurrentCalculation() {
     if (state.currentCalculation) {
       clearTimeout(state.currentCalculation.timeoutId);
-      if (DEBUG) console.log(`❌ Calcul annulé: ${state.currentCalculation.reason}`);
+      if (DEBUG) {
+        console.log(`❌ Calcul annulé: ${state.currentCalculation.reason}`);
+      }
       state.currentCalculation = null;
     }
   }
@@ -238,7 +239,9 @@
     cancelPendingRequest();
     cancelCurrentCalculation();
     setState(States.IDLE);
-    if (DEBUG) console.log('🛑 Tous les calculs annulés');
+    if (DEBUG) {
+      console.log('🛑 Tous les calculs annulés');
+    }
   }
 
   // ========== OBTENIR DÉLAI PAR PRIORITÉ ==========
@@ -260,7 +263,9 @@
     const oldState = state.current;
     state.current = newState;
 
-    if (DEBUG) console.log(`📊 État: ${oldState} → ${newState}`, data);
+    if (DEBUG) {
+      console.log(`📊 État: ${oldState} → ${newState}`, data);
+    }
 
     if (callbacks.onStateChange) {
       callbacks.onStateChange(newState, data);
@@ -274,17 +279,19 @@
       hasPendingRequest: state.pendingRequest !== null,
       isCalculating: state.current === States.CALCULATING,
       lastConfig: state.lastConfig,
-      lastResult: state.lastResult
+      lastResult: state.lastResult,
     };
   }
 
   // ========== VÉRIFIER SI CONFIG CHANGÉE ==========
   function hasConfigChanged(newConfig) {
-    if (!state.lastConfig) return true;
+    if (!state.lastConfig) {
+      return true;
+    }
 
     // Comparaison simplifiée des propriétés clés
     const keys = ['totalLength', 'fluid', 'ambient', 'geometry', 'insulation'];
-    
+
     for (const key of keys) {
       if (JSON.stringify(state.lastConfig[key]) !== JSON.stringify(newConfig[key])) {
         return true;
@@ -302,8 +309,6 @@
     getState,
     hasConfigChanged,
     States,
-    Priorities
+    Priorities,
   };
-
 })();
-

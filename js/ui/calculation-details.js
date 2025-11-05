@@ -1,22 +1,22 @@
 /**
  * calculation-details.js
- * 
+ *
  * Module pour afficher les détails de calcul étape par étape (Section 3).
- * 
+ *
  * Cette section permet à un ingénieur compétent de valider la pertinence
  * des résultats en suivant la mécanique de calcul complète.
- * 
+ *
  * Structure:
  * - Segment 1: Calculs détaillés complets
  * - Segments intermédiaires: Tableau récapitulatif
  * - Segment final: Calculs détaillés complets
  */
 
-(function() {
+(function () {
   'use strict';
 
   // ========== UTILITAIRES ==========
-  
+
   /**
    * Formate un nombre en notation scientifique LaTeX
    * @param {number} value - Valeur à formater
@@ -24,71 +24,86 @@
    * @returns {string} Notation LaTeX (ex: "1.234 \\times 10^{-3}")
    */
   function toScientificLatex(value, decimals = 3) {
-    if (value === 0) return '0';
-    
+    if (value === 0) {
+      return '0';
+    }
+
     const expStr = value.toExponential(decimals);
     const [mantissa, exponent] = expStr.split('e');
     const exp = parseInt(exponent, 10);
-    
+
     if (exp === 0) {
       return mantissa;
     }
-    
+
     return `${mantissa} \\times 10^{${exp}}`;
   }
 
   // ========== MODULE PRINCIPAL ==========
-  
+
   const CalculationDetails = {
     /**
      * Affiche les détails de calcul dans la Section 3
      * @param {Object} networkResult - Résultats du réseau complet
      * @param {Object} config - Configuration de l'analyse
      */
-    display: function(networkResult, config) {
+    display: function (networkResult, config) {
       console.log('📐 Génération des détails de calcul...');
-      
+
       const numSegments = networkResult.segmentResults.length;
-      
+
       if (numSegments === 0) {
         console.warn('Aucun segment à afficher');
         return;
       }
-      
+
       // Résumé exécutif
       const summaryContainer = document.getElementById('calc-summary');
       if (summaryContainer) {
         summaryContainer.innerHTML = this.generateExecutiveSummary(networkResult, config);
       }
-      
+
       // Segment 1 détaillé uniquement
       const firstContainer = document.getElementById('calc-segment-first');
       if (firstContainer) {
-        firstContainer.innerHTML = this.generateSegmentHeader(1, 0, networkResult.segmentResults[0], config, numSegments);
-        firstContainer.innerHTML += this.displaySegmentCalculations(0, networkResult.segmentResults[0], config);
-        
+        firstContainer.innerHTML = this.generateSegmentHeader(
+          1,
+          0,
+          networkResult.segmentResults[0],
+          config,
+          numSegments
+        );
+        firstContainer.innerHTML += this.displaySegmentCalculations(
+          0,
+          networkResult.segmentResults[0],
+          config
+        );
+
         // Ajouter le tableau collapsible après le segment détaillé
-        firstContainer.innerHTML += this.generateTableCollapsible(networkResult.segmentResults, networkResult.x_profile);
+        firstContainer.innerHTML += this.generateTableCollapsible(
+          networkResult.segmentResults,
+          networkResult.x_profile
+        );
       }
-      
+
       // Attacher événements pour sections collapsibles
       this.attachCollapseEvents();
-      
+
       // Rendre les équations LaTeX avec KaTeX
       this.renderLatex();
-      
+
       console.log('✅ Détails de calcul générés');
     },
-    
+
     /**
      * Génère le résumé exécutif
      */
-    generateExecutiveSummary: function(networkResult, config) {
-      const firstSeg = networkResult.segmentResults[0];
+    generateExecutiveSummary: function (networkResult, config) {
+      // const firstSeg = networkResult.segmentResults[0]; // Non utilisé actuellement
       const segmentLength = config.totalLength / config.numSegments;
-      
-      const t = (key, replacements) => window.I18n ? I18n.t(key, replacements) : key;
-      
+
+      const t = (key, replacements) => (window.I18n ? I18n.t(key, replacements) : key);
+
       return `
         <div class="calc-executive-summary">
           <h3>${t('calcDetails.methodology.title')}</h3>
@@ -153,16 +168,22 @@
         </div>
       `;
     },
-    
+
     /**
      * Génère l'en-tête d'un segment
      */
-    generateSegmentHeader: function(segmentNum, startPosition, segmentResult, config, totalSegments) {
+    generateSegmentHeader: function (
+      segmentNum,
+      startPosition,
+      segmentResult,
+      config,
+      totalSegments
+    ) {
       const segmentLength = config.totalLength / config.numSegments;
       const endPosition = startPosition + segmentLength;
-      
-      const t = (key, replacements) => window.I18n ? I18n.t(key, replacements) : key;
-      
+
+      const t = (key, replacements) => (window.I18n ? I18n.t(key, replacements) : key);
+
       return `
         <div class="calc-segment-header">
           <h3>${t('calcDetails.example.title')} ${segmentNum} / ${totalSegments}</h3>
@@ -178,13 +199,13 @@
         </div>
       `;
     },
-    
+
     /**
      * Affiche tous les calculs détaillés pour un segment
      */
-    displaySegmentCalculations: function(segmentIndex, segmentResult, config) {
+    displaySegmentCalculations: function (segmentIndex, segmentResult, config) {
       let html = '<div class="calc-blocks">';
-      
+
       // Recalculer le segment complet pour avoir tous les détails
       const segmentLength = config.totalLength / config.numSegments;
       const segmentGeometry = {
@@ -192,15 +213,15 @@
         D_outer: config.geometry.D_outer,
         roughness: config.geometry.roughness,
         length: segmentLength,
-        material: config.geometry.material
+        material: config.geometry.material,
       };
-      
+
       const segmentFluid = {
         T_in: segmentResult.T_in,
-        P: config.fluid.P,  // Utiliser la pression initiale (simplifié)
-        m_dot: config.fluid.m_dot
+        P: config.fluid.P, // Utiliser la pression initiale (simplifié)
+        m_dot: config.fluid.m_dot,
       };
-      
+
       // Recalcul complet pour avoir tous les détails (h_int, h_ext, NTU, etc.)
       const fullSegmentResult = calculatePipeSegment(
         segmentGeometry,
@@ -208,45 +229,47 @@
         config.ambient,
         config.insulation
       );
-      
+
       // Propriétés fluides calculées
       const T_avg = (segmentResult.T_in + segmentResult.T_out) / 2;
       const water = WaterProperties.getWaterProperties(T_avg, config.fluid.P); // Pression en bar
       const air = AirProperties.getAirProperties(config.ambient.T_amb);
-      
+
       // 1. Propriétés des fluides
       html += this.displayFluidProperties(T_avg, config.fluid.P, water, air, config.ambient.T_amb);
-      
+
       // 2. Hydraulique
       html += this.displayHydraulics(fullSegmentResult, segmentGeometry, config, water);
-      
+
       // 3. Transfert thermique interne
       html += this.displayConvectionInternal(fullSegmentResult, segmentGeometry, config, water);
-      
+
       // 4. Transfert thermique externe
       html += this.displayConvectionExternal(fullSegmentResult, config, air);
-      
+
       // 5. Résistances thermiques
       html += this.displayThermalResistances(fullSegmentResult, segmentGeometry, config);
-      
+
       // 6. Méthode NTU
       html += this.displayNTU(fullSegmentResult, segmentResult, config, water);
-      
+
       html += '</div>';
       return html;
     },
-    
+
     /**
      * Affiche les propriétés des fluides avec interpolation
      */
-    displayFluidProperties: function(T_avg, P_bar, water, air, T_amb) {
-      const t = (key) => window.I18n ? I18n.t(key) : key;
-      
+    displayFluidProperties: function (T_avg, P_bar, water, air, T_amb) {
+      const t = (key) => (window.I18n ? I18n.t(key) : key);
+
       // Convertir pression: bar → kPag → unité d'affichage
       const P_kPag = P_bar * 100; // 1 bar = 100 kPa
       const P_display = window.UnitConverter ? UnitConverter.fromSI('pressure', P_kPag) : P_kPag;
-      const pressureUnit = window.UnitConverter ? UnitConverter.getUnitInfo('pressure').label : 'kPag';
-      
+      const pressureUnit = window.UnitConverter
+        ? UnitConverter.getUnitInfo('pressure').label
+        : 'kPag';
+
       return `
         <div class="calc-block">
           <h4 class="calc-block__title">${t('calcDetails.step1.title')}</h4>
@@ -302,18 +325,18 @@
         </div>
       `;
     },
-    
+
     /**
      * Affiche les calculs hydrauliques
      */
-    displayHydraulics: function(result, geometry, config, water) {
-      const t = (key) => window.I18n ? I18n.t(key) : key;
+    displayHydraulics: function (result, geometry, config, water) {
+      const t = (key) => (window.I18n ? I18n.t(key) : key);
       const Q = config.fluid.m_dot / water.rho;
       const A = Math.PI * Math.pow(geometry.D_inner / 2, 2);
       const V = result.V;
       const D = geometry.D_inner;
       const epsilon_D = geometry.roughness / D;
-      
+
       return `
         <div class="calc-block">
           <h4 class="calc-block__title">${t('calcDetails.step2.title')}</h4>
@@ -362,14 +385,18 @@
               <p>• ${t('calcDetails.step2.friction.roughness')} ${toScientificLatex(geometry.roughness, 3)} / ${D.toFixed(4)} = ${toScientificLatex(epsilon_D, 3)}</p>
             </div>
             <div class="calc-block__formula">
-              ${result.regime === 'laminar' ? `
+              ${
+                result.regime === 'laminar'
+                  ? `
                 <p>${t('calcDetails.step2.friction.laminarFlow')}</p>
                 <p>\\( f = \\frac{64}{Re} = \\frac{64}{${result.Re.toFixed(0)}} = ${result.f.toFixed(6)} \\)</p>
-              ` : `
+              `
+                  : `
                 <p>${t('calcDetails.step2.friction.correlation')}</p>
                 <p>\\( f = ${result.f.toFixed(6)} \\)</p>
                 <p><em>${t('calcDetails.step2.friction.note')}</em></p>
-              `}
+              `
+              }
             </div>
             <div class="calc-block__result">
               ${t('calcDetails.step2.friction.result')} ${result.f.toFixed(6)}
@@ -393,8 +420,12 @@
             <div class="calc-block__result">
               ${(() => {
                 const dP_kPa = result.dP / 1000;
-                const dP_display = window.UnitConverter ? UnitConverter.fromSI('pressure', dP_kPa) : dP_kPa;
-                const pressureUnit = window.UnitConverter ? UnitConverter.getUnitInfo('pressure').label.replace('g', '') : 'kPa';
+                const dP_display = window.UnitConverter
+                  ? UnitConverter.fromSI('pressure', dP_kPa)
+                  : dP_kPa;
+                const pressureUnit = window.UnitConverter
+                  ? UnitConverter.getUnitInfo('pressure').label.replace('g', '')
+                  : 'kPa';
                 return `${t('calcDetails.step2.pressureDrop.result')} ${result.dP.toFixed(1)} Pa (${dP_display.toFixed(2)} ${pressureUnit})`;
               })()}
             </div>
@@ -405,34 +436,36 @@
         </div>
       `;
     },
-    
+
     /**
      * Affiche la convection interne
      */
-    displayConvectionInternal: function(result, geometry, config, water) {
-      const t = (key) => window.I18n ? I18n.t(key) : key;
+    displayConvectionInternal: function (result, geometry, config, water) {
+      const t = (key) => (window.I18n ? I18n.t(key) : key);
       const Pr = (water.mu * water.cp) / water.k;
       const D = geometry.D_inner;
       const L = geometry.length;
-      
+
       // Déterminer la corrélation utilisée
       let correlationName = '';
       let correlationFormula = '';
       if (result.regime === 'laminar') {
         correlationName = t('calcDetails.step3.correlations.hausen');
-        correlationFormula = 'Nu = 3.66 + (0.0668 × (D/L) × Re × Pr) / (1 + 0.04 × [(D/L) × Re × Pr]^(2/3))';
+        correlationFormula =
+          'Nu = 3.66 + (0.0668 × (D/L) × Re × Pr) / (1 + 0.04 × [(D/L) × Re × Pr]^(2/3))';
       } else {
         if (result.Re > 10000) {
           correlationName = t('calcDetails.step3.correlations.dittusBoelter');
           correlationFormula = 'Nu = 0.023 × Re^0.8 × Pr^0.4';
         } else {
           correlationName = t('calcDetails.step3.correlations.gnielinski');
-          correlationFormula = 'Nu = ((f/8) × (Re-1000) × Pr) / (1 + 12.7 × (f/8)^0.5 × (Pr^(2/3) - 1))';
+          correlationFormula =
+            'Nu = ((f/8) × (Re-1000) × Pr) / (1 + 12.7 × (f/8)^0.5 × (Pr^(2/3) - 1))';
         }
       }
-      
-      const Nu = result.h_int * D / water.k;
-      
+
+      const Nu = (result.h_int * D) / water.k;
+
       return `
         <div class="calc-block">
           <h4 class="calc-block__title">${t('calcDetails.step3.title')}</h4>
@@ -450,7 +483,7 @@
           <div class="calc-block__subsection">
             <h5>${t('calcDetails.step3.nusselt.title')}</h5>
             <div class="calc-block__inputs">
-              <p>• Re = ${result.Re.toFixed(0)}, Pr = ${Pr.toFixed(3)}, D/L = ${(D/L).toFixed(6)}</p>
+              <p>• Re = ${result.Re.toFixed(0)}, Pr = ${Pr.toFixed(3)}, D/L = ${(D / L).toFixed(6)}</p>
             </div>
             <div class="calc-block__formula">
               <p><strong>${t('calcDetails.step3.nusselt.correlation')} ${correlationName}</strong></p>
@@ -477,22 +510,22 @@
         </div>
       `;
     },
-    
+
     /**
      * Affiche la convection externe
      */
-    displayConvectionExternal: function(result, config, air) {
-      const t = (key) => window.I18n ? I18n.t(key) : key;
-      const D_outer_final = config.insulation 
+    displayConvectionExternal: function (result, config, _air) {
+      const t = (key) => (window.I18n ? I18n.t(key) : key);
+      const D_outer_final = config.insulation
         ? config.geometry.D_outer + 2 * config.insulation.thickness
         : config.geometry.D_outer;
-      
+
       const isForced = config.ambient.V_wind > 0.1;
       const pipeMat = MaterialProperties.getMaterialProperties(config.geometry.material);
-      
-      // Estimer Nu externe (on ne l'a pas directement dans result)
-      const Nu_ext = result.h_ext * D_outer_final / air.k - (result.h_ext * 0.1); // Approximation
-      
+
+      // Estimer Nu externe (on ne l'a pas directement dans result) - Non utilisé actuellement
+      // const Nu_ext = (result.h_ext * D_outer_final) / air.k - result.h_ext * 0.1; // Approximation
+
       return `
         <div class="calc-block">
           <h4 class="calc-block__title">${t('calcDetails.step4.title')}</h4>
@@ -504,14 +537,18 @@
               ${isForced ? `<p>• ${t('calcDetails.step4.convection.windSpeed')}<sub>wind</sub> = ${config.ambient.V_wind.toFixed(1)} m/s (${(config.ambient.V_wind * 3.6).toFixed(1)} km/h)</p>` : ''}
             </div>
             <div class="calc-block__formula">
-              ${isForced ? `
+              ${
+                isForced
+                  ? `
                 <p><strong>${t('calcDetails.step4.convection.forcedConvection')}</strong></p>
                 <p>${t('calcDetails.step4.convection.reynoldsAir')} \\( Re_{air} = \\frac{\\rho_{air} V_{wind} D_{ext}}{\\mu_{air}} \\)</p>
                 <p>${t('calcDetails.step4.convection.correlation')}</p>
-              ` : `
+              `
+                  : `
                 <p><strong>${t('calcDetails.step4.convection.naturalConvection')}</strong></p>
                 <p>${t('calcDetails.step4.convection.rayleighCorrelation')}</p>
-              `}
+              `
+              }
               <p><em>h<sub>conv</sub> ${t('calcDetails.step4.convection.calculated')}</em></p>
             </div>
             <div class="calc-block__result">
@@ -553,17 +590,17 @@
         </div>
       `;
     },
-    
+
     /**
      * Affiche les résistances thermiques
      */
-    displayThermalResistances: function(result, geometry, config) {
-      const t = (key) => window.I18n ? I18n.t(key) : key;
+    displayThermalResistances: function (result, geometry, config) {
+      const t = (key) => (window.I18n ? I18n.t(key) : key);
       const pipeMat = MaterialProperties.getMaterialProperties(geometry.material);
       const D_i = geometry.D_inner;
       const D_o = geometry.D_outer;
       const L = geometry.length;
-      
+
       let html = `
         <div class="calc-block">
           <h4 class="calc-block__title">${t('calcDetails.step5.title')}</h4>
@@ -577,20 +614,20 @@
               <p><strong>R<sub>cond,pipe</sub></strong> ${t('calcDetails.step5.series.condPipe')}</p>
               <p>\\( R_{cond,pipe} = \\frac{\\ln(D_o/D_i)}{2\\pi k_{pipe} L} = \\frac{\\ln(${D_o.toFixed(4)}/${D_i.toFixed(4)})}{2\\pi \\times ${pipeMat.k.toFixed(1)} \\times ${L.toFixed(2)}} \\)</p>
       `;
-      
+
       if (config.insulation) {
         const insulMat = MaterialProperties.getMaterialProperties(config.insulation.material);
         const D_o_insul = D_o + 2 * config.insulation.thickness;
         const materialI18nKey = UIUtils.getInsulationI18nKey(config.insulation.material);
         const materialName = t(`insulation.materials.${materialI18nKey}`);
-        
+
         html += `
               <p><strong>R<sub>cond,insul</sub></strong> ${t('calcDetails.step5.series.condInsulation')} ${materialName}) :</p>
               <p>\\( R_{cond,insul} = \\frac{\\ln(D_{o,insul}/D_o)}{2\\pi k_{insul} L} = \\frac{\\ln(${D_o_insul.toFixed(4)}/${D_o.toFixed(4)})}{2\\pi \\times ${insulMat.k.toFixed(3)} \\times ${L.toFixed(2)}} \\)</p>
         `;
       }
-      
-      const D_ext_final = config.insulation ? (D_o + 2 * config.insulation.thickness) : D_o;
+
+      const D_ext_final = config.insulation ? D_o + 2 * config.insulation.thickness : D_o;
       html += `
               <p><strong>R<sub>conv,ext</sub></strong> ${t('calcDetails.step5.series.convExternal')}</p>
               <p>\\( R_{conv,ext} = \\frac{1}{h_{ext} \\pi D_{ext} L} = \\frac{1}{${result.h_ext.toFixed(1)} \\times \\pi \\times ${D_ext_final.toFixed(4)} \\times ${L.toFixed(2)}} \\)</p>
@@ -611,10 +648,10 @@
           <div class="calc-block__subsection">
             <h5>${t('calcDetails.step5.ua.title')}</h5>
             <div class="calc-block__formula">
-              <p>\\( UA = \\frac{1}{R_{total}} = \\frac{1}{${result.R_total.toFixed(6)}} = ${(1/result.R_total).toFixed(3)} \\text{ W/K} \\)</p>
+              <p>\\( UA = \\frac{1}{R_{total}} = \\frac{1}{${result.R_total.toFixed(6)}} = ${(1 / result.R_total).toFixed(3)} \\text{ W/K} \\)</p>
             </div>
             <div class="calc-block__result">
-              ${t('calcDetails.step5.ua.result')} ${(1/result.R_total).toFixed(2)} W/K
+              ${t('calcDetails.step5.ua.result')} ${(1 / result.R_total).toFixed(2)} W/K
             </div>
             <div class="calc-block__reference">
               <strong>${t('calcDetails.step5.ua.source')}</strong>
@@ -622,20 +659,20 @@
           </div>
         </div>
       `;
-      
+
       return html;
     },
-    
+
     /**
      * Affiche la méthode NTU
      */
-    displayNTU: function(result, segmentResult, config, water) {
-      const t = (key) => window.I18n ? I18n.t(key) : key;
+    displayNTU: function (result, segmentResult, config, water) {
+      const t = (key) => (window.I18n ? I18n.t(key) : key);
       const UA = 1 / result.R_total;
       const C = config.fluid.m_dot * water.cp;
       const NTU = result.NTU;
       const epsilon = 1 - Math.exp(-NTU);
-      
+
       return `
         <div class="calc-block">
           <h4 class="calc-block__title">${t('calcDetails.step6.title')}</h4>
@@ -702,11 +739,11 @@
         </div>
       `;
     },
-    
+
     /**
      * Génère le tableau collapsible
      */
-    generateTableCollapsible: function(segmentResults, x_profile) {
+    generateTableCollapsible: function (segmentResults, x_profile) {
       return `
         <div class="calc-table-collapsible">
           <button class="btn-collapse-subsection" id="btn-toggle-table" aria-expanded="false">
@@ -720,12 +757,12 @@
         </div>
       `;
     },
-    
+
     /**
      * Affiche le tableau de tous les segments
      */
-    displayAllSegmentsTable: function(segmentResults, x_profile) {
-      const t = (key) => window.I18n ? I18n.t(key) : key;
+    displayAllSegmentsTable: function (segmentResults, x_profile) {
+      const t = (key) => (window.I18n ? I18n.t(key) : key);
       let html = `
         <div class="calc-all-segments">
           <h3>${t('detailedCalcs.tableTitle')}</h3>
@@ -751,15 +788,15 @@
               </thead>
               <tbody>
       `;
-      
+
       // Tous les segments
       for (let i = 0; i < segmentResults.length; i++) {
         const seg = segmentResults[i];
         const pos = x_profile[i];
-        
+
         // Mettre en évidence le premier segment (exemple détaillé)
         const rowClass = i === 0 ? ' class="highlighted-row"' : '';
-        
+
         html += `
                 <tr${rowClass}>
                   <td>${i + 1}${i === 0 ? ' 📋' : ''}</td>
@@ -774,7 +811,7 @@
                 </tr>
         `;
       }
-      
+
       html += `
               </tbody>
             </table>
@@ -791,52 +828,65 @@
           </div>
         </div>
       `;
-      
+
       return html;
     },
-    
+
     /**
      * Attache les événements pour les sections collapsibles
      */
-    attachCollapseEvents: function() {
+    attachCollapseEvents: function () {
       // Toggle Section 3 principale
-      const showDetailsText = window.I18n ? I18n.t('detailedCalcs.showTechnicalDetails') : 'Afficher les détails techniques';
-      const hideDetailsText = window.I18n ? I18n.t('detailedCalcs.hideTechnicalDetails') : 'Masquer les détails techniques';
-      this.attachToggleEvent('btn-toggle-section3', 'section3-content', 
-        showDetailsText, hideDetailsText, true);
-      
+      const showDetailsText = window.I18n
+        ? I18n.t('detailedCalcs.showTechnicalDetails')
+        : 'Afficher les détails techniques';
+      const hideDetailsText = window.I18n
+        ? I18n.t('detailedCalcs.hideTechnicalDetails')
+        : 'Masquer les détails techniques';
+      this.attachToggleEvent(
+        'btn-toggle-section3',
+        'section3-content',
+        showDetailsText,
+        hideDetailsText,
+        true
+      );
+
       // Toggle tableau récapitulatif
-      const showText = window.I18n ? I18n.t('detailedCalcs.showSegmentsTable') : 'Afficher le tableau récapitulatif de tous les segments';
-      const hideText = window.I18n ? I18n.t('detailedCalcs.hideSegmentsTable') : 'Masquer le tableau récapitulatif';
+      const showText = window.I18n
+        ? I18n.t('detailedCalcs.showSegmentsTable')
+        : 'Afficher le tableau récapitulatif de tous les segments';
+      const hideText = window.I18n
+        ? I18n.t('detailedCalcs.hideSegmentsTable')
+        : 'Masquer le tableau récapitulatif';
       this.attachToggleEvent('btn-toggle-table', 'table-content', showText, hideText, false);
     },
-    
+
     /**
      * Attache un événement toggle à un bouton
      */
-    attachToggleEvent: function(btnId, contentId, textShow, textHide, scrollOnOpen) {
+    attachToggleEvent: function (btnId, contentId, textShow, textHide, scrollOnOpen) {
       const toggleBtn = document.getElementById(btnId);
       const content = document.getElementById(contentId);
-      
+
       if (!toggleBtn || !content) {
         return;
       }
-      
+
       // Retirer ancien listener si présent
       const newToggleBtn = toggleBtn.cloneNode(true);
       toggleBtn.parentNode.replaceChild(newToggleBtn, toggleBtn);
-      
+
       // Initialiser le texte selon l'état actuel
       const isOpen = newToggleBtn.getAttribute('aria-expanded') === 'true';
       const textSpan = newToggleBtn.querySelector('.collapse-text');
       if (textSpan) {
         textSpan.textContent = isOpen ? textHide : textShow;
       }
-      
+
       // Ajouter nouveau listener
-      newToggleBtn.addEventListener('click', function() {
+      newToggleBtn.addEventListener('click', function () {
         const isOpen = newToggleBtn.getAttribute('aria-expanded') === 'true';
-        
+
         if (isOpen) {
           // Fermer
           content.classList.remove('is-open');
@@ -847,7 +897,7 @@
           content.classList.add('is-open');
           newToggleBtn.setAttribute('aria-expanded', 'true');
           newToggleBtn.querySelector('.collapse-text').textContent = textHide;
-          
+
           // Scroll smooth si demandé
           if (scrollOnOpen) {
             setTimeout(() => {
@@ -860,35 +910,33 @@
         }
       });
     },
-    
+
     /**
      * Rend les équations LaTeX avec KaTeX
      */
-    renderLatex: function() {
+    renderLatex: function () {
       // Attendre que KaTeX soit chargé
       if (typeof renderMathInElement === 'undefined') {
         console.warn('KaTeX renderMathInElement non disponible');
         return;
       }
-      
+
       // Rendre dans toute la Section 3
       const section = document.getElementById('section-explanations');
       if (section) {
         renderMathInElement(section, {
           delimiters: [
-            {left: '$$', right: '$$', display: true},
-            {left: '\\[', right: '\\]', display: true},
-            {left: '\\(', right: '\\)', display: false}
+            { left: '$$', right: '$$', display: true },
+            { left: '\\[', right: '\\]', display: true },
+            { left: '\\(', right: '\\)', display: false },
           ],
-          throwOnError: false
+          throwOnError: false,
         });
         console.log('✅ Équations LaTeX rendues avec KaTeX');
       }
-    }
+    },
   };
-  
+
   // Export global
   window.CalculationDetails = CalculationDetails;
-  
 })();
-

@@ -12,7 +12,7 @@ node tests/automated_verification.js
 ✅ Validation 25 conversions d'unités  
 ✅ Exécution 14 tests unitaires  
 ✅ Validation externe (si données disponibles)  
-✅ Génération rapport concis à signer  
+✅ Génération rapport concis à signer
 
 **Temps**: 1-2 minutes d'exécution + 10-15 minutes de lecture + signature
 
@@ -26,11 +26,11 @@ Voir: **[QUICK_VERIFICATION_GUIDE.md](QUICK_VERIFICATION_GUIDE.md)** (3 pages)
 
 ## 📄 FICHIERS CLÉS
 
-| Fichier | Description |
-|---------|-------------|
-| `tests/automated_verification.js` | Script automatique principal |
+| Fichier                              | Description                            |
+| ------------------------------------ | -------------------------------------- |
+| `tests/automated_verification.js`    | Script automatique principal           |
 | `tests/verification_references.json` | Valeurs de référence (Perry's, CODATA) |
-| `docs/AUTOMATED_VERIFICATION_*.md` | Rapport généré (à signer) |
+| `docs/AUTOMATED_VERIFICATION_*.md`   | Rapport généré (à signer)              |
 
 ---
 
@@ -51,7 +51,7 @@ Voir: **[QUICK_VERIFICATION_GUIDE.md](QUICK_VERIFICATION_GUIDE.md)** (3 pages)
 Pour signer le rapport:
 
 - ✅ 100% constantes critiques validées (dont Gnielinski 12.7)
-- ✅ 100% conversions d'unités correctes  
+- ✅ 100% conversions d'unités correctes
 - ✅ 100% tests unitaires passent
 
 ---
@@ -85,5 +85,4 @@ Pour signer le rapport:
 
 **Vérification scientifique rigoureuse en 30 minutes ⚡**
 
-*ThermaFlow v1.0.1 - Automated Verification System*
-
+_ThermaFlow v1.0.1 - Automated Verification System_

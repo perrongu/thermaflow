@@ -1,14 +1,14 @@
 /**
  * test_phase1_materials.js
- * 
+ *
  * Tests unitaires pour le module des matériaux (Phase 1.4):
  * - pipe-materials.js
- * 
+ *
  * Validation des propriétés thermophysiques contre:
  * - Perry's Chemical Engineers' Handbook
  * - ASHRAE Fundamentals Handbook
  * - Valeurs de référence industrielles
- * 
+ *
  * Exécution: node tests/test_phase1_materials.js
  */
 
@@ -23,7 +23,7 @@ let testsFailed = 0;
 function assertClose(actual, expected, tolerance = 0.01, message = '') {
   testsRun++;
   const relativeError = Math.abs((actual - expected) / expected);
-  
+
   if (relativeError <= tolerance) {
     testsPassed++;
     console.log(`  ✓ ${message}`);
@@ -31,7 +31,9 @@ function assertClose(actual, expected, tolerance = 0.01, message = '') {
   } else {
     testsFailed++;
     console.log(`  ✗ ${message}`);
-    console.log(`    Attendu: ${expected}, Obtenu: ${actual}, Erreur: ${(relativeError * 100).toFixed(2)}%`);
+    console.log(
+      `    Attendu: ${expected}, Obtenu: ${actual}, Erreur: ${(relativeError * 100).toFixed(2)}%`
+    );
     return false;
   }
 }
@@ -103,7 +105,7 @@ console.log('\n\n=== Tests: Propriétés des isolants ===\n');
 
 console.log('Test 5: Laine de verre (fiberglass)');
 const fiberglass = materials.getMaterialProperties('fiberglass');
-assertClose(fiberglass.k, 0.040, 0.1, 'k_fiberglass ≈ 0.040 W/(m·K) (bon isolant)');
+assertClose(fiberglass.k, 0.04, 0.1, 'k_fiberglass ≈ 0.040 W/(m·K) (bon isolant)');
 assertClose(fiberglass.rho, 32, 0.2, 'ρ_fiberglass ≈ 32 kg/m³ (très léger)');
 assertEqual(fiberglass.category, 'insulation', 'Catégorie: insulation');
 
@@ -142,7 +144,7 @@ assertEqual(pvc.category, 'plastic', 'Catégorie: plastic');
 
 console.log('\nTest 9: PEHD (HDPE)');
 const hdpe = materials.getMaterialProperties('hdpe');
-assertClose(hdpe.k, 0.50, 0.1, 'k_HDPE ≈ 0.50 W/(m·K)');
+assertClose(hdpe.k, 0.5, 0.1, 'k_HDPE ≈ 0.50 W/(m·K)');
 
 // ===== TESTS UTILITAIRES =====
 console.log('\n\n=== Tests: Fonctions utilitaires ===\n');
@@ -165,17 +167,16 @@ const plastics = materials.listMaterials('plastic');
 testsRun++;
 if (metals.length > 0 && insulators.length > 0 && plastics.length > 0) {
   testsPassed++;
-  console.log(`  ✓ Métaux: ${metals.length}, Isolants: ${insulators.length}, Plastiques: ${plastics.length}`);
+  console.log(
+    `  ✓ Métaux: ${metals.length}, Isolants: ${insulators.length}, Plastiques: ${plastics.length}`
+  );
 } else {
   testsFailed++;
   console.log(`  ✗ Catégories incomplètes`);
 }
 
 console.log('\nTest 12: Matériau inexistant');
-assertThrows(
-  () => materials.getMaterialProperties('unobtanium'),
-  'Matériau inexistant → erreur'
-);
+assertThrows(() => materials.getMaterialProperties('unobtanium'), 'Matériau inexistant → erreur');
 
 // ===== TESTS RÉSISTANCE THERMIQUE =====
 console.log('\n\n=== Tests: Résistance thermique cylindrique ===\n');
@@ -190,7 +191,7 @@ console.log('\nTest 14: Résistance conduction isolation');
 // Isolation 20mm épaisseur: r_i=27mm, r_o=47mm, k=0.04 W/(m·K), L=1m
 const R_insul = resistance.conductionResistanceCylinder(0.027, 0.047, 0.04, 1.0);
 // R = ln(47/27) / (2π × 0.04 × 1) = 2.20 K/W
-assertClose(R_insul, 2.20, 0.1, 'R_insul ≈ 2.20 K/W (élevé - bon isolant)');
+assertClose(R_insul, 2.2, 0.1, 'R_insul ≈ 2.20 K/W (élevé - bon isolant)');
 
 console.log('\nTest 15: Comparaison métal vs isolation');
 testsRun++;
@@ -207,10 +208,7 @@ assertThrows(
   () => resistance.conductionResistanceCylinder(0.05, 0.03, 50, 1),
   'r_outer < r_inner → erreur'
 );
-assertThrows(
-  () => resistance.conductionResistanceCylinder(0.025, 0.027, -50, 1),
-  'k < 0 → erreur'
-);
+assertThrows(() => resistance.conductionResistanceCylinder(0.025, 0.027, -50, 1), 'k < 0 → erreur');
 
 // ===== TESTS COMPARATIFS =====
 console.log('\n\n=== Tests: Comparaisons physiques ===\n');
@@ -281,4 +279,3 @@ console.log('='.repeat(60));
 
 // Code de sortie
 process.exit(testsFailed > 0 ? 1 : 0);
-

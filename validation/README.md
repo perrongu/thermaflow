@@ -25,18 +25,18 @@ L'échantillon a été généré selon une approche combinée pour garantir une 
 
 ### Couverture des paramètres
 
-| Paramètre | Plage couverte | Distribution |
-|-----------|----------------|--------------|
-| **Matériaux** | Steel (46%), Copper (18%), SS (36%) | Catégorielle |
-| **NPS** | Steel 0.5-36", Copper 0.25-12", SS 0.125-24" | Log-normale |
-| **Longueur** | 1-2500 m | Log-normale |
-| **T_eau** | 1-100°C (focus 10-90°C) | LHS uniforme |
-| **Débit** | 0.1-6000 m³/h (focus 0.5-100) | Log-normale |
-| **Pression** | 100-1000 kPag | Uniforme |
-| **T_air** | -50 à +30°C (focus -30 à +10°C) | LHS uniforme |
-| **Vent** | 0-108 km/h (focus 0-30) | Beta (α=2, β=5) |
-| **Isolation** | 50% sans, 50% avec (4 matériaux) | Catégorielle |
-| **Épaisseur isolation** | 13-100 mm | Log-normale |
+| Paramètre               | Plage couverte                               | Distribution    |
+| ----------------------- | -------------------------------------------- | --------------- |
+| **Matériaux**           | Steel (46%), Copper (18%), SS (36%)          | Catégorielle    |
+| **NPS**                 | Steel 0.5-36", Copper 0.25-12", SS 0.125-24" | Log-normale     |
+| **Longueur**            | 1-2500 m                                     | Log-normale     |
+| **T_eau**               | 1-100°C (focus 10-90°C)                      | LHS uniforme    |
+| **Débit**               | 0.1-6000 m³/h (focus 0.5-100)                | Log-normale     |
+| **Pression**            | 100-1000 kPag                                | Uniforme        |
+| **T_air**               | -50 à +30°C (focus -30 à +10°C)              | LHS uniforme    |
+| **Vent**                | 0-108 km/h (focus 0-30)                      | Beta (α=2, β=5) |
+| **Isolation**           | 50% sans, 50% avec (4 matériaux)             | Catégorielle    |
+| **Épaisseur isolation** | 13-100 mm                                    | Log-normale     |
 
 ### Structure du fichier JSON
 
@@ -139,6 +139,7 @@ Pour chaque cas (case_id 1 à 130):
 **⚠️ IMPORTANT - Cas de gel:**
 
 Certains logiciels (Aspen Hysys, AFT Fathom, DWSIM) arrêtent le calcul lorsque le gel est détecté et affichent un message d'erreur. Dans ce cas:
+
 - **Ne pas** essayer de forcer un calcul
 - **Mettre** `status: "freeze_detected"`
 - **Laisser** les valeurs à `null` (elles n'ont pas de sens physique)
@@ -170,14 +171,14 @@ for case in data['cases']:
     fathom = case['outputs']['aft_fathom']
     dwsim = case['outputs']['dwsim']
     thermaflow = case['outputs']['thermaflow']
-    
+
     # Vérifier si cas de gel (au moins un logiciel a détecté le gel)
     has_freeze = (
         hysys['status'] == 'freeze_detected' or
         fathom['status'] == 'freeze_detected' or
         dwsim['status'] == 'freeze_detected'
     )
-    
+
     if has_freeze:
         freeze_cases.append({
             'case_id': case['case_id'],
@@ -187,11 +188,11 @@ for case in data['cases']:
             'dwsim_status': dwsim['status']
         })
         continue  # Exclure de l'analyse statistique
-    
+
     # N'inclure que les cas avec status "ok" pour tous les logiciels
-    if (hysys['status'] == 'ok' and fathom['status'] == 'ok' and 
+    if (hysys['status'] == 'ok' and fathom['status'] == 'ok' and
         dwsim['status'] == 'ok' and thermaflow['status'] == 'ok'):
-        
+
         results.append({
             'case_id': case['case_id'],
             'hysys_T': hysys['T_out_C'],
@@ -254,6 +255,7 @@ ThermaFlow sera considéré validé si:
 ### 5. Cas problématiques
 
 Si certains cas montrent des écarts importants:
+
 1. Vérifier la configuration des logiciels (mêmes corrélations)
 2. Documenter dans le champ "notes"
 3. Investiguer les causes (limites de validité, approximations)
@@ -276,6 +278,7 @@ const rng = new SeededRandom(42); // Changer 42 pour un autre nombre
 ## Fichiers de sortie attendus
 
 Après validation complète:
+
 - `external_validation_sample_v1.0.1.json` (complété avec résultats)
 - `validation_analysis.xlsx` (analyse statistique)
 - `validation_report_v1.0.1.pdf` (rapport final)
@@ -301,6 +304,7 @@ Quand un logiciel détecte un gel (T_out < 0°C ou message d'erreur):
 4. Copier le message d'erreur exact dans `notes`
 
 **Exemple:**
+
 ```json
 "aspen_hysys": {
   "status": "freeze_detected",
@@ -314,6 +318,7 @@ Quand un logiciel détecte un gel (T_out < 0°C ou message d'erreur):
 ### Cas concernés
 
 Les cas suivants sont à risque de gel:
+
 - Cas 7, 8, 9, 10 (explicitement "risque gel")
 - Autres cas avec T_eau < 5°C et T_air < -20°C
 - Cas avec isolation insuffisante et conditions très froides
@@ -327,4 +332,3 @@ Ces cas seront automatiquement exclus de l'analyse statistique principale mais p
 - Les très grands diamètres (>12") peuvent ne pas être supportés par tous les logiciels
 - Les débits très élevés (>1000 m³/h) sont industriels, vérifier validité des corrélations
 - **Les cas de gel sont normaux** et attendus pour certaines conditions limites
-

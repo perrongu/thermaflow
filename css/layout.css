@@ -60,11 +60,11 @@
   .header__title {
     font-size: var(--font-size-3xl);
   }
-  
+
   .header__subtitle {
     font-size: var(--font-size-base);
   }
-  
+
   .header__status-container {
     position: static;
     margin-top: var(--spacing-4);
@@ -118,7 +118,7 @@
   .results-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .card--full {
     grid-column: 1 / -1;
   }
@@ -190,26 +190,26 @@
   .main {
     padding: var(--spacing-6) 0;
   }
-  
+
   .intro {
     padding: var(--spacing-4);
     margin-bottom: var(--spacing-6);
   }
-  
+
   .form-section {
     padding: var(--spacing-4);
     margin-bottom: var(--spacing-6);
   }
-  
+
   .results-section {
     margin-bottom: var(--spacing-6);
   }
-  
+
   .results-grid {
     gap: var(--spacing-4);
     margin-bottom: var(--spacing-6);
   }
-  
+
   .section {
     padding: var(--spacing-4);
     margin-bottom: var(--spacing-6);
@@ -222,18 +222,19 @@
     size: A4;
     margin: 1.5cm;
   }
-  
+
   body {
     background: white;
   }
-  
-  .header, .footer, 
+
+  .header,
+  .footer,
   .diagram-wrapper,
   .form-section,
   .results-actions {
     display: none !important;
   }
-  
+
   .section {
     page-break-inside: avoid;
     break-inside: avoid;
@@ -241,26 +242,25 @@
     border: 1px solid var(--color-gray-300);
     margin-bottom: var(--spacing-6);
   }
-  
+
   .config-summary {
     display: block !important;
     page-break-inside: avoid;
   }
-  
+
   .section-2 {
     page-break-before: always;
   }
-  
+
   .verdict-card {
     page-break-inside: avoid;
   }
-  
+
   .chart-container {
     page-break-inside: avoid;
   }
-  
+
   .under-development {
     border: 1px solid var(--color-gray-300);
   }
 }
-

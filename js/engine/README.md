@@ -20,4 +20,3 @@ Moteur de calcul principal qui orchestre les résolutions itératives.
    - Propagation vers segment i+1
 3. **Détection gel** : Surveillance T_eau ≤ 0°C
 4. **Résultats** : Profils T(x) et P(x) le long de la conduite
-

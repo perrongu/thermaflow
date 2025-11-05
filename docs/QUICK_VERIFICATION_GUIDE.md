@@ -27,11 +27,11 @@ node tests/automated_verification.js
 
 ## ⏱️ TIMELINE (10-15 MINUTES)
 
-| Étape | Durée | Action |
-|-------|-------|--------|
+| Étape                        | Durée    | Action                             |
+| ---------------------------- | -------- | ---------------------------------- |
 | **1. Exécution automatique** | ~1-2 min | Script valide tout automatiquement |
-| **2. Lecture du rapport** | 5-10 min | Lire et comprendre les résultats |
-| **3. Signature** | 2-3 min | Signer si tout est PASS |
+| **2. Lecture du rapport**    | 5-10 min | Lire et comprendre les résultats   |
+| **3. Signature**             | 2-3 min  | Signer si tout est PASS            |
 
 **Total**: ~10-15 minutes
 
@@ -47,11 +47,13 @@ node tests/automated_verification.js
 ```
 
 **Le script affiche en temps réel**:
+
 - `✓` Constante validée
 - `✗` Échec détecté
 - Progression des tests
 
 **Résultat attendu**:
+
 ```
 ╔═══════════════════════════════════════════╗
 ║    RÉSUMÉ FINAL                           ║
@@ -77,6 +79,7 @@ Rapport: docs/AUTOMATED_VERIFICATION_2025-10-30.md
 #### Section 1: Résumé exécutif
 
 Tableau récapitulatif:
+
 - Constantes: X/Y pass
 - Conversions: X/Y pass
 - Tests: X/Y pass
@@ -84,6 +87,7 @@ Tableau récapitulatif:
 #### Section 2: Constantes physiques
 
 Table avec toutes les constantes validées:
+
 - Stefan-Boltzmann: ✓
 - Gnielinski 12.7: ✓ (CRITIQUE)
 - Colebrook 3.7, 2.51: ✓
@@ -92,6 +96,7 @@ Table avec toutes les constantes validées:
 #### Section 3: Conversions d'unités
 
 Validation automatique de:
+
 - bar → Pa
 - °C → K
 - L/min → m³/s
@@ -104,6 +109,7 @@ Liste des 12 tests avec status PASS/FAIL
 #### Section 5: Certification (À SIGNER)
 
 Espace pour:
+
 - Nom
 - Titre/Position
 - Signature
@@ -140,19 +146,20 @@ Espace pour:
 
 Le script extrait automatiquement du code et compare:
 
-| Constante | Valeur code | Référence | Status |
-|-----------|-------------|-----------|--------|
-| Stefan-Boltzmann | 5.670374419e-8 | CODATA 2018 | Auto ✓ |
-| Gnielinski 12.7 | 12.7 | Perry's 5-12 | Auto ✓ |
-| Colebrook 3.7 | 3.7 | Perry's 6-4 | Auto ✓ |
-| Friction laminaire 64 | 64 | Perry's 6-4 | Auto ✓ |
-| ... | ... | ... | Auto ✓ |
+| Constante             | Valeur code    | Référence    | Status |
+| --------------------- | -------------- | ------------ | ------ |
+| Stefan-Boltzmann      | 5.670374419e-8 | CODATA 2018  | Auto ✓ |
+| Gnielinski 12.7       | 12.7           | Perry's 5-12 | Auto ✓ |
+| Colebrook 3.7         | 3.7            | Perry's 6-4  | Auto ✓ |
+| Friction laminaire 64 | 64             | Perry's 6-4  | Auto ✓ |
+| ...                   | ...            | ...          | Auto ✓ |
 
 **Méthode**: Regex patterns pour extraire constantes, comparaison numérique avec tolérance
 
 ### 2. Conversions d'unités (12 cas de test)
 
 Calculs automatiques:
+
 - 1 bar = 100000 Pa ✓
 - 20°C = 293.15 K ✓
 - 60 L/min = 0.001 m³/s ✓
@@ -163,6 +170,7 @@ Calculs automatiques:
 ### 3. Tests unitaires (12 fichiers)
 
 Exécution automatique de tous les tests:
+
 - test_phase1_hydraulics.js
 - test_phase1_heat_transfer.js
 - test_phase1_materials.js
@@ -174,18 +182,20 @@ Exécution automatique de tous les tests:
 
 Si le fichier `validation/external_validation_sample_v1.0.json` contient des données de logiciels de référence:
 
-| Logiciel | Paramètres comparés |
-|----------|---------------------|
-| Aspen Hysys | T_out, ΔP, Q_loss |
-| AFT Fathom | T_out, ΔP, Q_loss |
-| DWSIM | T_out, ΔP, Q_loss |
+| Logiciel    | Paramètres comparés |
+| ----------- | ------------------- |
+| Aspen Hysys | T_out, ΔP, Q_loss   |
+| AFT Fathom  | T_out, ΔP, Q_loss   |
+| DWSIM       | T_out, ΔP, Q_loss   |
 
 **Statistiques automatiques**:
+
 - Écarts moyens ThermaFlow vs chaque logiciel
 - Écarts vs moyenne des logiciels disponibles
 - Identification cas avec écarts > seuils
 
 **Seuils significatifs**:
+
 - Température: > 3°C
 - Pression: > 20 kPa ET > 30%
 - Thermique: > 50%
@@ -203,6 +213,7 @@ Si le fichier `validation/external_validation_sample_v1.0.json` contient des don
 ✅ **100% des tests** passent
 
 **Tolérances**:
+
 - Constantes physiques: ±0.01% (ou 0 pour valeurs entières)
 - Conversions: ±1e-6 (précision double)
 - Tests: PASS strict (pas de tolérance)
@@ -216,9 +227,10 @@ Si le fichier `validation/external_validation_sample_v1.0.json` contient des don
 **Cause**: Pattern regex ne matche pas le code
 
 **Solution**: Vérifier que la constante est bien déclarée:
+
 ```javascript
-const NOM_CONSTANTE = valeur;  // OK
-NOM_CONSTANTE = valeur;         // OK
+const NOM_CONSTANTE = valeur; // OK
+NOM_CONSTANTE = valeur; // OK
 return valeur; // NOM_CONSTANTE // OK
 ```
 
@@ -227,6 +239,7 @@ return valeur; // NOM_CONSTANTE // OK
 **Cause**: Régression dans le code
 
 **Solution**:
+
 1. Voir logs: `tests/error_test_xxx.log`
 2. Corriger le code
 3. Ré-exécuter vérification
@@ -236,6 +249,7 @@ return valeur; // NOM_CONSTANTE // OK
 **Cause**: Valeur dans code ≠ référence
 
 **Solution**:
+
 1. Vérifier dans Perry's la valeur officielle
 2. Corriger dans le code
 3. Ré-exécuter vérification
@@ -280,6 +294,7 @@ node tests/test_phase1_hydraulics.js
 ### Contact
 
 Pour questions sur:
+
 - **Équations**: Consulter Perry's Handbook (disponible dans `docs/references/`)
 - **Tests**: Voir logs dans `tests/error_*.log`
 - **Script**: Lire commentaires dans `tests/automated_verification.js`
@@ -304,6 +319,5 @@ Pour questions sur:
 
 ---
 
-*Guide créé le 2025-10-30*  
-*ThermaFlow v1.0.1 - Quick Verification System*
-
+_Guide créé le 2025-10-30_  
+_ThermaFlow v1.0.1 - Quick Verification System_

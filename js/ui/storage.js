@@ -1,15 +1,15 @@
 /**
  * storage.js
- * 
+ *
  * Gestion du localStorage pour sauvegarder les paramètres utilisateur
- * 
+ *
  * Fonctionnalités:
  * - Sauvegarder derniers paramètres
  * - Restaurer au chargement (optionnel)
  * - Effacer historique
  */
 
-(function() {
+(function () {
   'use strict';
 
   const STORAGE_KEY = 'thermaflow_last_config';
@@ -17,7 +17,7 @@
   // ========== SAUVEGARDE ==========
   /**
    * Sauvegarde la configuration dans localStorage
-   * 
+   *
    * @param {Object} config - Configuration à sauvegarder
    */
   function save(config) {
@@ -25,7 +25,7 @@
       const data = {
         config: config,
         timestamp: Date.now(),
-        version: '1.0.1'
+        version: '1.0.1',
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch (error) {
@@ -36,14 +36,16 @@
   // ========== CHARGEMENT ==========
   /**
    * Charge la dernière configuration depuis localStorage
-   * 
+   *
    * @returns {Object|null} Objet complet {config, timestamp, version, unitPreferences} ou null si inexistant
    */
   function load() {
     try {
       const json = localStorage.getItem(STORAGE_KEY);
-      if (!json) return null;
-      
+      if (!json) {
+        return null;
+      }
+
       const data = JSON.parse(json);
       return data; // Retourner l'objet complet, pas seulement data.config
     } catch (error) {
@@ -60,7 +62,7 @@
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch (error) {
-      console.warn('Impossible d\'effacer la configuration:', error);
+      console.warn("Impossible d'effacer la configuration:", error);
     }
   }
 
@@ -68,8 +70,6 @@
   window.Storage = {
     save,
     load,
-    clear
+    clear,
   };
-
 })();
-

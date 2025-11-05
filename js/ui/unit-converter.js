@@ -1,77 +1,77 @@
 /**
  * unit-converter.js
- * 
+ *
  * Module central de conversion d'unités pour ThermaFlow
- * 
+ *
  * Principe: Calculs internes toujours en SI, conversion uniquement à l'affichage
- * 
+ *
  * Facteurs de conversion validés compatibles avec PINT (Python):
  * - 1 m³/h = 4.40286745 USGPM
  * - 1 kPag = 0.145037738 psig
  */
 
-(function() {
+(function () {
   'use strict';
 
   // ========== FACTEURS DE CONVERSION ==========
   // Validés avec PINT: https://pint.readthedocs.io/en/stable/
-  
+
   const CONVERSION_FACTORS = {
     // Débit volumique
     // Source: PINT (1 * ureg.meter**3 / ureg.hour).to('USGPM')
     // 1 gallon US = 3.785411784 L
     M3H_TO_USGPM: 4.40286745,
-    USGPM_TO_M3H: 0.227124707,  // Inverse calculé: 1 / 4.40286745
-    
+    USGPM_TO_M3H: 0.227124707, // Inverse calculé: 1 / 4.40286745
+
     // Pression (gauge)
     // Source: PINT (1 * ureg.kPa).to('psi')
     // 1 psi = 6894.75729 Pa
     KPAG_TO_PSIG: 0.145037738,
-    PSIG_TO_KPAG: 6.89475729    // Inverse calculé: 1 / 0.145037738
+    PSIG_TO_KPAG: 6.89475729, // Inverse calculé: 1 / 0.145037738
   };
 
   // ========== DÉFINITIONS DES UNITÉS ==========
-  
+
   const UNITS = {
     flowRate: {
-      'm3_h': {
+      m3_h: {
         get label() {
           return window.I18n ? I18n.t('units.flowRate.m3_h') : 'm³/h';
         },
-        toSI: (value) => value,  // m³/h est l'unité SI d'affichage par défaut
+        toSI: (value) => value, // m³/h est l'unité SI d'affichage par défaut
         fromSI: (value) => value,
-        decimals: 1,  // Compromis: précision 0.1 m³/h pour plage 0.1-6000
-        min: 0.1,     // Ajusté pour cohérence avec decimals
-        max: 6000     // Étendu pour applications industrielles (26400 USGPM)
+        decimals: 2, // Précision 0.01 m³/h pour plage 0.1-6000
+        min: 0.1, // Ajusté pour cohérence avec decimals
+        max: 6000, // Étendu pour applications industrielles (26400 USGPM)
       },
-      'usgpm': {
+      usgpm: {
         get label() {
           return window.I18n ? I18n.t('units.flowRate.usgpm') : 'USGPM';
         },
         toSI: (value) => value * CONVERSION_FACTORS.USGPM_TO_M3H,
         fromSI: (value) => value * CONVERSION_FACTORS.M3H_TO_USGPM,
-        decimals: 0,  // Entiers suffisants pour USGPM (min ≈ 0.44)
+        decimals: 2, // Précision 0.01 USGPM pour meilleure lisibilité
         get min() {
-          return 0.1 * CONVERSION_FACTORS.M3H_TO_USGPM;  // 0.44 USGPM
+          return 0.1 * CONVERSION_FACTORS.M3H_TO_USGPM; // 0.44 USGPM
         },
         get max() {
-          return 6000 * CONVERSION_FACTORS.M3H_TO_USGPM;    // 26417 USGPM
-        }
-      }
+          return 6000 * CONVERSION_FACTORS.M3H_TO_USGPM; // 26417 USGPM
+        },
+      },
     },
-    
+
     pressure: {
-      'kPag': {
+      kPag: {
         get label() {
           return window.I18n ? I18n.t('units.pressure.kPag') : 'kPag';
         },
-        toSI: (value) => value,  // kPag est l'unité SI d'affichage par défaut
+        toSI: (value) => value, // kPag est l'unité SI d'affichage par défaut
         fromSI: (value) => value,
         decimals: 0,
         min: 100,
-        max: 1000
+        max: 1000,
       },
-      'psig': {
+      psig: {
         get label() {
           return window.I18n ? I18n.t('units.pressure.psig') : 'psig';
         },
@@ -79,20 +79,20 @@
         fromSI: (value) => value * CONVERSION_FACTORS.KPAG_TO_PSIG,
         decimals: 0,
         get min() {
-          return 100 * CONVERSION_FACTORS.KPAG_TO_PSIG;  // 14.5 psig
+          return 100 * CONVERSION_FACTORS.KPAG_TO_PSIG; // 14.5 psig
         },
         get max() {
-          return 1000 * CONVERSION_FACTORS.KPAG_TO_PSIG;  // 145.0 psig
-        }
-      }
-    }
+          return 1000 * CONVERSION_FACTORS.KPAG_TO_PSIG; // 145.0 psig
+        },
+      },
+    },
   };
 
   // ========== ÉTAT GLOBAL ==========
-  
-  let currentUnits = {
+
+  const currentUnits = {
     flowRate: 'm3_h',
-    pressure: 'kPag'
+    pressure: 'kPag',
   };
 
   // ========== FONCTIONS PUBLIQUES ==========
@@ -109,7 +109,7 @@
     if (!UNITS[paramType][unitKey]) {
       throw new Error(`Unité invalide: ${unitKey} pour ${paramType}`);
     }
-    
+
     currentUnits[paramType] = unitKey;
     console.log(`📐 Unité changée: ${paramType} → ${unitKey}`);
   }
@@ -146,10 +146,10 @@
     if (!UNITS[paramType]) {
       throw new Error(`Type de paramètre invalide: ${paramType}`);
     }
-    
-    return Object.keys(UNITS[paramType]).map(key => ({
+
+    return Object.keys(UNITS[paramType]).map((key) => ({
       key: key,
-      label: UNITS[paramType][key].label
+      label: UNITS[paramType][key].label,
     }));
   }
 
@@ -213,7 +213,7 @@
     return {
       min: unit.min,
       max: unit.max,
-      decimals: unit.decimals
+      decimals: unit.decimals,
     };
   }
 
@@ -242,33 +242,31 @@
   }
 
   // ========== EXPORT ==========
-  
+
   window.UnitConverter = {
     // Gestion unités
     setUnit,
     getUnit,
     getUnitInfo,
     getAvailableUnits,
-    
+
     // Conversions
     toSI,
     fromSI,
     convert,
-    
+
     // Formatage et plages
     format,
     getRanges,
-    
+
     // Persistance
     loadPreferences,
     getPreferences,
     savePreferences: getPreferences, // Alias pour rétrocompatibilité
-    
+
     // Constantes (pour tests)
-    CONVERSION_FACTORS
+    CONVERSION_FACTORS,
   };
 
   console.log('✅ UnitConverter initialisé');
-
 })();
-

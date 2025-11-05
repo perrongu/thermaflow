@@ -105,4 +105,3 @@ Pas de changement fonctionnel. Version 1.0.1 identique à 1.0.0 en termes de cal
 - Pas de bundler
 - Compatible tous navigateurs modernes
 - Open source (Licence MIT)
-

@@ -1,13 +1,13 @@
 /**
  * flow-regimes.js
- * 
+ *
  * Constantes définissant les limites de régimes d'écoulement.
- * 
+ *
  * Ces valeurs sont utilisées de manière cohérente dans tous les modules
  * (hydrodynamique, thermique, etc.) pour garantir l'uniformité des calculs.
- * 
+ *
  * SOURCE DE VÉRITÉ UNIQUE pour les transitions de régime.
- * 
+ *
  * @module flow-regimes
  */
 
@@ -18,7 +18,7 @@
 /**
  * Limite supérieure du régime laminaire.
  * Pour Re < RE_LAMINAR_MAX: écoulement laminaire garanti.
- * 
+ *
  * Référence: Perry's Chemical Engineers' Handbook, Section 6-3
  * Valeur standard en ingénierie: 2300
  */
@@ -33,10 +33,10 @@ const RE_TRANSITION_START = 2300;
 /**
  * Fin de la zone de transition / début du régime turbulent.
  * Pour Re > RE_TURBULENT_MIN: écoulement turbulent garanti.
- * 
+ *
  * Zone de transition: 2300 < Re < 4000
  * Cette zone est physiquement instable (écoulement intermittent).
- * 
+ *
  * Référence: Perry's Chemical Engineers' Handbook, Section 6-3
  * Valeur standard en ingénierie: 4000
  */
@@ -58,7 +58,7 @@ if (typeof window !== 'undefined') {
     RE_LAMINAR_MAX,
     RE_TRANSITION_START,
     RE_TRANSITION_END,
-    RE_TURBULENT_MIN
+    RE_TURBULENT_MIN,
   };
 }
 
@@ -68,7 +68,6 @@ if (typeof module !== 'undefined' && module.exports) {
     RE_LAMINAR_MAX,
     RE_TRANSITION_START,
     RE_TRANSITION_END,
-    RE_TURBULENT_MIN
+    RE_TURBULENT_MIN,
   };
 }
-

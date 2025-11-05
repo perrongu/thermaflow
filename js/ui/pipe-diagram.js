@@ -5,7 +5,7 @@
  */
 
 (function () {
-  "use strict";
+  'use strict';
 
   // ========== CONFIGURATION ==========
   const SVG_WIDTH = 900;
@@ -29,16 +29,16 @@
   const LENGTH_DIM_OFFSET = 20; // Distance de la ligne de cote de longueur au-dessus du tuyau
   const WATER_BLOCK_OFFSET_X = 200; // Distance du bloc EAU à gauche du tuyau
   const AIR_BLOCK_OFFSET_Y = 15; // Distance du bloc AIR sous le tuyau
-  const DIMENSION_EXTENSION = 10; // Longueur des extensions de cote
-  const DIMENSION_OFFSET = 35; // Distance des cotes de dimension de la pièce
+  // const DIMENSION_EXTENSION = 10; // Longueur des extensions de cote (non utilisé)
+  // const DIMENSION_OFFSET = 35; // Distance des cotes de dimension de la pièce (non utilisé)
 
   // Couleurs
-  const COLOR_PIPE = "#1e3a8a";
-  const COLOR_WATER = "#3b82f6";
-  const COLOR_INSULATION = "#d1d5db";
-  const COLOR_DIMENSION = "#374151";
-  const COLOR_TEXT = "#111827";
-  const COLOR_ARROW = "#f97316";
+  const COLOR_PIPE = '#1e3a8a';
+  const COLOR_WATER = '#3b82f6';
+  const COLOR_INSULATION = '#d1d5db';
+  const COLOR_DIMENSION = '#374151';
+  const COLOR_TEXT = '#111827';
+  const COLOR_ARROW = '#f97316';
 
   // ========== ÉTAT ==========
   let svgElement = null;
@@ -53,25 +53,22 @@
    * @throws {Error} Si le container n'est pas trouvé
    */
   function init() {
-    const container = document.getElementById("pipe-diagram-container");
+    const container = document.getElementById('pipe-diagram-container');
     if (!container) {
-      console.error("❌ Container #pipe-diagram-container non trouvé");
+      console.error('❌ Container #pipe-diagram-container non trouvé');
       return;
     }
 
     // Créer l'élément SVG avec viewBox décalée pour éliminer l'espace vide en haut
-    svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svgElement.setAttribute("id", "pipe-diagram");
-    svgElement.setAttribute(
-      "viewBox",
-      `0 ${SVG_VIEWBOX_Y_OFFSET} ${SVG_WIDTH} ${SVG_HEIGHT}`,
-    );
-    svgElement.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-    svgElement.setAttribute("preserveAspectRatio", "xMidYMid meet");
+    svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svgElement.setAttribute('id', 'pipe-diagram');
+    svgElement.setAttribute('viewBox', `0 ${SVG_VIEWBOX_Y_OFFSET} ${SVG_WIDTH} ${SVG_HEIGHT}`);
+    svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    svgElement.setAttribute('preserveAspectRatio', 'xMidYMid meet');
 
     container.appendChild(svgElement);
 
-    console.log("✅ PipeDiagram initialisé");
+    console.log('✅ PipeDiagram initialisé');
   }
 
   // ========== MISE À JOUR ==========
@@ -86,24 +83,24 @@
    */
   function update(specs) {
     if (!svgElement) {
-      console.error("❌ SVG non initialisé");
+      console.error('❌ SVG non initialisé');
       return;
     }
 
     if (
       !specs ||
-      typeof specs.OD !== "number" ||
-      typeof specs.ID !== "number" ||
-      typeof specs.WT !== "number"
+      typeof specs.OD !== 'number' ||
+      typeof specs.ID !== 'number' ||
+      typeof specs.WT !== 'number'
     ) {
-      console.error("❌ Spécifications invalides:", specs);
+      console.error('❌ Spécifications invalides:', specs);
       return;
     }
 
     currentSpecs = specs;
 
     // Effacer le contenu existant
-    svgElement.innerHTML = "";
+    svgElement.innerHTML = '';
 
     // Dessiner la vue isométrique
     drawIsometricPipe(specs);
@@ -111,9 +108,11 @@
 
   // ========== VUE ISOMÉTRIQUE DU TUYAU ==========
   function drawIsometricPipe(specs) {
-    const { OD, ID, WT } = specs;
+    // Variables destructurées mais non utilisées directement dans cette fonction
+    // (specs est passé à drawOpenEndSection)
+    // const { OD, ID, WT } = specs;
 
-    const g = createSVGElement("g");
+    const g = createSVGElement('g');
 
     // Coordonnées du tuyau
     const leftX = PIPE_CENTER_X - PIPE_LENGTH / 2;
@@ -121,8 +120,7 @@
     const centerY = PIPE_CENTER_Y;
 
     // 1. Isolation (couche extérieure, grisée) - seulement si activée
-    const hasInsulation =
-      document.getElementById("has-insulation")?.checked || false;
+    const hasInsulation = document.getElementById('has-insulation')?.checked || false;
     if (hasInsulation) {
       drawOpenCylinder(
         g,
@@ -133,24 +131,13 @@
         PIPE_DEPTH + 5,
         COLOR_INSULATION,
         3,
-        "none",
-        0.5,
+        'none',
+        0.5
       );
     }
 
     // 2. Corps du tuyau (paroi) - ouvert à droite
-    drawOpenCylinder(
-      g,
-      leftX,
-      rightX,
-      centerY,
-      PIPE_RADIUS,
-      PIPE_DEPTH,
-      COLOR_PIPE,
-      4,
-      "none",
-      1,
-    );
+    drawOpenCylinder(g, leftX, rightX, centerY, PIPE_RADIUS, PIPE_DEPTH, COLOR_PIPE, 4, 'none', 1);
 
     // 3. Intérieur (eau)
     const innerRadius = PIPE_RADIUS - WALL_THICKNESS;
@@ -163,9 +150,9 @@
       PIPE_DEPTH - 3,
       COLOR_WATER,
       2,
-      "none",
+      'none',
       0.3,
-      true,
+      true
     );
 
     // 4. Tranche droite ouverte avec dimensions OD, ID, WT
@@ -195,55 +182,55 @@
     strokeWidth,
     dashArray,
     opacity,
-    isFill = false,
+    isFill = false
   ) {
     // Ellipse gauche (entrée)
-    const leftEllipse = createSVGElement("ellipse", {
+    const leftEllipse = createSVGElement('ellipse', {
       cx: leftX,
       cy: centerY,
       rx: depth,
       ry: radius,
-      fill: isFill ? color : "none",
+      fill: isFill ? color : 'none',
       stroke: color,
-      "stroke-width": strokeWidth,
-      "stroke-dasharray": dashArray,
+      'stroke-width': strokeWidth,
+      'stroke-dasharray': dashArray,
       opacity: opacity,
     });
     parent.appendChild(leftEllipse);
 
     // Corps (rectangle)
-    const body = createSVGElement("rect", {
+    const body = createSVGElement('rect', {
       x: leftX,
       y: centerY - radius,
       width: rightX - leftX,
       height: radius * 2,
-      fill: isFill ? color : "none",
-      stroke: "none",
+      fill: isFill ? color : 'none',
+      stroke: 'none',
       opacity: opacity,
     });
     parent.appendChild(body);
 
     // Lignes supérieure et inférieure
-    const topLine = createSVGElement("line", {
+    const topLine = createSVGElement('line', {
       x1: leftX,
       y1: centerY - radius,
       x2: rightX,
       y2: centerY - radius,
       stroke: color,
-      "stroke-width": strokeWidth,
-      "stroke-dasharray": dashArray,
+      'stroke-width': strokeWidth,
+      'stroke-dasharray': dashArray,
       opacity: opacity,
     });
     parent.appendChild(topLine);
 
-    const bottomLine = createSVGElement("line", {
+    const bottomLine = createSVGElement('line', {
       x1: leftX,
       y1: centerY + radius,
       x2: rightX,
       y2: centerY + radius,
       stroke: color,
-      "stroke-width": strokeWidth,
-      "stroke-dasharray": dashArray,
+      'stroke-width': strokeWidth,
+      'stroke-dasharray': dashArray,
       opacity: opacity,
     });
     parent.appendChild(bottomLine);
@@ -256,100 +243,60 @@
     const { OD, ID, WT } = specs;
 
     // Cercle extérieur (OD)
-    const outerCircle = createSVGElement("circle", {
+    const outerCircle = createSVGElement('circle', {
       cx: rightX,
       cy: centerY,
       r: PIPE_RADIUS,
-      fill: "none",
+      fill: 'none',
       stroke: COLOR_PIPE,
-      "stroke-width": 3,
+      'stroke-width': 3,
     });
     parent.appendChild(outerCircle);
 
     // Cercle intérieur (ID)
     const innerRadius = PIPE_RADIUS - WALL_THICKNESS;
-    const innerCircle = createSVGElement("circle", {
+    const innerCircle = createSVGElement('circle', {
       cx: rightX,
       cy: centerY,
       r: innerRadius,
       fill: COLOR_WATER,
       opacity: 0.3,
       stroke: COLOR_PIPE,
-      "stroke-width": 2,
+      'stroke-width': 2,
     });
     parent.appendChild(innerCircle);
 
     // Dimensions sur la tranche (bonnes pratiques)
     // OD - cote verticale à droite avec extensions hors pièce et label décalé
     const odX = rightX + 70;
-    drawReferenceLine(
-      parent,
-      rightX,
-      centerY - PIPE_RADIUS,
-      odX - 10,
-      centerY - PIPE_RADIUS,
-    ); // extension haut
-    drawReferenceLine(
-      parent,
-      rightX,
-      centerY + PIPE_RADIUS,
-      odX - 10,
-      centerY + PIPE_RADIUS,
-    ); // extension bas
-    drawDimensionLine(
-      parent,
-      odX,
-      centerY - PIPE_RADIUS,
-      odX,
-      centerY + PIPE_RADIUS,
-      "",
-      true,
-    );
-    const odText = createSVGElement("text", {
+    drawReferenceLine(parent, rightX, centerY - PIPE_RADIUS, odX - 10, centerY - PIPE_RADIUS); // extension haut
+    drawReferenceLine(parent, rightX, centerY + PIPE_RADIUS, odX - 10, centerY + PIPE_RADIUS); // extension bas
+    drawDimensionLine(parent, odX, centerY - PIPE_RADIUS, odX, centerY + PIPE_RADIUS, '', true);
+    const odText = createSVGElement('text', {
       x: odX + 40,
       y: centerY,
-      "text-anchor": "start",
+      'text-anchor': 'start',
       fill: COLOR_TEXT,
-      "font-size": 11,
-      "font-weight": "bold",
-      "font-family": "sans-serif",
+      'font-size': 11,
+      'font-weight': 'bold',
+      'font-family': 'sans-serif',
     });
     odText.textContent = `OD = ${OD.toFixed(1)} mm`;
     parent.appendChild(odText);
 
     // ID - cote horizontale sous la pièce, label au milieu au-dessus
     const idY = centerY + innerRadius + 40;
-    drawReferenceLine(
-      parent,
-      rightX - innerRadius,
-      centerY,
-      rightX - innerRadius,
-      idY - 8,
-    );
-    drawReferenceLine(
-      parent,
-      rightX + innerRadius,
-      centerY,
-      rightX + innerRadius,
-      idY - 8,
-    );
-    drawDimensionLine(
-      parent,
-      rightX - innerRadius,
-      idY,
-      rightX + innerRadius,
-      idY,
-      "",
-      false,
-    );
-    const idText = createSVGElement("text", {
+    drawReferenceLine(parent, rightX - innerRadius, centerY, rightX - innerRadius, idY - 8);
+    drawReferenceLine(parent, rightX + innerRadius, centerY, rightX + innerRadius, idY - 8);
+    drawDimensionLine(parent, rightX - innerRadius, idY, rightX + innerRadius, idY, '', false);
+    const idText = createSVGElement('text', {
       x: rightX,
       y: idY - 10,
-      "text-anchor": "middle",
+      'text-anchor': 'middle',
       fill: COLOR_TEXT,
-      "font-size": 11,
-      "font-weight": "bold",
-      "font-family": "sans-serif",
+      'font-size': 11,
+      'font-weight': 'bold',
+      'font-family': 'sans-serif',
     });
     idText.textContent = `ID = ${ID.toFixed(1)} mm`;
     parent.appendChild(idText);
@@ -364,18 +311,18 @@
     drawReferenceLine(parent, rightX, wtInnerY, wtX - 8, wtInnerY);
 
     // Ligne de cote verticale
-    drawDimensionLine(parent, wtX, wtOuterY, wtX, wtInnerY, "", true);
+    drawDimensionLine(parent, wtX, wtOuterY, wtX, wtInnerY, '', true);
 
     // Label WT décalé et positionné plus haut pour éviter chevauchement avec OD
-    const wtText = createSVGElement("text", {
+    const wtText = createSVGElement('text', {
       x: wtX + 25,
       y: wtOuterY - 5,
-      "text-anchor": "start",
-      "dominant-baseline": "bottom",
+      'text-anchor': 'start',
+      'dominant-baseline': 'bottom',
       fill: COLOR_TEXT,
-      "font-size": 11,
-      "font-weight": "bold",
-      "font-family": "sans-serif",
+      'font-size': 11,
+      'font-weight': 'bold',
+      'font-family': 'sans-serif',
     });
     wtText.textContent = `WT = ${WT.toFixed(2)} mm`;
     parent.appendChild(wtText);
@@ -401,8 +348,8 @@
       dimY,
       rightX,
       dimY,
-      "", // Pas de label fixe
-      false,
+      '', // Pas de label fixe
+      false
     );
 
     // Lignes de référence
@@ -410,7 +357,7 @@
     drawReferenceLine(parent, rightX, centerY - PIPE_RADIUS, rightX, dimY);
 
     // foreignObject pour input de longueur
-    const foreign = createSVGElement("foreignObject", {
+    const foreign = createSVGElement('foreignObject', {
       x: (leftX + rightX) / 2 - 60,
       y: dimY - 35,
       width: 120,
@@ -430,14 +377,14 @@
 
   // ========== LIGNE DE RÉFÉRENCE ==========
   function drawReferenceLine(parent, x1, y1, x2, y2) {
-    const line = createSVGElement("line", {
+    const line = createSVGElement('line', {
       x1,
       y1,
       x2,
       y2,
       stroke: COLOR_DIMENSION,
-      "stroke-width": 1,
-      "stroke-dasharray": "3,3",
+      'stroke-width': 1,
+      'stroke-dasharray': '3,3',
       opacity: 0.5,
     });
     parent.appendChild(line);
@@ -463,58 +410,52 @@
     const bgHeight = 30 + contentHeight + 10; // titre + contenu + padding bas
 
     // Rectangle de fond
-    const bg = createSVGElement("rect", {
+    const bg = createSVGElement('rect', {
       x: blockX,
       y: blockY,
       width: 160,
       height: bgHeight,
-      fill: "#f0f9ff",
+      fill: '#f0f9ff',
       stroke: COLOR_PIPE,
-      "stroke-width": 2,
+      'stroke-width': 2,
       rx: 5,
     });
     parent.appendChild(bg);
 
     // Titre "EAU"
-    const title = createSVGElement("text", {
+    const title = createSVGElement('text', {
       x: blockX + 80,
       y: blockY + 22,
-      "text-anchor": "middle",
+      'text-anchor': 'middle',
       fill: COLOR_TEXT,
-      "font-size": 16,
-      "font-weight": "bold",
-      "font-family": "sans-serif",
+      'font-size': 16,
+      'font-weight': 'bold',
+      'font-family': 'sans-serif',
     });
-    title.textContent = window.I18n ? I18n.t("diagram.water") : "EAU";
+    title.textContent = window.I18n ? I18n.t('diagram.water') : 'EAU';
     parent.appendChild(title);
 
     // foreignObject pour les inputs HTML
-    const foreign = createSVGElement("foreignObject", {
+    const foreign = createSVGElement('foreignObject', {
       x: blockX + 10,
       y: blockY + 30,
       width: 140,
       height: contentHeight,
     });
 
-    const tempLabel = window.I18n
-      ? I18n.t("diagram.temperature")
-      : "Température (°C):";
+    const tempLabel = window.I18n ? I18n.t('diagram.temperature') : 'Température (°C):';
 
     // Labels dynamiques avec unités
     const pressureUnit = window.UnitConverter
-      ? UnitConverter.getUnitInfo("pressure").label
-      : "kPag";
-    const flowUnit = window.UnitConverter
-      ? UnitConverter.getUnitInfo("flowRate").label
-      : "m³/h";
+      ? UnitConverter.getUnitInfo('pressure').label
+      : 'kPag';
+    const flowUnit = window.UnitConverter ? UnitConverter.getUnitInfo('flowRate').label : 'm³/h';
     const pressureLabel = (
-      window.I18n ? I18n.t("diagram.pressure") : `Pression (${pressureUnit}):`
-    ).replace("kPag", pressureUnit);
-    const flowLabel = (
-      window.I18n ? I18n.t("diagram.flowRate") : `Débit (${flowUnit}):`
-    )
-      .replace("m³/hr", flowUnit)
-      .replace("m³/h", flowUnit);
+      window.I18n ? I18n.t('diagram.pressure') : `Pression (${pressureUnit}):`
+    ).replace('kPag', pressureUnit);
+    const flowLabel = (window.I18n ? I18n.t('diagram.flowRate') : `Débit (${flowUnit}):`)
+      .replace('m³/hr', flowUnit)
+      .replace('m³/h', flowUnit);
 
     foreign.innerHTML = `
       <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: sans-serif; padding-top: 2px; padding-bottom: 8px;">
@@ -555,18 +496,18 @@
     const arrowY = centerY;
 
     // Ligne
-    const arrowLine = createSVGElement("line", {
+    const arrowLine = createSVGElement('line', {
       x1: arrowStartX,
       y1: arrowY,
       x2: arrowEndX,
       y2: arrowY,
       stroke: COLOR_ARROW,
-      "stroke-width": 3,
+      'stroke-width': 3,
     });
     parent.appendChild(arrowLine);
 
     // Tête de flèche
-    const arrowHead = createSVGElement("polygon", {
+    const arrowHead = createSVGElement('polygon', {
       points: `${arrowEndX},${arrowY} ${arrowEndX - 10},${arrowY - 6} ${arrowEndX - 10},${arrowY + 6}`,
       fill: COLOR_ARROW,
     });
@@ -594,45 +535,41 @@
     const bgHeight = 30 + contentHeight + 10; // titre + contenu + padding bas
 
     // Rectangle de fond
-    const bg = createSVGElement("rect", {
+    const bg = createSVGElement('rect', {
       x: blockX,
       y: blockY,
       width: blockWidth,
       height: bgHeight,
-      fill: "#f0fdf4",
-      stroke: "#16a34a",
-      "stroke-width": 2,
+      fill: '#f0fdf4',
+      stroke: '#16a34a',
+      'stroke-width': 2,
       rx: 5,
     });
     parent.appendChild(bg);
 
     // Titre "AIR"
-    const title = createSVGElement("text", {
+    const title = createSVGElement('text', {
       x: blockX + blockWidth / 2,
       y: blockY + 22,
-      "text-anchor": "middle",
+      'text-anchor': 'middle',
       fill: COLOR_TEXT,
-      "font-size": 16,
-      "font-weight": "bold",
-      "font-family": "sans-serif",
+      'font-size': 16,
+      'font-weight': 'bold',
+      'font-family': 'sans-serif',
     });
-    title.textContent = window.I18n ? I18n.t("diagram.air") : "AIR";
+    title.textContent = window.I18n ? I18n.t('diagram.air') : 'AIR';
     parent.appendChild(title);
 
     // foreignObject pour les inputs HTML
-    const foreign = createSVGElement("foreignObject", {
+    const foreign = createSVGElement('foreignObject', {
       x: blockX + 10,
       y: blockY + 30,
       width: blockWidth - 20,
       height: contentHeight,
     });
 
-    const airTempLabel = window.I18n
-      ? I18n.t("diagram.temperature")
-      : "Température (°C):";
-    const windLabel = window.I18n
-      ? I18n.t("diagram.windSpeed")
-      : "Vitesse du vent (km/h):";
+    const airTempLabel = window.I18n ? I18n.t('diagram.temperature') : 'Température (°C):';
+    const windLabel = window.I18n ? I18n.t('diagram.windSpeed') : 'Vitesse du vent (km/h):';
 
     foreign.innerHTML = `
       <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: sans-serif; padding-top: 2px; padding-bottom: 8px;">
@@ -657,13 +594,13 @@
     const arrowEndY = centerY + PIPE_RADIUS; // vers le bas du tuyau
 
     // Ligne
-    const arrowLine = createSVGElement("line", {
+    const arrowLine = createSVGElement('line', {
       x1: arrowStartX,
       y1: arrowStartY,
       x2: arrowEndX,
       y2: arrowEndY,
       stroke: COLOR_ARROW,
-      "stroke-width": 3,
+      'stroke-width': 3,
     });
     parent.appendChild(arrowLine);
 
@@ -677,7 +614,7 @@
     const angle1 = angle + Math.PI - 0.4; // ~140°
     const angle2 = angle + Math.PI + 0.4; // ~220°
 
-    const arrowHead = createSVGElement("polygon", {
+    const arrowHead = createSVGElement('polygon', {
       points: `${arrowEndX},${arrowEndY} ${arrowEndX + arrowSize * Math.cos(angle1)},${arrowEndY + arrowSize * Math.sin(angle1)} ${arrowEndX + arrowSize * Math.cos(angle2)},${arrowEndY + arrowSize * Math.sin(angle2)}`,
       fill: COLOR_ARROW,
     });
@@ -699,13 +636,13 @@
    */
   function drawDimensionLine(parent, x1, y1, x2, y2, label, isVertical) {
     // Ligne principale
-    const line = createSVGElement("line", {
+    const line = createSVGElement('line', {
       x1,
       y1,
       x2,
       y2,
       stroke: COLOR_DIMENSION,
-      "stroke-width": 1.5,
+      'stroke-width': 1.5,
     });
     parent.appendChild(line);
 
@@ -713,66 +650,66 @@
     const barSize = 6;
     if (isVertical) {
       // Barre haut
-      const bar1 = createSVGElement("line", {
+      const bar1 = createSVGElement('line', {
         x1: x1 - barSize,
         y1: y1,
         x2: x1 + barSize,
         y2: y1,
         stroke: COLOR_DIMENSION,
-        "stroke-width": 1.5,
+        'stroke-width': 1.5,
       });
       parent.appendChild(bar1);
 
       // Barre bas
-      const bar2 = createSVGElement("line", {
+      const bar2 = createSVGElement('line', {
         x1: x2 - barSize,
         y1: y2,
         x2: x2 + barSize,
         y2: y2,
         stroke: COLOR_DIMENSION,
-        "stroke-width": 1.5,
+        'stroke-width': 1.5,
       });
       parent.appendChild(bar2);
     } else {
       // Barre gauche
-      const bar1 = createSVGElement("line", {
+      const bar1 = createSVGElement('line', {
         x1: x1,
         y1: y1 - barSize,
         x2: x1,
         y2: y1 + barSize,
         stroke: COLOR_DIMENSION,
-        "stroke-width": 1.5,
+        'stroke-width': 1.5,
       });
       parent.appendChild(bar1);
 
       // Barre droite
-      const bar2 = createSVGElement("line", {
+      const bar2 = createSVGElement('line', {
         x1: x2,
         y1: y2 - barSize,
         x2: x2,
         y2: y2 + barSize,
         stroke: COLOR_DIMENSION,
-        "stroke-width": 1.5,
+        'stroke-width': 1.5,
       });
       parent.appendChild(bar2);
     }
 
     // Label
-    const text = createSVGElement("text", {
+    const text = createSVGElement('text', {
       x: (x1 + x2) / 2,
       y: (y1 + y2) / 2,
-      "text-anchor": "middle",
-      "dominant-baseline": "middle",
+      'text-anchor': 'middle',
+      'dominant-baseline': 'middle',
       fill: COLOR_TEXT,
-      "font-size": 11,
-      "font-weight": "bold",
-      "font-family": "sans-serif",
+      'font-size': 11,
+      'font-weight': 'bold',
+      'font-family': 'sans-serif',
     });
 
     if (isVertical) {
-      text.setAttribute("x", (x1 + x2) / 2 + 25);
+      text.setAttribute('x', (x1 + x2) / 2 + 25);
     } else {
-      text.setAttribute("y", (y1 + y2) / 2 - 10);
+      text.setAttribute('y', (y1 + y2) / 2 - 10);
     }
 
     text.textContent = label;
@@ -781,10 +718,7 @@
 
   // ========== UTILITAIRES SVG ==========
   function createSVGElement(type, attributes = {}) {
-    const element = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      type,
-    );
+    const element = document.createElementNS('http://www.w3.org/2000/svg', type);
 
     Object.entries(attributes).forEach(([key, value]) => {
       element.setAttribute(key, value);
@@ -794,34 +728,24 @@
   }
 
   // ========== LISTENER CHANGEMENT DE LANGUE ==========
-  document.addEventListener("thermaflow:language-changed", function (e) {
+  document.addEventListener('thermaflow:language-changed', function (e) {
     try {
       console.log(
-        "🌐 PipeDiagram: changement de langue détecté →",
-        e.detail ? e.detail.lang : "no detail",
+        '🌐 PipeDiagram: changement de langue détecté →',
+        e.detail ? e.detail.lang : 'no detail'
       );
       if (currentSpecs) {
-        console.log(
-          "🔄 PipeDiagram: régénération du diagramme avec specs:",
-          currentSpecs,
-        );
+        console.log('🔄 PipeDiagram: régénération du diagramme avec specs:', currentSpecs);
         update(currentSpecs);
       } else {
-        console.warn(
-          "⚠️ PipeDiagram: pas de specs à régénérer (currentSpecs est null)",
-        );
+        console.warn('⚠️ PipeDiagram: pas de specs à régénérer (currentSpecs est null)');
       }
     } catch (err) {
-      console.error(
-        "❌ PipeDiagram: erreur dans listener language-changed:",
-        err,
-      );
+      console.error('❌ PipeDiagram: erreur dans listener language-changed:', err);
     }
   });
 
-  console.log(
-    "🔍 PipeDiagram: listener language-changed attaché au niveau module",
-  );
+  console.log('🔍 PipeDiagram: listener language-changed attaché au niveau module');
 
   // ========== API PUBLIQUE ==========
   window.PipeDiagram = {
@@ -830,7 +754,7 @@
   };
 
   // Export conditionnel pour tests Node.js
-  if (typeof module !== "undefined" && module.exports) {
+  if (typeof module !== 'undefined' && module.exports) {
     module.exports = { init, update };
   }
 })();

@@ -1,13 +1,13 @@
 /**
  * test_integration.js
- * 
+ *
  * Tests d'intégration end-to-end pour ThermaFlow
- * 
+ *
  * Teste le système complet de bout en bout:
  * - Configuration → Engine → Résultats
  * - Scénarios réalistes
  * - Validation scientifique
- * 
+ *
  * Exécution: node tests/test_integration.js
  */
 
@@ -38,7 +38,7 @@ function assertApprox(actual, expected, tolerance, message) {
   testsTotal++;
   const diff = Math.abs(actual - expected);
   const relError = expected !== 0 ? Math.abs(diff / expected) : diff;
-  
+
   if (diff <= tolerance || relError <= tolerance) {
     testsPassed++;
   } else {
@@ -59,23 +59,23 @@ const scenario1 = {
     D_inner: 0.0525,
     D_outer: 0.0603,
     roughness: 0.045e-3,
-    material: 'steel'
+    material: 'steel',
   },
   totalLength: 100,
   numSegments: 20,
   fluid: {
     T_in: 60,
     P: 3.0,
-    m_dot: 2.0
+    m_dot: 2.0,
   },
   ambient: {
     T_amb: -10,
-    V_wind: 5.0
+    V_wind: 5.0,
   },
   insulation: {
     material: 'fiberglass',
-    thickness: 0.020
-  }
+    thickness: 0.02,
+  },
 };
 
 const result1 = pipeNetwork.calculatePipeNetwork(scenario1);
@@ -96,20 +96,25 @@ console.log('Scénario 2: Sans isolation - DN50, 100m, -10°C\n');
 
 const scenario2 = {
   ...scenario1,
-  insulation: null
+  insulation: null,
 };
 
 const result2 = pipeNetwork.calculatePipeNetwork(scenario2);
 const freeze2 = freezeDetector.detectFreeze(result2.T_profile, result2.x_profile, 0);
 
 assert(result2.T_final < result1.T_final, 'Sans isolation devrait être plus froid');
-assert(result2.Q_loss_total > result1.Q_loss_total, 'Sans isolation devrait perdre plus de chaleur');
+assert(
+  result2.Q_loss_total > result1.Q_loss_total,
+  'Sans isolation devrait perdre plus de chaleur'
+);
 assert(result2.T_final > 40, 'T_final devrait être > 40°C pour ce cas');
 
 console.log(`  ✓ T_final = ${result2.T_final.toFixed(2)}°C`);
 console.log(`  ✓ Gel détecté = ${freeze2.freezeDetected ? 'OUI ⚠️' : 'NON ✅'}`);
 console.log(`  ✓ Q_loss = ${(result2.Q_loss_total / 1000).toFixed(2)} kW`);
-console.log(`  ✓ Augmentation perte: ${((result2.Q_loss_total / result1.Q_loss_total - 1) * 100).toFixed(0)}%\n`);
+console.log(
+  `  ✓ Augmentation perte: ${((result2.Q_loss_total / result1.Q_loss_total - 1) * 100).toFixed(0)}%\n`
+);
 
 // ========== SCÉNARIO 3: CONDUITE LONGUE, DÉBIT FAIBLE (RISQUE ÉLEVÉ) ==========
 console.log('Scénario 3: Conduite longue, débit faible - 500m, 0.5 kg/s, -20°C\n');
@@ -121,16 +126,16 @@ const scenario3 = {
   fluid: {
     T_in: 40,
     P: 3.0,
-    m_dot: 0.5
+    m_dot: 0.5,
   },
   ambient: {
     T_amb: -20,
-    V_wind: 10.0
+    V_wind: 10.0,
   },
   insulation: {
     material: 'fiberglass',
-    thickness: 0.020
-  }
+    thickness: 0.02,
+  },
 };
 
 const result3 = pipeNetwork.calculatePipeNetwork(scenario3);
@@ -156,13 +161,13 @@ const scenario4 = {
   fluid: {
     T_in: 60,
     P: 3.0,
-    m_dot: 5.0
+    m_dot: 5.0,
   },
   ambient: {
     T_amb: -10,
-    V_wind: 5.0
+    V_wind: 5.0,
   },
-  insulation: scenario1.insulation
+  insulation: scenario1.insulation,
 };
 
 const result4 = pipeNetwork.calculatePipeNetwork(scenario4);
@@ -185,16 +190,16 @@ const scenario5 = {
   fluid: {
     T_in: 50,
     P: 3.0,
-    m_dot: 1.5
+    m_dot: 1.5,
   },
   ambient: {
     T_amb: -40,
-    V_wind: 15.0
+    V_wind: 15.0,
   },
   insulation: {
     material: 'fiberglass',
-    thickness: 0.030  // Isolation plus épaisse
-  }
+    thickness: 0.03, // Isolation plus épaisse
+  },
 };
 
 const result5 = pipeNetwork.calculatePipeNetwork(scenario5);
@@ -209,18 +214,26 @@ console.log('='.repeat(70));
 console.log('VALIDATION COHÉRENCE PHYSIQUE\n');
 
 // Test: Température décroissante
-assert(result1.T_profile[0] >= result1.T_profile[result1.T_profile.length - 1],
-  'Température devrait être décroissante');
+assert(
+  result1.T_profile[0] >= result1.T_profile[result1.T_profile.length - 1],
+  'Température devrait être décroissante'
+);
 
 // Test: Pression décroissante
-assert(result1.P_profile[0] >= result1.P_profile[result1.P_profile.length - 1],
-  'Pression devrait être décroissante');
+assert(
+  result1.P_profile[0] >= result1.P_profile[result1.P_profile.length - 1],
+  'Pression devrait être décroissante'
+);
 
 // Test: Conservation énergie (Q_loss = m·cp·ΔT approx)
-const water_cp = 4184;  // J/(kg·K) approximatif
+const water_cp = 4184; // J/(kg·K) approximatif
 const Q_from_temp = scenario1.fluid.m_dot * water_cp * (result1.T_profile[0] - result1.T_final);
-assertApprox(Q_from_temp, result1.Q_loss_total, result1.Q_loss_total * 0.1,
-  'Conservation énergie: Q = m·cp·ΔT');
+assertApprox(
+  Q_from_temp,
+  result1.Q_loss_total,
+  result1.Q_loss_total * 0.1,
+  'Conservation énergie: Q = m·cp·ΔT'
+);
 
 console.log(`  ✓ Températures décroissantes`);
 console.log(`  ✓ Pressions décroissantes`);
@@ -233,7 +246,7 @@ console.log('TESTS PERFORMANCE\n');
 const perfScenario = {
   ...scenario1,
   totalLength: 100,
-  numSegments: 100  // Test avec 100 segments
+  numSegments: 100, // Test avec 100 segments
 };
 
 const startTime = Date.now();
@@ -261,10 +274,9 @@ console.log(`  5. Air très froid → ${freeze5.freezeDetected ? 'GEL ⚠️' : 
 console.log('\n');
 
 if (testsPassed === testsTotal) {
-  console.log('✅ TOUS LES TESTS D\'INTÉGRATION PASSENT\n');
+  console.log("✅ TOUS LES TESTS D'INTÉGRATION PASSENT\n");
   process.exit(0);
 } else {
   console.log(`❌ ${testsTotal - testsPassed} TEST(S) EN ÉCHEC\n`);
   process.exit(1);
 }
-

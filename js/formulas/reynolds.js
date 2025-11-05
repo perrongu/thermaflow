@@ -13,23 +13,27 @@ if (typeof module !== 'undefined' && module.exports) {
 
 // Fonctions helper pour accès uniforme aux constantes
 function getRELaminarMax() {
-  return _flowRegimes_reynolds ? _flowRegimes_reynolds.RE_LAMINAR_MAX : window.FlowRegimes.RE_LAMINAR_MAX;
+  return _flowRegimes_reynolds
+    ? _flowRegimes_reynolds.RE_LAMINAR_MAX
+    : window.FlowRegimes.RE_LAMINAR_MAX;
 }
 
 function getRETurbulentMin() {
-  return _flowRegimes_reynolds ? _flowRegimes_reynolds.RE_TURBULENT_MIN : window.FlowRegimes.RE_TURBULENT_MIN;
+  return _flowRegimes_reynolds
+    ? _flowRegimes_reynolds.RE_TURBULENT_MIN
+    : window.FlowRegimes.RE_TURBULENT_MIN;
 }
 
 /**
  * Calcule le nombre de Reynolds pour un écoulement en conduite.
- * 
+ *
  * @param {number} rho - Densité du fluide [kg/m³]
  * @param {number} V - Vitesse moyenne d'écoulement [m/s]
  * @param {number} D - Diamètre hydraulique [m]
  * @param {number} mu - Viscosité dynamique [Pa·s]
  * @returns {number} Nombre de Reynolds [sans dimension]
  * @throws {Error} Si les paramètres sont invalides
- * 
+ *
  * @example
  * // Eau à 20°C (ρ=998 kg/m³, μ=1.002e-3 Pa·s) dans DN50 (D=0.0525m) à V=1 m/s
  * const Re = calculateReynolds(998, 1.0, 0.0525, 1.002e-3);
@@ -49,7 +53,7 @@ function calculateReynolds(rho, V, D, mu) {
   if (typeof mu !== 'number' || !isFinite(mu)) {
     throw new Error(`Viscosité invalide: ${mu} (doit être un nombre fini)`);
   }
-  
+
   // Validation des valeurs positives
   if (rho <= 0) {
     throw new Error(`Densité doit être positive: ${rho} kg/m³`);
@@ -63,20 +67,20 @@ function calculateReynolds(rho, V, D, mu) {
   if (mu <= 0) {
     throw new Error(`Viscosité doit être positive: ${mu} Pa·s`);
   }
-  
+
   // Calcul du nombre de Reynolds
   const Re = (rho * V * D) / mu;
-  
+
   return Re;
 }
 
 /**
  * Détermine le régime d'écoulement basé sur le nombre de Reynolds.
- * 
+ *
  * @param {number} Re - Nombre de Reynolds [sans dimension]
  * @returns {string} Régime: 'laminar', 'transitional', ou 'turbulent'
  * @throws {Error} Si Re est invalide
- * 
+ *
  * @example
  * const regime = getFlowRegime(1500);  // 'laminar'
  * const regime = getFlowRegime(3000);  // 'transitional'
@@ -89,10 +93,10 @@ function getFlowRegime(Re) {
   if (Re < 0) {
     throw new Error(`Nombre de Reynolds doit être non-négatif: ${Re}`);
   }
-  
+
   const RE_LAMINAR_MAX = getRELaminarMax();
   const RE_TURBULENT_MIN = getRETurbulentMin();
-  
+
   if (Re < RE_LAMINAR_MAX) {
     return 'laminar';
   } else if (Re <= RE_TURBULENT_MIN) {
@@ -104,14 +108,14 @@ function getFlowRegime(Re) {
 
 /**
  * Calcule le nombre de Reynolds et détermine le régime d'écoulement.
- * 
+ *
  * @param {number} rho - Densité du fluide [kg/m³]
  * @param {number} V - Vitesse moyenne d'écoulement [m/s]
  * @param {number} D - Diamètre hydraulique [m]
  * @param {number} mu - Viscosité dynamique [Pa·s]
  * @returns {ReynoldsResult} Objet contenant Re et le régime
  * @throws {Error} Si les paramètres sont invalides
- * 
+ *
  * @example
  * // Eau à 20°C dans DN50 à 1 m/s
  * const result = calculateReynoldsWithRegime(998, 1.0, 0.0525, 1.002e-3);
@@ -121,20 +125,20 @@ function getFlowRegime(Re) {
 function calculateReynoldsWithRegime(rho, V, D, mu) {
   const Re = calculateReynolds(rho, V, D, mu);
   const regime = getFlowRegime(Re);
-  
+
   return { Re, regime };
 }
 
 /**
  * Calcule la vitesse critique correspondant à la transition laminaire-turbulent.
- * 
+ *
  * @param {number} rho - Densité du fluide [kg/m³]
  * @param {number} D - Diamètre hydraulique [m]
  * @param {number} mu - Viscosité dynamique [Pa·s]
  * @param {number} [Re_crit=2300] - Nombre de Reynolds critique
  * @returns {number} Vitesse critique [m/s]
  * @throws {Error} Si les paramètres sont invalides
- * 
+ *
  * @example
  * // Vitesse critique pour eau à 20°C dans DN50
  * const V_crit = getCriticalVelocity(998, 0.0525, 1.002e-3);
@@ -145,7 +149,7 @@ function getCriticalVelocity(rho, D, mu, Re_crit) {
   if (Re_crit === undefined) {
     Re_crit = getRELaminarMax();
   }
-  
+
   // Validation
   if (typeof rho !== 'number' || !isFinite(rho) || rho <= 0) {
     throw new Error(`Densité invalide: ${rho}`);
@@ -159,10 +163,10 @@ function getCriticalVelocity(rho, D, mu, Re_crit) {
   if (typeof Re_crit !== 'number' || !isFinite(Re_crit) || Re_crit <= 0) {
     throw new Error(`Reynolds critique invalide: ${Re_crit}`);
   }
-  
+
   // V = Re·μ / (ρ·D)
   const V_crit = (Re_crit * mu) / (rho * D);
-  
+
   return V_crit;
 }
 
@@ -174,8 +178,12 @@ if (typeof window !== 'undefined') {
     calculateReynoldsWithRegime,
     getCriticalVelocity,
     // Exposer les constantes via getters pour accès uniforme
-    get RE_LAMINAR_MAX() { return getRELaminarMax(); },
-    get RE_TURBULENT_MIN() { return getRETurbulentMin(); }
+    get RE_LAMINAR_MAX() {
+      return getRELaminarMax();
+    },
+    get RE_TURBULENT_MIN() {
+      return getRETurbulentMin();
+    },
   };
 }
 
@@ -187,7 +195,6 @@ if (typeof module !== 'undefined' && module.exports) {
     calculateReynoldsWithRegime,
     getCriticalVelocity,
     RE_LAMINAR_MAX: _flowRegimes_reynolds.RE_LAMINAR_MAX,
-    RE_TURBULENT_MIN: _flowRegimes_reynolds.RE_TURBULENT_MIN
+    RE_TURBULENT_MIN: _flowRegimes_reynolds.RE_TURBULENT_MIN,
   };
 }
-

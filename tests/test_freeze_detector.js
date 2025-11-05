@@ -1,14 +1,14 @@
 /**
  * test_freeze_detector.js
- * 
+ *
  * Tests pour le module freeze-detector (Phase 2 - Engine)
- * 
+ *
  * Teste la détection de gel:
  * - Détection correcte du gel
  * - Localisation précise
  * - Cas limites (juste au-dessus/en-dessous de 0°C)
  * - Fonctions utilitaires
- * 
+ *
  * Exécution: node tests/test_freeze_detector.js
  */
 
@@ -37,7 +37,7 @@ function assertApprox(actual, expected, tolerance, message) {
   testsTotal++;
   const diff = Math.abs(actual - expected);
   const relError = expected !== 0 ? Math.abs(diff / expected) : diff;
-  
+
   if (diff <= tolerance || relError <= tolerance) {
     testsPassed++;
   } else {
@@ -121,7 +121,9 @@ assert(result_safe.minTempPosition === 60, 'minTempPosition devrait être 60m');
 assert(result_safe.marginToFreeze === 30, 'Marge devrait être 30°C');
 assert(result_safe.verdict === 'NO_FREEZE', 'Verdict devrait être NO_FREEZE');
 
-console.log(`  ℹ️  Cas sûr: minTemp = ${result_safe.minTemp}°C, marge = ${result_safe.marginToFreeze}°C`);
+console.log(
+  `  ℹ️  Cas sûr: minTemp = ${result_safe.minTemp}°C, marge = ${result_safe.marginToFreeze}°C`
+);
 
 // Test 2.2: Température juste au-dessus du gel
 const T_close = [10, 8, 5, 3, 1, 0.5, 0.1];
@@ -132,7 +134,9 @@ assert(result_close.freezeDetected === false, 'Ne devrait pas détecter de gel (
 assert(result_close.minTemp === 0.1, 'minTemp devrait être 0.1°C');
 assertApprox(result_close.marginToFreeze, 0.1, 1e-9, 'Marge devrait être 0.1°C');
 
-console.log(`  ℹ️  Cas limite: minTemp = ${result_close.minTemp}°C, marge = ${result_close.marginToFreeze}°C`);
+console.log(
+  `  ℹ️  Cas limite: minTemp = ${result_close.minTemp}°C, marge = ${result_close.marginToFreeze}°C`
+);
 
 // ========== SUITE 3: DÉTECTION GEL ==========
 console.log('\nSuite 3: Détection - Gel présent\n');
@@ -148,7 +152,9 @@ assert(result_freeze1.minTemp === -10, 'minTemp devrait être -10°C');
 assert(result_freeze1.marginToFreeze === -10, 'Marge devrait être -10°C');
 assert(result_freeze1.verdict === 'FREEZE_DETECTED', 'Verdict devrait être FREEZE_DETECTED');
 
-console.log(`  ℹ️  Gel franc: Position gel = ${result_freeze1.freezePosition.toFixed(1)}m, minTemp = ${result_freeze1.minTemp}°C`);
+console.log(
+  `  ℹ️  Gel franc: Position gel = ${result_freeze1.freezePosition.toFixed(1)}m, minTemp = ${result_freeze1.minTemp}°C`
+);
 
 // Test 3.2: Gel juste à 0°C
 const T_freeze2 = [10, 8, 5, 3, 1, 0, -0.5];
@@ -189,9 +195,16 @@ const x_interp = [0, 50, 100, 150];
 const result_interp = freezeDetector.detectFreeze(T_interp, x_interp, 0);
 
 assert(result_interp.freezeDetected === true, 'Devrait détecter le gel');
-assertApprox(result_interp.freezePosition, 100, 1, 'Position gel devrait être à 100m (interpolation)');
+assertApprox(
+  result_interp.freezePosition,
+  100,
+  1,
+  'Position gel devrait être à 100m (interpolation)'
+);
 
-console.log(`  ℹ️  Interpolation: Position gel = ${result_interp.freezePosition.toFixed(1)}m (attendu: 100m)`);
+console.log(
+  `  ℹ️  Interpolation: Position gel = ${result_interp.freezePosition.toFixed(1)}m (attendu: 100m)`
+);
 
 // Test 4.2: Interpolation avec pente différente
 const T_interp2 = [20, 10, -10];
@@ -202,7 +215,9 @@ const result_interp2 = freezeDetector.detectFreeze(T_interp2, x_interp2, 0);
 // 0°C devrait être à x = 50 + (0-10)/(-10-10) * 50 = 50 + 25 = 75m
 assertApprox(result_interp2.freezePosition, 75, 1, 'Position gel devrait être à 75m');
 
-console.log(`  ℹ️  Interpolation 2: Position gel = ${result_interp2.freezePosition.toFixed(1)}m (attendu: 75m)`);
+console.log(
+  `  ℹ️  Interpolation 2: Position gel = ${result_interp2.freezePosition.toFixed(1)}m (attendu: 75m)`
+);
 
 // ========== SUITE 5: TEMPÉRATURE DE GEL PERSONNALISÉE ==========
 console.log('\nSuite 5: Température de gel personnalisée\n');
@@ -249,9 +264,9 @@ assertApprox(margin2, -5, 1e-9, 'Marge devrait être -5°C');
 console.log(`  ℹ️  freezeMargin: +3°C (pas gel), -5°C (gel)`);
 
 // Test 6.3: requiresInsulation
-const needs1 = freezeDetector.requiresInsulation(10, 0, 5);  // 10 > 5 → false
-const needs2 = freezeDetector.requiresInsulation(3, 0, 5);   // 3 < 5 → true
-const needs3 = freezeDetector.requiresInsulation(-1, 0, 5);  // -1 < 5 → true
+const needs1 = freezeDetector.requiresInsulation(10, 0, 5); // 10 > 5 → false
+const needs2 = freezeDetector.requiresInsulation(3, 0, 5); // 3 < 5 → true
+const needs3 = freezeDetector.requiresInsulation(-1, 0, 5); // -1 < 5 → true
 
 assert(needs1 === false, 'T=10°C ne devrait pas nécessiter isolation (marge 5°C)');
 assert(needs2 === true, 'T=3°C devrait nécessiter isolation (marge 5°C)');
@@ -296,7 +311,9 @@ const result_two_freeze = freezeDetector.detectFreeze(T_two_freeze, x_two_freeze
 assert(result_two_freeze.freezeDetected === true, 'Deux points avec gel devraient être détectés');
 assertApprox(result_two_freeze.freezePosition, 50, 1, 'Position gel devrait être au milieu');
 
-console.log(`  ℹ️  Deux points gel: Position = ${result_two_freeze.freezePosition.toFixed(1)}m (attendu: 50m)`);
+console.log(
+  `  ℹ️  Deux points gel: Position = ${result_two_freeze.freezePosition.toFixed(1)}m (attendu: 50m)`
+);
 
 // Test 7.4: Température constante au point de gel
 const T_constant = [0, 0, 0, 0];
@@ -330,4 +347,3 @@ if (testsPassed === testsTotal) {
   console.log(`❌ ${testsTotal - testsPassed} TEST(S) EN ÉCHEC\n`);
   process.exit(1);
 }
-

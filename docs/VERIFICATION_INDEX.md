@@ -10,16 +10,19 @@
 **Temps total**: ~1 minute d'exécution + lecture du rapport
 
 **Fichiers**:
+
 - 📖 **[README_QUICK_START.md](README_QUICK_START.md)** - Démarrage rapide
 - 🔧 **`tests/automated_verification.js`** - Script automatique
 - 📊 **`tests/verification_references.json`** - Valeurs de référence
 
 **Commande unique**:
+
 ```bash
 node tests/automated_verification.js
 ```
 
 **Ce qui est validé automatiquement**:
+
 - ✅ 14 constantes physiques critiques
 - ✅ 25 conversions d'unités
 - ✅ 14 fichiers de tests unitaires
@@ -27,11 +30,13 @@ node tests/automated_verification.js
 - ✅ Génération rapport concis prêt à signer
 
 **Processus**:
+
 1. Exécuter le script (~1 minute)
 2. Lire le rapport généré
 3. Signer la section CERTIFICATION
 
 **Idéal pour**:
+
 - ✅ Vérification après modifications
 - ✅ Validation avant commit
 - ✅ CI/CD automatisé
@@ -103,8 +108,9 @@ npm test && node tests/automated_verification.js
 ### État actuel
 
 **Échantillon**: 130 cas de test vs logiciels de référence
+
 - Aspen Hysys
-- AFT Fathom  
+- AFT Fathom
 - DWSIM
 
 **Progression**: 50/130 cas avec données DWSIM
@@ -122,6 +128,7 @@ Pour contribuer à la validation:
 ### Résultats
 
 **Rapport automatique** inclut:
+
 - Statistiques comparatives (mean, P50, P95)
 - Écarts ThermaFlow vs logiciels référence
 - Liste cas avec écarts significatifs
@@ -173,6 +180,5 @@ Qualité    : 10/10    (Impeccable)
 
 ---
 
-*ThermaFlow v1.0.1 - Système de Vérification Automatique*  
-*Dernière mise à jour: 2025-10-30*
-
+_ThermaFlow v1.0.1 - Système de Vérification Automatique_  
+_Dernière mise à jour: 2025-10-30_

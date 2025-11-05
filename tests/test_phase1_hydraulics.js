@@ -1,20 +1,20 @@
 /**
  * test_phase1_hydraulics.js
- * 
+ *
  * Tests unitaires pour les modules hydrauliques (Phase 1.2):
  * - reynolds.js
  * - friction-factor.js
  * - pressure-drop.js
- * 
+ *
  * Validation contre:
  * - Valeurs calculées manuellement
  * - Diagramme de Moody
  * - fluids.readthedocs.io
- * 
+ *
  * Exécution: node tests/test_phase1_hydraulics.js
  */
 
-const path = require('path');
+// const path = require('path');
 
 // Charger les modules en utilisant require direct (modules Node.js style)
 const reynolds = require('../js/formulas/reynolds.js');
@@ -33,7 +33,7 @@ let testsFailed = 0;
 function assertClose(actual, expected, tolerance = 0.01, message = '') {
   testsRun++;
   const relativeError = Math.abs((actual - expected) / expected);
-  
+
   if (relativeError <= tolerance) {
     testsPassed++;
     console.log(`  ✓ ${message}`);
@@ -41,7 +41,9 @@ function assertClose(actual, expected, tolerance = 0.01, message = '') {
   } else {
     testsFailed++;
     console.log(`  ✗ ${message}`);
-    console.log(`    Attendu: ${expected}, Obtenu: ${actual}, Erreur: ${(relativeError * 100).toFixed(2)}%`);
+    console.log(
+      `    Attendu: ${expected}, Obtenu: ${actual}, Erreur: ${(relativeError * 100).toFixed(2)}%`
+    );
     return false;
   }
 }
@@ -117,7 +119,7 @@ assertClose(f_lam, 0.064, 0.001, 'f = 64/1000 = 0.064');
 console.log('\nTest 8: Churchill pour turbulent lisse');
 // Re=50000, ε/D=0 (lisse) → f ≈ 0.0176-0.021 (Churchill peut différer légèrement)
 const f_churchill_smooth = friction.frictionFactorChurchill(50000, 0);
-assertClose(f_churchill_smooth, 0.019, 0.10, 'f ≈ 0.019 (lisse, tolérance 10%)');
+assertClose(f_churchill_smooth, 0.019, 0.1, 'f ≈ 0.019 (lisse, tolérance 10%)');
 
 console.log('\nTest 9: Churchill pour turbulent rugueux');
 // Re=50000, ε/D=0.001 → f ≈ 0.0252
@@ -148,11 +150,15 @@ const f_max = Math.max(f_2300, f_4000);
 if (f_trans >= f_min && f_trans <= f_max) {
   testsPassed++;
   testsRun++;
-  console.log(`  ✓ f_trans (${f_trans.toFixed(4)}) entre ${f_min.toFixed(4)} et ${f_max.toFixed(4)}`);
+  console.log(
+    `  ✓ f_trans (${f_trans.toFixed(4)}) entre ${f_min.toFixed(4)} et ${f_max.toFixed(4)}`
+  );
 } else {
   testsFailed++;
   testsRun++;
-  console.log(`  ✗ f_trans (${f_trans.toFixed(4)}) hors limites [${f_min.toFixed(4)}, ${f_max.toFixed(4)}]`);
+  console.log(
+    `  ✗ f_trans (${f_trans.toFixed(4)}) hors limites [${f_min.toFixed(4)}, ${f_max.toFixed(4)}]`
+  );
 }
 
 console.log('\nTest 13: Validation Moody - Point de référence');
@@ -172,7 +178,7 @@ assertClose(dP, 19010, 0.01, 'ΔP ≈ 19010 Pa');
 console.log('\nTest 15: Head loss');
 const h_L = pressureBasic.headLoss(19010, 998);
 // h_L = 19010 / (998 × 9.81) = 1.94 m
-assertClose(h_L, 1.94, 0.01, 'h_L ≈ 1.94 m colonne d\'eau');
+assertClose(h_L, 1.94, 0.01, "h_L ≈ 1.94 m colonne d'eau");
 
 console.log('\nTest 16: Vitesse depuis débit');
 // Q = 1 L/min = 1.667e-5 m³/s, D = 0.0525m
@@ -239,4 +245,3 @@ console.log('='.repeat(60));
 
 // Code de sortie
 process.exit(testsFailed > 0 ? 1 : 0);
-

@@ -9,22 +9,24 @@
  */
 
 (function () {
-  "use strict";
+  'use strict';
 
   // ========== CONSTANTES ==========
-  const RESOLUTION_1D = 15; // Points par paramètre (compromis performance/précision)
+  // const RESOLUTION_1D = 15; // Points par paramètre (non utilisé, utilise config dynamique)
   const FREEZE_TEMP = 0; // °C - Température de gel de l'eau pure
   const SAFETY_THRESHOLD = 5; // °C - Marge de sécurité opérationnelle standard industrielle
 
   // Définition des paramètres analysables (même que sensitivity-analysis.js)
   function getParameterLabel(key) {
-    if (!window.I18n) return key;
+    if (!window.I18n) {
+      return key;
+    }
     const labels = {
-      L: "sensitivityTable.pipeLength",
-      m_dot: "sensitivityTable.waterFlow",
-      T_in: "sensitivityTable.waterTempIn",
-      T_amb: "sensitivityTable.airTemp",
-      V_wind: "sensitivityTable.windSpeed",
+      L: 'sensitivityTable.pipeLength',
+      m_dot: 'sensitivityTable.waterFlow',
+      T_in: 'sensitivityTable.waterTempIn',
+      T_amb: 'sensitivityTable.airTemp',
+      V_wind: 'sensitivityTable.windSpeed',
     };
     return I18n.t(labels[key] || key);
   }
@@ -32,69 +34,63 @@
   const PARAMETER_DEFINITIONS = {
     L: {
       get label() {
-        return getParameterLabel("L");
+        return getParameterLabel('L');
       },
-      unit: "m",
-      path: ["totalLength"],
+      unit: 'm',
+      path: ['totalLength'],
       min: 1,
       max: 2500,
     },
     m_dot: {
       get label() {
-        return getParameterLabel("m_dot");
+        return getParameterLabel('m_dot');
       },
       get unit() {
-        return window.UnitConverter
-          ? UnitConverter.getUnitInfo("flowRate").label
-          : "m³/h";
+        return window.UnitConverter ? UnitConverter.getUnitInfo('flowRate').label : 'm³/h';
       },
-      path: ["meta", "flowM3PerHr"],
+      path: ['meta', 'flowM3PerHr'],
       get min() {
-        return window.UnitConverter
-          ? UnitConverter.getRanges("flowRate").min
-          : 0.06;
+        return window.UnitConverter ? UnitConverter.getRanges('flowRate').min : 0.06;
       },
       get max() {
-        return window.UnitConverter
-          ? UnitConverter.getRanges("flowRate").max
-          : 30;
+        return window.UnitConverter ? UnitConverter.getRanges('flowRate').max : 30;
       },
       convertToSI: (value) =>
-        window.UnitConverter ? UnitConverter.toSI("flowRate", value) : value,
+        window.UnitConverter ? UnitConverter.toSI('flowRate', value) : value,
       convertFromSI: (value) =>
-        window.UnitConverter ? UnitConverter.fromSI("flowRate", value) : value,
+        window.UnitConverter ? UnitConverter.fromSI('flowRate', value) : value,
     },
     T_in: {
       get label() {
-        return getParameterLabel("T_in");
+        return getParameterLabel('T_in');
       },
-      unit: "°C",
-      path: ["fluid", "T_in"],
+      unit: '°C',
+      path: ['fluid', 'T_in'],
       min: 1,
       max: 100,
     },
     T_amb: {
       get label() {
-        return getParameterLabel("T_amb");
+        return getParameterLabel('T_amb');
       },
-      unit: "°C",
-      path: ["ambient", "T_amb"],
+      unit: '°C',
+      path: ['ambient', 'T_amb'],
       min: -40,
       max: 50,
     },
     V_wind: {
       get label() {
-        return getParameterLabel("V_wind");
+        return getParameterLabel('V_wind');
       },
-      unit: "km/h",
-      path: ["ambient", "V_wind"],
+      unit: 'km/h',
+      path: ['ambient', 'V_wind'],
       min: 0,
       max: 108,
     },
     t_insul: {
-      label: "Épaisseur isolation",
-      unit: "mm",
-      path: ["insulation", "thickness"],
+      label: 'Épaisseur isolation',
+      unit: 'mm',
+      path: ['insulation', 'thickness'],
       conditional: true,
       min: 5,
       max: 100,
@@ -224,24 +220,15 @@
       maxEffective = samples[bestStart + bestLength - 2].value;
       const sampleInterval = (paramDef.max - paramDef.min) / (SAMPLES - 1);
       const safetyMargin = sampleInterval * 0.2;
-      minEffective = Math.min(
-        minEffective + safetyMargin,
-        maxEffective - safetyMargin,
-      );
-      maxEffective = Math.max(
-        maxEffective - safetyMargin,
-        minEffective + safetyMargin,
-      );
+      minEffective = Math.min(minEffective + safetyMargin, maxEffective - safetyMargin);
+      maxEffective = Math.max(maxEffective - safetyMargin, minEffective + safetyMargin);
     } else if (bestLength === 2) {
       // 2 points: utiliser seulement le premier avec marge réduite
       minEffective = samples[bestStart].value;
       maxEffective = samples[bestStart].value;
       const sampleInterval = (paramDef.max - paramDef.min) / (SAMPLES - 1);
       minEffective = Math.max(minEffective, paramDef.min);
-      maxEffective = Math.min(
-        minEffective + sampleInterval * 0.5,
-        paramDef.max,
-      );
+      maxEffective = Math.min(minEffective + sampleInterval * 0.5, paramDef.max);
     } else {
       // 1 seul point: créer mini-plage autour
       minEffective = samples[bestStart].value;
@@ -270,11 +257,7 @@
     let consecutiveSuccesses = 0;
     const REQUIRED_SUCCESSES = 2; // Doit réussir 2 fois consécutivement
 
-    for (
-      let attempt = 0;
-      attempt < 10 && consecutiveSuccesses < REQUIRED_SUCCESSES;
-      attempt++
-    ) {
+    for (let attempt = 0; attempt < 10 && consecutiveSuccesses < REQUIRED_SUCCESSES; attempt++) {
       try {
         const testConfig = JSON.parse(JSON.stringify(baseConfig));
         applyParameterValue(testConfig, paramKey, finalMax);
@@ -295,10 +278,7 @@
         consecutiveSuccesses = 0; // Reset si échec
         // Réduction très agressive de 40% vers le centre
         const reduction = (finalMax - finalMin) * 0.4;
-        finalMax = Math.max(
-          finalMax - reduction,
-          finalMin + (finalMax - finalMin) * 0.05,
-        );
+        finalMax = Math.max(finalMax - reduction, finalMin + (finalMax - finalMin) * 0.05);
       }
     }
 
@@ -306,11 +286,7 @@
     let minValid = false;
     consecutiveSuccesses = 0;
 
-    for (
-      let attempt = 0;
-      attempt < 10 && consecutiveSuccesses < REQUIRED_SUCCESSES;
-      attempt++
-    ) {
+    for (let attempt = 0; attempt < 10 && consecutiveSuccesses < REQUIRED_SUCCESSES; attempt++) {
       try {
         const testConfig = JSON.parse(JSON.stringify(baseConfig));
         applyParameterValue(testConfig, paramKey, finalMin);
@@ -329,10 +305,7 @@
         consecutiveSuccesses = 0; // Reset si échec
         // Augmentation très agressive de 40% vers le centre
         const increase = (finalMax - finalMin) * 0.4;
-        finalMin = Math.min(
-          finalMin + increase,
-          finalMax - (finalMax - finalMin) * 0.05,
-        );
+        finalMin = Math.min(finalMin + increase, finalMax - (finalMax - finalMin) * 0.05);
       }
     }
 
@@ -368,7 +341,7 @@
       T_base = baseResult.T_final;
       // console.log(`📊 T_base = ${T_base.toFixed(2)}°C`);
     } catch (error) {
-      console.error("Erreur calcul cas de base:", error);
+      console.error('Erreur calcul cas de base:', error);
       return results;
     }
 
@@ -386,11 +359,7 @@
       const baseValue = getDisplayValue(baseConfig, paramKey);
 
       // Détecter la plage effective valide (où les calculs convergent)
-      const effectiveRange = detectEffectiveRange(
-        baseConfig,
-        paramKey,
-        paramDef,
-      );
+      const effectiveRange = detectEffectiveRange(baseConfig, paramKey, paramDef);
 
       // Utiliser la plage effective au lieu de min/max théoriques
       let minToUse = effectiveRange.min;
@@ -409,16 +378,14 @@
           T_atMin = result.T_final;
           if (effectiveMin !== minToUse) {
             console.log(
-              `✓ MIN ajusté pour ${paramKey}: ${minToUse.toFixed(2)} → ${effectiveMin.toFixed(2)}`,
+              `✓ MIN ajusté pour ${paramKey}: ${minToUse.toFixed(2)} → ${effectiveMin.toFixed(2)}`
             );
             minToUse = effectiveMin; // Mettre à jour pour le reste
           }
           break; // Succès!
         } catch (error) {
           if (attempt === 4) {
-            console.warn(
-              `❌ MIN échoue même après 5 tentatives pour ${paramKey}`,
-            );
+            console.warn(`❌ MIN échoue même après 5 tentatives pour ${paramKey}`);
             errorAtMin = error.message;
           } else {
             // Augmenter de 10% et réessayer
@@ -440,16 +407,14 @@
           T_atMax = result.T_final;
           if (effectiveMax !== maxToUse) {
             console.log(
-              `✓ MAX ajusté pour ${paramKey}: ${maxToUse.toFixed(2)} → ${effectiveMax.toFixed(2)}`,
+              `✓ MAX ajusté pour ${paramKey}: ${maxToUse.toFixed(2)} → ${effectiveMax.toFixed(2)}`
             );
             maxToUse = effectiveMax; // Mettre à jour pour le reste
           }
           break; // Succès!
         } catch (error) {
           if (attempt === 4) {
-            console.warn(
-              `❌ MAX échoue même après 5 tentatives pour ${paramKey}`,
-            );
+            console.warn(`❌ MAX échoue même après 5 tentatives pour ${paramKey}`);
             errorAtMax = error.message;
           } else {
             // Réduire de 10% et réessayer
@@ -465,8 +430,7 @@
         max: maxToUse,
         originalMin: paramDef.min,
         originalMax: paramDef.max,
-        isEffectiveRange:
-          minToUse !== paramDef.min || maxToUse !== paramDef.max,
+        isEffectiveRange: minToUse !== paramDef.min || maxToUse !== paramDef.max,
       };
 
       // Trouver les valeurs critiques du paramètre (qui donnent T=0°C et T=5°C)
@@ -477,7 +441,7 @@
         T_base,
         baseValue,
         T_atMin,
-        T_atMax,
+        T_atMax
       );
 
       // Calculer l'amplitude
@@ -525,7 +489,7 @@
     T_base,
     baseValue,
     T_atMin,
-    T_atMax,
+    T_atMax
   ) {
     const result = { freeze: null, safety: null };
 
@@ -548,7 +512,7 @@
           paramDef,
           FREEZE_TEMP,
           baseValue,
-          paramDef.max,
+          paramDef.max
         );
       } else {
         // Diminuer le paramètre améliore → chercher entre min et base
@@ -558,7 +522,7 @@
           paramDef,
           FREEZE_TEMP,
           paramDef.min,
-          baseValue,
+          baseValue
         );
       }
     } else {
@@ -571,7 +535,7 @@
           paramDef,
           FREEZE_TEMP,
           paramDef.min,
-          baseValue,
+          baseValue
         );
       } else {
         // Diminuer améliore → augmenter détériore → chercher entre base et max
@@ -581,7 +545,7 @@
           paramDef,
           FREEZE_TEMP,
           baseValue,
-          paramDef.max,
+          paramDef.max
         );
       }
     }
@@ -597,7 +561,7 @@
           paramDef,
           SAFETY_THRESHOLD,
           baseValue,
-          paramDef.max,
+          paramDef.max
         );
       } else {
         // Diminuer améliore → chercher entre min et base
@@ -607,7 +571,7 @@
           paramDef,
           SAFETY_THRESHOLD,
           paramDef.min,
-          baseValue,
+          baseValue
         );
       }
     } else {
@@ -620,7 +584,7 @@
           paramDef,
           SAFETY_THRESHOLD,
           paramDef.min,
-          baseValue,
+          baseValue
         );
       } else {
         // Diminuer améliore → augmenter détériore → chercher entre base et max
@@ -630,7 +594,7 @@
           paramDef,
           SAFETY_THRESHOLD,
           baseValue,
-          paramDef.max,
+          paramDef.max
         );
       }
     }
@@ -654,7 +618,7 @@
     paramDef,
     targetTemp,
     searchMin,
-    searchMax,
+    searchMax
   ) {
     let min = searchMin;
     let max = searchMax;
@@ -680,10 +644,7 @@
         return null;
       }
     } catch (e) {
-      console.warn(
-        `Erreur lors de la vérification de plage pour ${paramKey}:`,
-        e,
-      );
+      console.warn(`Erreur lors de la vérification de plage pour ${paramKey}:`, e);
       return null;
     }
 
@@ -747,16 +708,18 @@
   // ========== UTILITAIRES POUR PARAMÈTRES ==========
   function getDisplayValue(config, paramKey) {
     const paramDef = PARAMETER_DEFINITIONS[paramKey];
-    if (!paramDef) return null;
+    if (!paramDef) {
+      return null;
+    }
 
-    if (paramKey === "m_dot") {
+    if (paramKey === 'm_dot') {
       // Valeur en m³/h (SI) dans config → convertir vers unité d'affichage
       const flowM3H = getValueFromPath(config, paramDef.path);
       return paramDef.convertFromSI ? paramDef.convertFromSI(flowM3H) : flowM3H;
-    } else if (paramKey === "V_wind") {
-      const windMS = getValueFromPath(config, ["ambient", "V_wind"]);
+    } else if (paramKey === 'V_wind') {
+      const windMS = getValueFromPath(config, ['ambient', 'V_wind']);
       return windMS !== null ? windMS * 3.6 : null;
-    } else if (paramKey === "t_insul") {
+    } else if (paramKey === 't_insul') {
       const thicknessM = getValueFromPath(config, paramDef.path);
       return thicknessM !== null ? thicknessM * 1000.0 : null;
     } else {
@@ -767,7 +730,9 @@
   function getValueFromPath(obj, path) {
     let current = obj;
     for (const key of path) {
-      if (current === undefined || current === null) return null;
+      if (current === undefined || current === null) {
+        return null;
+      }
       current = current[key];
     }
     return current;
@@ -786,24 +751,21 @@
 
   function applyParameterValue(config, paramKey, displayValue) {
     const paramDef = PARAMETER_DEFINITIONS[paramKey];
-    if (!paramDef) return;
+    if (!paramDef) {
+      return;
+    }
 
-    if (paramKey === "m_dot") {
+    if (paramKey === 'm_dot') {
       // displayValue est dans l'unité d'affichage → convertir vers m³/h (SI)
-      const flowM3H = paramDef.convertToSI
-        ? paramDef.convertToSI(displayValue)
-        : displayValue;
+      const flowM3H = paramDef.convertToSI ? paramDef.convertToSI(displayValue) : displayValue;
 
       const T_water = config.fluid.T_in;
       const P_water = config.fluid.P;
 
       let rho_water = 1000;
-      if (typeof window.WaterProperties !== "undefined") {
+      if (typeof window.WaterProperties !== 'undefined') {
         try {
-          const waterProps = window.WaterProperties.getWaterProperties(
-            T_water,
-            P_water,
-          );
+          const waterProps = window.WaterProperties.getWaterProperties(T_water, P_water);
           rho_water = waterProps.rho;
         } catch (e) {
           // Utiliser valeur par défaut
@@ -811,12 +773,12 @@
       }
 
       const flowKgPerS = (flowM3H / 3600) * rho_water;
-      setValueByPath(config, ["meta", "flowM3PerHr"], flowM3H);
-      setValueByPath(config, ["fluid", "m_dot"], flowKgPerS);
-    } else if (paramKey === "V_wind") {
+      setValueByPath(config, ['meta', 'flowM3PerHr'], flowM3H);
+      setValueByPath(config, ['fluid', 'm_dot'], flowKgPerS);
+    } else if (paramKey === 'V_wind') {
       const windMS = displayValue / 3.6;
       setValueByPath(config, paramDef.path, windMS);
-    } else if (paramKey === "t_insul") {
+    } else if (paramKey === 't_insul') {
       const thicknessM = displayValue / 1000.0;
       setValueByPath(config, paramDef.path, thicknessM);
     } else {
@@ -839,7 +801,7 @@
    * @param {Object} baseConfig - Configuration de base (non utilisé dans nouvelle logique)
    * @returns {Object} { shouldTruncate: boolean, newMin: number, newMax: number, reason: string }
    */
-  function analyzeTruncationNeed(result, baseConfig) {
+  function analyzeTruncationNeed(result, _baseConfig) {
     const defaultResult = {
       shouldTruncate: false,
       newMin: result.paramDef.min,
@@ -848,7 +810,7 @@
     };
 
     // Troncature uniquement pour le débit d'eau
-    if (result.paramKey !== "m_dot") {
+    if (result.paramKey !== 'm_dot') {
       return defaultResult;
     }
 
@@ -935,7 +897,7 @@
     // Analyser si troncature nécessaire
     const truncation = analyzeTruncationNeed(result, baseConfig);
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     const dpr = window.devicePixelRatio || 1;
 
     // Taille du canvas - VERSION COMPACTE
@@ -947,8 +909,8 @@
 
     canvas.width = canvasWidth * dpr;
     canvas.height = canvasHeight * dpr;
-    canvas.style.width = canvasWidth + "px";
-    canvas.style.height = canvasHeight + "px";
+    canvas.style.width = canvasWidth + 'px';
+    canvas.style.height = canvasHeight + 'px';
 
     ctx.scale(dpr, dpr);
 
@@ -959,27 +921,21 @@
     const barY = padding.top + 2;
 
     // Échelle pour le paramètre (utiliser plage tronquée si applicable)
-    const xMin = truncation.shouldTruncate
-      ? truncation.newMin
-      : result.paramDef.min;
-    const xMax = truncation.shouldTruncate
-      ? truncation.newMax
-      : result.paramDef.max;
-    const xScale = (x) =>
-      padding.left + ((x - xMin) / (xMax - xMin)) * plotWidth;
+    const xMin = truncation.shouldTruncate ? truncation.newMin : result.paramDef.min;
+    const xMax = truncation.shouldTruncate ? truncation.newMax : result.paramDef.max;
+    const xScale = (x) => padding.left + ((x - xMin) / (xMax - xMin)) * plotWidth;
 
     // Ajouter badge si plage modifiée (troncature ou plage effective)
-    const needsBadge =
-      truncation.shouldTruncate || result.paramDef.isEffectiveRange;
+    const needsBadge = truncation.shouldTruncate || result.paramDef.isEffectiveRange;
 
     if (needsBadge) {
       // Créer ou mettre à jour le badge sous le canvas
-      let badge = container.querySelector(".truncation-notice");
+      let badge = container.querySelector('.truncation-notice');
       if (!badge) {
-        badge = document.createElement("div");
-        badge.className = "truncation-notice";
+        badge = document.createElement('div');
+        badge.className = 'truncation-notice';
         badge.style.cssText =
-          "font-size: 10px; color: #6b7280; margin-top: 4px; text-align: center; font-style: italic;";
+          'font-size: 10px; color: #6b7280; margin-top: 4px; text-align: center; font-style: italic;';
         container.appendChild(badge);
       }
 
@@ -988,43 +944,31 @@
       if (truncation.shouldTruncate) {
         // Badge troncature pour lisibilité - utiliser le reason de l'analyse
         const truncLabel = window.I18n
-          ? I18n.t("sensitivity.truncatedRange")
-          : "Plage tronquée pour lisibilité";
+          ? I18n.t('sensitivity.truncatedRange')
+          : 'Plage tronquée pour lisibilité';
         const truncDetail =
           truncation.reason ||
-          (window.I18n
-            ? I18n.t("sensitivity.truncatedDetail")
-            : "Centrée sur valeurs importantes");
+          (window.I18n ? I18n.t('sensitivity.truncatedDetail') : 'Centrée sur valeurs importantes');
         badge.textContent = `ℹ️ ${truncLabel} (${xMin.toFixed(1)}-${xMax.toFixed(1)} ${unit}) - ${truncDetail}`;
       } else if (result.paramDef.isEffectiveRange) {
         // Badge plage effective (calculs convergent)
         const origMin = result.paramDef.originalMin;
         const origMax = result.paramDef.originalMax;
         const effectiveLabel = window.I18n
-          ? I18n.t("sensitivity.effectiveRange")
-          : "Plage effective";
+          ? I18n.t('sensitivity.effectiveRange')
+          : 'Plage effective';
         const theoreticalLabel = window.I18n
-          ? I18n.t("sensitivity.theoreticalRange")
-          : "Plage théorique";
+          ? I18n.t('sensitivity.theoreticalRange')
+          : 'Plage théorique';
         const exceedsLabel = window.I18n
-          ? I18n.t("sensitivity.exceedsLimits")
-          : "dépasse limites physiques";
+          ? I18n.t('sensitivity.exceedsLimits')
+          : 'dépasse limites physiques';
         badge.textContent = `ℹ️ ${effectiveLabel} (${xMin.toFixed(1)}-${xMax.toFixed(1)} ${unit}) - ${theoreticalLabel} ${origMin.toFixed(1)}-${origMax.toFixed(1)} ${unit} ${exceedsLabel}`;
       }
     }
 
     // Dessiner la barre principale colorée (passer baseConfig pour recalcul si troncature)
-    drawColoredBar(
-      ctx,
-      padding.left,
-      barY,
-      plotWidth,
-      plotHeight,
-      result,
-      xMin,
-      xMax,
-      baseConfig,
-    );
+    drawColoredBar(ctx, padding.left, barY, plotWidth, plotHeight, result, xMin, xMax, baseConfig);
 
     // Dessiner les lignes de référence (Base, 0°C, 5°C)
     drawReferenceLines(ctx, barY, plotHeight, result, xScale);
@@ -1051,13 +995,13 @@
     result,
     displayMin,
     displayMax,
-    baseConfig,
+    baseConfig
   ) {
     // Couleurs des zones (mêmes que profil température)
-    const COLOR_SAFE = "#DFFFD6"; // Vert: T ≥ 5°C
-    const COLOR_WARNING = "#FFF4CC"; // Jaune: 0°C < T < 5°C
-    const COLOR_FREEZE = "#FFD6D6"; // Rouge: T ≤ 0°C
-    const COLOR_UNKNOWN = "#e5e7eb"; // Gris: données manquantes
+    const COLOR_SAFE = '#DFFFD6'; // Vert: T ≥ 5°C
+    const COLOR_WARNING = '#FFF4CC'; // Jaune: 0°C < T < 5°C
+    const COLOR_FREEZE = '#FFD6D6'; // Rouge: T ≤ 0°C
+    const COLOR_UNKNOWN = '#e5e7eb'; // Gris: données manquantes
 
     // Si displayMin/Max diffèrent des bornes originales dans result (troncature),
     // il faut recalculer T aux nouvelles bornes
@@ -1078,9 +1022,7 @@
         const resultMin = calculatePipeNetwork(configMin);
         T_atDisplayMin = resultMin.T_final;
       } catch (e) {
-        console.warn(
-          `Échec calcul T@displayMin (${displayMin}) pour ${paramKey}`,
-        );
+        console.warn(`Échec calcul T@displayMin (${displayMin}) pour ${paramKey}`);
         T_atDisplayMin = null;
       }
 
@@ -1091,9 +1033,7 @@
         const resultMax = calculatePipeNetwork(configMax);
         T_atDisplayMax = resultMax.T_final;
       } catch (e) {
-        console.warn(
-          `Échec calcul T@displayMax (${displayMax}) pour ${paramKey}`,
-        );
+        console.warn(`Échec calcul T@displayMax (${displayMax}) pour ${paramKey}`);
         T_atDisplayMax = null;
       }
     }
@@ -1102,29 +1042,23 @@
     if (T_atDisplayMin === null || T_atDisplayMax === null) {
       ctx.fillStyle = COLOR_UNKNOWN;
       ctx.fillRect(startX, barY, barWidth, barHeight);
-      ctx.strokeStyle = "#9ca3af";
+      ctx.strokeStyle = '#9ca3af';
       ctx.lineWidth = 1;
       ctx.strokeRect(startX, barY, barWidth, barHeight);
 
       // Ajouter texte explicatif
-      ctx.fillStyle = "#6b7280";
-      ctx.font = "italic 10px sans-serif";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      const invalidText = window.I18n
-        ? I18n.t("detailedCalcs.outOfRange")
-        : "Hors plage";
+      ctx.fillStyle = '#6b7280';
+      ctx.font = 'italic 10px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const invalidText = window.I18n ? I18n.t('detailedCalcs.outOfRange') : 'Hors plage';
       const detailText =
-        T_atMin === null && T_atMax === null
-          ? " (min et max)"
-          : T_atMin === null
-            ? " (min)"
-            : " (max)";
-      ctx.fillText(
-        invalidText + detailText,
-        startX + barWidth / 2,
-        barY + barHeight / 2,
-      );
+        T_atDisplayMin === null && T_atDisplayMax === null
+          ? ' (min et max)'
+          : T_atDisplayMin === null
+            ? ' (min)'
+            : ' (max)';
+      ctx.fillText(invalidText + detailText, startX + barWidth / 2, barY + barHeight / 2);
 
       return;
     }
@@ -1137,8 +1071,12 @@
 
     // Fonction pour déterminer la couleur selon la température
     const getColor = (T) => {
-      if (T <= FREEZE_TEMP) return COLOR_FREEZE;
-      if (T < SAFETY_THRESHOLD) return COLOR_WARNING;
+      if (T <= FREEZE_TEMP) {
+        return COLOR_FREEZE;
+      }
+      if (T < SAFETY_THRESHOLD) {
+        return COLOR_WARNING;
+      }
       return COLOR_SAFE;
     };
 
@@ -1201,7 +1139,7 @@
     });
 
     // Bordure globale
-    ctx.strokeStyle = "#9ca3af";
+    ctx.strokeStyle = '#9ca3af';
     ctx.lineWidth = 1;
     ctx.strokeRect(startX, barY, barWidth, barHeight);
 
@@ -1209,7 +1147,7 @@
     segments.forEach((seg, idx) => {
       if (idx > 0) {
         const x = xScale(seg.paramStart);
-        ctx.strokeStyle = "#6b7280";
+        ctx.strokeStyle = '#6b7280';
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.moveTo(x, barY);
@@ -1233,7 +1171,7 @@
 
     // Ligne de base (valeur actuelle) - NOIRE
     const baseX = xScale(result.baseValue);
-    ctx.strokeStyle = "#000000";
+    ctx.strokeStyle = '#000000';
     ctx.lineWidth = 2.5;
     ctx.beginPath();
     ctx.moveTo(baseX, lineTop);
@@ -1242,16 +1180,16 @@
 
     labels.push({
       x: baseX,
-      text: "Base",
-      color: "#000000",
-      font: "bold 9px sans-serif",
+      text: 'Base',
+      color: '#000000',
+      font: 'bold 9px sans-serif',
       priority: 1,
     });
 
     // Ligne 0°C (point de gel) - ROUGE
     if (result.criticalValueFreeze !== null) {
       const freezeX = xScale(result.criticalValueFreeze);
-      ctx.strokeStyle = "#dc2626";
+      ctx.strokeStyle = '#dc2626';
       ctx.lineWidth = 1.5;
       ctx.setLineDash([4, 2]);
       ctx.beginPath();
@@ -1262,9 +1200,9 @@
 
       labels.push({
         x: freezeX,
-        text: "0°C",
-        color: "#dc2626",
-        font: "8px sans-serif",
+        text: '0°C',
+        color: '#dc2626',
+        font: '8px sans-serif',
         priority: 2,
       });
     }
@@ -1272,7 +1210,7 @@
     // Ligne 5°C (seuil sécurité) - ORANGE
     if (result.criticalValueSafety !== null) {
       const safetyX = xScale(result.criticalValueSafety);
-      ctx.strokeStyle = "#f59e0b";
+      ctx.strokeStyle = '#f59e0b';
       ctx.lineWidth = 1.5;
       ctx.setLineDash([4, 2]);
       ctx.beginPath();
@@ -1283,9 +1221,9 @@
 
       labels.push({
         x: safetyX,
-        text: "5°C",
-        color: "#f59e0b",
-        font: "8px sans-serif",
+        text: '5°C',
+        color: '#f59e0b',
+        font: '8px sans-serif',
         priority: 3,
       });
     }
@@ -1312,7 +1250,7 @@
     labels.forEach((label) => {
       ctx.fillStyle = label.color;
       ctx.font = label.font;
-      ctx.textAlign = "center";
+      ctx.textAlign = 'center';
       const y = labelY + (label.yOffset || 0);
       ctx.fillText(label.text, label.x, y);
     });
@@ -1321,26 +1259,19 @@
   /**
    * Dessine les labels des valeurs min/max - VERSION COMPACTE
    */
-  function drawValueLabels(
-    ctx,
-    barY,
-    barHeight,
-    result,
-    xScale,
-    paddingBottom,
-  ) {
+  function drawValueLabels(ctx, barY, barHeight, result, xScale, _paddingBottom) {
     const labelY = barY + barHeight + 14;
 
-    ctx.font = "9px sans-serif";
-    ctx.fillStyle = "#4b5563";
+    ctx.font = '9px sans-serif';
+    ctx.fillStyle = '#4b5563';
 
     // Valeur MIN à gauche
-    ctx.textAlign = "left";
+    ctx.textAlign = 'left';
     const minText = `${result.paramDef.min.toFixed(0)} ${result.paramDef.unit}`;
     ctx.fillText(minText, xScale(result.paramDef.min) - 2, labelY);
 
     // Valeur MAX à droite
-    ctx.textAlign = "right";
+    ctx.textAlign = 'right';
     const maxText = `${result.paramDef.max.toFixed(0)} ${result.paramDef.unit}`;
     ctx.fillText(maxText, xScale(result.paramDef.max) + 2, labelY);
 
@@ -1351,7 +1282,7 @@
    * Dessine les limites épaisses aux extrémités - VERSION COMPACTE
    */
   function drawLimits(ctx, startX, barY, barWidth, barHeight) {
-    ctx.strokeStyle = "#1f2937";
+    ctx.strokeStyle = '#1f2937';
     ctx.lineWidth = 3;
 
     // Limite gauche
@@ -1378,13 +1309,13 @@
       <table class="tornado-summary-table">
         <thead>
           <tr>
-            <th>${window.I18n ? I18n.t("sensitivityTable.parameter") : "Paramètre"}</th>
-            <th>${window.I18n ? I18n.t("sensitivityTable.currentValue") : "Valeur actuelle"}</th>
-            <th>${window.I18n ? I18n.t("sensitivityTable.tempAtMin") : "T°C au Min"}</th>
-            <th>${window.I18n ? I18n.t("sensitivityTable.tempAtMax") : "T°C au Max"}</th>
-            <th>${window.I18n ? I18n.t("sensitivityTable.freezeCritical") : "Point critique gel (0°C)"}</th>
-            <th>${window.I18n ? I18n.t("sensitivityTable.safetyCritical") : "Point critique sécurité (5°C)"}</th>
-            <th>${window.I18n ? I18n.t("sensitivityTable.amplitude") : "Amplitude"}</th>
+            <th>${window.I18n ? I18n.t('sensitivityTable.parameter') : 'Paramètre'}</th>
+            <th>${window.I18n ? I18n.t('sensitivityTable.currentValue') : 'Valeur actuelle'}</th>
+            <th>${window.I18n ? I18n.t('sensitivityTable.tempAtMin') : 'T°C au Min'}</th>
+            <th>${window.I18n ? I18n.t('sensitivityTable.tempAtMax') : 'T°C au Max'}</th>
+            <th>${window.I18n ? I18n.t('sensitivityTable.freezeCritical') : 'Point critique gel (0°C)'}</th>
+            <th>${window.I18n ? I18n.t('sensitivityTable.safetyCritical') : 'Point critique sécurité (5°C)'}</th>
+            <th>${window.I18n ? I18n.t('sensitivityTable.amplitude') : 'Amplitude'}</th>
           </tr>
         </thead>
         <tbody>
@@ -1396,35 +1327,33 @@
       const baseValueFormatted = result.baseValue.toFixed(2);
       const T_minFormatted =
         result.T_atMin !== null
-          ? (result.T_atMin >= 0 ? "+" : "") + result.T_atMin.toFixed(1) + "°C"
-          : "N/A";
+          ? (result.T_atMin >= 0 ? '+' : '') + result.T_atMin.toFixed(1) + '°C'
+          : 'N/A';
       const T_maxFormatted =
         result.T_atMax !== null
-          ? (result.T_atMax >= 0 ? "+" : "") + result.T_atMax.toFixed(1) + "°C"
-          : "N/A";
+          ? (result.T_atMax >= 0 ? '+' : '') + result.T_atMax.toFixed(1) + '°C'
+          : 'N/A';
 
-      const outOfRangeText = window.I18n
-        ? I18n.t("detailedCalcs.outOfRange")
-        : "Hors plage";
+      const outOfRangeText = window.I18n ? I18n.t('detailedCalcs.outOfRange') : 'Hors plage';
 
       const freezeFormatted =
         result.criticalValueFreeze !== null
-          ? result.criticalValueFreeze.toFixed(2) + " " + result.paramDef.unit
+          ? result.criticalValueFreeze.toFixed(2) + ' ' + result.paramDef.unit
           : outOfRangeText;
 
       const safetyFormatted =
         result.criticalValueSafety !== null
-          ? result.criticalValueSafety.toFixed(2) + " " + result.paramDef.unit
+          ? result.criticalValueSafety.toFixed(2) + ' ' + result.paramDef.unit
           : outOfRangeText;
 
-      const amplitudeFormatted = result.amplitude.toFixed(1) + "°C";
+      const amplitudeFormatted = result.amplitude.toFixed(1) + '°C';
 
       // Classe CSS selon la criticité (basée sur si les points critiques sont dans la plage)
-      let rowClass = "";
+      let rowClass = '';
       if (result.criticalValueFreeze !== null) {
-        rowClass = "critical-row"; // Risque de gel dans la plage
+        rowClass = 'critical-row'; // Risque de gel dans la plage
       } else if (result.criticalValueSafety !== null) {
-        rowClass = "warning-row"; // Seuil sécurité dans la plage
+        rowClass = 'warning-row'; // Seuil sécurité dans la plage
       }
 
       html += `

@@ -1,18 +1,18 @@
 /**
  * test_phase1_heat_transfer.js
- * 
+ *
  * Tests unitaires pour les modules de transfert thermique (Phase 1.3):
  * - nusselt-internal.js
  * - nusselt-external.js
  * - radiation.js
  * - thermal-resistance.js
  * - heat-transfer.js
- * 
+ *
  * Validation contre:
  * - Corrélations du Perry's Handbook
  * - fluids.readthedocs.io
  * - Solutions analytiques
- * 
+ *
  * Exécution: node tests/test_phase1_heat_transfer.js
  */
 
@@ -30,7 +30,7 @@ let testsFailed = 0;
 function assertClose(actual, expected, tolerance = 0.01, message = '') {
   testsRun++;
   const relativeError = Math.abs((actual - expected) / expected);
-  
+
   if (relativeError <= tolerance) {
     testsPassed++;
     console.log(`  ✓ ${message}`);
@@ -38,7 +38,9 @@ function assertClose(actual, expected, tolerance = 0.01, message = '') {
   } else {
     testsFailed++;
     console.log(`  ✗ ${message}`);
-    console.log(`    Attendu: ${expected}, Obtenu: ${actual}, Erreur: ${(relativeError * 100).toFixed(2)}%`);
+    console.log(
+      `    Attendu: ${expected}, Obtenu: ${actual}, Erreur: ${(relativeError * 100).toFixed(2)}%`
+    );
     return false;
   }
 }
@@ -82,7 +84,7 @@ console.log('\nTest 2: Nusselt laminaire avec flux constant');
 const Nu_lam_q = nusseltInt.nusseltLaminarFullyDeveloped('constant_q');
 assertClose(Nu_lam_q, 4.36, 0.001, 'Nu_lam = 4.36 (q_wall constant)');
 
-console.log('\nTest 3: Hausen laminaire avec effet d\'entrée');
+console.log("\nTest 3: Hausen laminaire avec effet d'entrée");
 // Eau Pr=7, Re=1500, DN50 (D=0.0525m), L=10m
 const Nu_hausen = nusseltInt.nusseltHausen(1500, 7.0, 0.0525, 10);
 testsRun++;
@@ -196,7 +198,9 @@ const h_rad_low = radiation.radiationCoefficient(333.15, 263.15, 0.1);
 testsRun++;
 if (h_rad_high > 9 * h_rad_low) {
   testsPassed++;
-  console.log(`  ✓ h_rad(ε=0.95) = ${h_rad_high.toFixed(1)} >> h_rad(ε=0.1) = ${h_rad_low.toFixed(2)}`);
+  console.log(
+    `  ✓ h_rad(ε=0.95) = ${h_rad_high.toFixed(1)} >> h_rad(ε=0.1) = ${h_rad_low.toFixed(2)}`
+  );
 } else {
   testsFailed++;
   console.log(`  ✗ Effet émissivité insuffisant`);
@@ -209,7 +213,7 @@ console.log('Test 21: Résistance convection');
 // h=800 W/(m²·K), D=0.05m, L=1m
 const R_conv = resistance.convectionResistanceCylinder(800, 0.05, 1.0);
 // A = π×0.05×1 = 0.157 m², R = 1/(800×0.157) = 0.0080 K/W
-assertClose(R_conv, 0.0080, 0.05, 'R_conv ≈ 0.0080 K/W');
+assertClose(R_conv, 0.008, 0.05, 'R_conv ≈ 0.0080 K/W');
 
 console.log('\nTest 22: Résistance conduction cylindrique');
 // r_i=0.025m, r_o=0.027m, k=50.2 W/(m·K), L=1m
@@ -234,7 +238,7 @@ const UA = resistance.overallHeatTransferCoefficient(0.16);
 assertClose(UA, 6.25, 0.01, 'UA = 6.25 W/K');
 
 console.log('\nTest 26: Profil de température');
-const T_profile = resistance.temperatureProfile(60, -10, [0.01, 0.0003, 0.10, 0.05]);
+const T_profile = resistance.temperatureProfile(60, -10, [0.01, 0.0003, 0.1, 0.05]);
 // 5 températures (interfaces)
 assertEqual(T_profile.length, 5, '5 points de température');
 // T[0] = 60°C, T[4] = -10°C
@@ -243,10 +247,10 @@ assertClose(T_profile[4], -10, 0.001, 'T_extérieur = -10°C');
 
 console.log('\nTest 27: Configuration conduite multicouche');
 const pipe_config = [
-  { type: 'convection', h: 800, D: 0.050, name: 'eau_int' },
+  { type: 'convection', h: 800, D: 0.05, name: 'eau_int' },
   { type: 'conduction', r_inner: 0.025, r_outer: 0.027, k: 50.2, name: 'acier' },
   { type: 'conduction', r_inner: 0.027, r_outer: 0.047, k: 0.04, name: 'isolation' },
-  { type: 'convection', h: 20, D: 0.094, name: 'air_ext' }
+  { type: 'convection', h: 20, D: 0.094, name: 'air_ext' },
 ];
 const result = resistance.pipeResistance(pipe_config, 1.0);
 // La résistance dominante devrait être l'isolation
@@ -254,7 +258,9 @@ testsRun++;
 const R_insulation = result.R_layers[2];
 if (R_insulation > result.R_total * 0.8) {
   testsPassed++;
-  console.log(`  ✓ R_isolation domine (${(R_insulation / result.R_total * 100).toFixed(0)}% du total)`);
+  console.log(
+    `  ✓ R_isolation domine (${((R_insulation / result.R_total) * 100).toFixed(0)}% du total)`
+  );
 } else {
   testsFailed++;
   console.log(`  ✗ R_isolation ne domine pas assez`);
@@ -285,9 +291,9 @@ const Q_loss = heatTransfer.heatLossRate(2.16, 4184, 60, 59.95);
 // Q = 2.16 × 4184 × (60 - 59.95) = 452 W
 assertClose(Q_loss, 452, 0.1, 'Q_loss ≈ 452 W');
 
-console.log('\nTest 32: Conservation d\'énergie');
+console.log("\nTest 32: Conservation d'énergie");
 // Q_loss devrait égaler UA × ΔT_moyen
-const Q_UA = UA * ((60 + 59.95) / 2 - (-10));
+const Q_UA = UA * ((60 + 59.95) / 2 - -10);
 assertClose(Q_loss, Q_UA, 0.05, 'Q_loss ≈ UA×ΔT (conservation)');
 
 console.log('\nTest 33: LMTD');
@@ -326,7 +332,13 @@ const R_conv_ext = resistance.convectionResistanceCylinder(20, D_ext, L_pipe);
 const R_total_pipe = resistance.totalResistanceSeries([R_conv_int, R_wall, R_insul, R_conv_ext]);
 
 const UA_total = resistance.overallHeatTransferCoefficient(R_total_pipe);
-const T_out_full = heatTransfer.calculateOutletTemperature(60, -10, m_dot_water, cp_water, UA_total);
+const T_out_full = heatTransfer.calculateOutletTemperature(
+  60,
+  -10,
+  m_dot_water,
+  cp_water,
+  UA_total
+);
 const Q_loss_full = heatTransfer.heatLossRate(m_dot_water, cp_water, 60, T_out_full);
 
 console.log(`  R_total = ${R_total_pipe.toFixed(3)} K/W`);
@@ -365,4 +377,3 @@ console.log('='.repeat(60));
 
 // Code de sortie
 process.exit(testsFailed > 0 ? 1 : 0);
-

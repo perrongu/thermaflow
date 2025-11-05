@@ -1,10 +1,10 @@
 /**
  * Tests unitaires pour les propriétés des fluides
- * 
+ *
  * Teste:
  * - water-properties.js: Propriétés de l'eau vs T et P
  * - air-properties.js: Propriétés de l'air vs T
- * 
+ *
  * Exécuter avec: node test_fluid_properties.js
  */
 
@@ -22,7 +22,7 @@ const colors = {
   red: '\x1b[31m',
   yellow: '\x1b[33m',
   blue: '\x1b[34m',
-  reset: '\x1b[0m'
+  reset: '\x1b[0m',
 };
 
 let testsRun = 0;
@@ -56,7 +56,9 @@ function assertClose(actual, expected, tolerance, testName) {
   assert(
     passed,
     testName,
-    passed ? '' : `Attendu: ${expected}, Obtenu: ${actual}, Erreur relative: ${(relError * 100).toFixed(2)}%`
+    passed
+      ? ''
+      : `Attendu: ${expected}, Obtenu: ${actual}, Erreur relative: ${(relError * 100).toFixed(2)}%`
   );
 }
 
@@ -71,13 +73,13 @@ console.log(`${colors.blue}>>> Tests des propriétés de l'eau${colors.reset}\n`
 console.log('Test 1: Valeurs aux points de grille');
 const water_0C_1bar = getWaterProperties(0, 1.0);
 assertClose(water_0C_1bar.rho, 999.84, 0.001, '  ρ(0°C, 1 bar)');
-assertClose(water_0C_1bar.mu, 1.791754e-03, 0.001, '  μ(0°C, 1 bar)');
+assertClose(water_0C_1bar.mu, 1.791754e-3, 0.001, '  μ(0°C, 1 bar)');
 assertClose(water_0C_1bar.k, 0.5557, 0.001, '  k(0°C, 1 bar)');
 assertClose(water_0C_1bar.cp, 4219.4, 0.001, '  cp(0°C, 1 bar)');
 
 const water_20C_1bar = getWaterProperties(20, 1.0);
 assertClose(water_20C_1bar.rho, 998.21, 0.001, '  ρ(20°C, 1 bar)');
-assertClose(water_20C_1bar.mu, 1.001597e-03, 0.001, '  μ(20°C, 1 bar)');
+assertClose(water_20C_1bar.mu, 1.001597e-3, 0.001, '  μ(20°C, 1 bar)');
 
 const water_100C_10bar = getWaterProperties(100, 10.0);
 assertClose(water_100C_10bar.rho, 958.77, 0.001, '  ρ(100°C, 10 bar)');
@@ -165,7 +167,7 @@ console.log(`\n${colors.blue}>>> Tests des propriétés de l'air${colors.reset}\
 console.log('Test 5: Valeurs aux points de grille');
 const air_0C = getAirProperties(0);
 assertClose(air_0C.rho, 1.2923, 0.001, '  ρ(0°C)');
-assertClose(air_0C.mu, 1.716000e-05, 0.001, '  μ(0°C)');
+assertClose(air_0C.mu, 1.716e-5, 0.001, '  μ(0°C)');
 assertClose(air_0C.k, 0.0241, 0.001, '  k(0°C)');
 assertClose(air_0C.cp, 1005.0, 0.001, '  cp(0°C)');
 assertClose(air_0C.Pr, 0.7156, 0.001, '  Pr(0°C)');
@@ -275,12 +277,12 @@ console.log('Test 10: Immutabilité des objets de données');
 assert(
   Object.isFrozen(waterTablesData),
   '  waterTablesData est frozen',
-  'L\'objet devrait être immutable'
+  "L'objet devrait être immutable"
 );
 assert(
   Object.isFrozen(airTablesData),
   '  airTablesData est frozen',
-  'L\'objet devrait être immutable'
+  "L'objet devrait être immutable"
 );
 
 // ===== RÉSUMÉ =====
@@ -299,4 +301,3 @@ console.log('='.repeat(60) + '\n');
 
 // Code de sortie
 process.exit(testsFailed > 0 ? 1 : 0);
-

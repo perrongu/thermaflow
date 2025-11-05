@@ -1,14 +1,14 @@
 /**
  * test_richardson_convection.js
- * 
+ *
  * Tests unitaires pour le nombre de Richardson et sélection convection mixte.
- * 
+ *
  * Valide:
  * - Calcul précis Ri = Gr/Re²
  * - Détection régime forcé, naturel, mixte
  * - Formule combinée Churchill (1977)
  * - Warnings appropriés
- * 
+ *
  * Exécution: node tests/test_richardson_convection.js
  */
 
@@ -22,7 +22,7 @@ let testsFailed = 0;
 function assertClose(actual, expected, tolerance = 0.01, message = '') {
   testsRun++;
   const relativeError = Math.abs((actual - expected) / expected);
-  
+
   if (relativeError <= tolerance) {
     testsPassed++;
     console.log(`  ✓ ${message}`);
@@ -30,7 +30,9 @@ function assertClose(actual, expected, tolerance = 0.01, message = '') {
   } else {
     testsFailed++;
     console.log(`  ✗ ${message}`);
-    console.log(`    Attendu: ${expected}, Obtenu: ${actual}, Erreur: ${(relativeError * 100).toFixed(2)}%`);
+    console.log(
+      `    Attendu: ${expected}, Obtenu: ${actual}, Erreur: ${(relativeError * 100).toFixed(2)}%`
+    );
     return false;
   }
 }
@@ -117,14 +119,16 @@ const Nu_f = nusseltExt.nusseltChurchillBernstein(1000, 0.715);
 const Nu_n = nusseltExt.nusseltNaturalConvectionCylinder(5e5 * 0.715, 0.715);
 
 // Formule: Nu = (Nu_f³ + Nu_n³)^(1/3)
-const Nu_combined = Math.pow(Math.pow(Nu_f, 3) + Math.pow(Nu_n, 3), 1.0/3.0);
+const Nu_combined = Math.pow(Math.pow(Nu_f, 3) + Math.pow(Nu_n, 3), 1.0 / 3.0);
 assertClose(Nu_mixed, Nu_combined, 0.001, 'Nu mixte = (Nu_f³ + Nu_n³)^(1/3)');
 
 // Nu mixte devrait être entre Nu_f et Nu_n (ou légèrement au-dessus du max)
 testsRun++;
 if (Nu_mixed >= Math.min(Nu_f, Nu_n) * 0.99) {
   testsPassed++;
-  console.log(`  ✓ Nu_mixte (${Nu_mixed.toFixed(1)}) cohérent avec Nu_f (${Nu_f.toFixed(1)}) et Nu_n (${Nu_n.toFixed(1)})`);
+  console.log(
+    `  ✓ Nu_mixte (${Nu_mixed.toFixed(1)}) cohérent avec Nu_f (${Nu_f.toFixed(1)}) et Nu_n (${Nu_n.toFixed(1)})`
+  );
 } else {
   testsFailed++;
   console.log(`  ✗ Nu_mixte devrait être >= min(Nu_f, Nu_n)`);
@@ -151,7 +155,7 @@ console.log('\nTest 8: Warning zone mixte émis');
 // Capturer console.warn temporairement
 let warningEmitted = false;
 const originalWarn = console.warn;
-console.warn = function(...args) {
+console.warn = function (...args) {
   if (args[0].includes('Convection mixte détectée')) {
     warningEmitted = true;
   }
@@ -217,4 +221,3 @@ console.log('='.repeat(60));
 
 // Code de sortie
 process.exit(testsFailed > 0 ? 1 : 0);
-

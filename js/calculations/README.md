@@ -5,7 +5,9 @@ Modules qui **orchestrent** formulas + correlations pour résoudre des problème
 ## Modules
 
 ### pressure-drop.js
+
 Calcul complet de perte de charge.
+
 ```
 Entrées: ρ, V, D, L, μ, ε/D
    ↓
@@ -17,7 +19,9 @@ Sorties: { dP, f, Re, regime }
 ```
 
 ### thermal-resistance.js
+
 Réseau de résistances thermiques (convection + conduction).
+
 ```
 Fluide → Conv_int → Cond_paroi → Cond_isolation → Conv_ext → Air
    ↓
@@ -26,7 +30,9 @@ Q = ΔT / R_total
 ```
 
 ### heat-transfer.js
+
 Transfert thermique avec méthode NTU-effectiveness.
+
 ```
 Entrées: T_in, m_dot, UA, L
    ↓
@@ -38,6 +44,7 @@ Q = ṁcp(T_in - T_out)
 ## Principe
 
 Ces modules **combinent** plusieurs étapes de calcul:
+
 1. Récupèrent propriétés (`js/properties/`)
 2. Appliquent formules de base (`js/formulas/`)
 3. Utilisent corrélations (`js/correlations/`)
@@ -50,4 +57,3 @@ Ces modules montrent comment assembler les pièces du puzzle pour résoudre
 des problèmes réels d'ingénierie.
 
 Niveau suivant → voir `js/engine/` pour segment et réseau complet
-

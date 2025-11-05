@@ -9,8 +9,8 @@
  * Output: validation/external_validation_sample_v1.0.1.json
  */
 
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
 // ========== CONFIGURATION ==========
 
@@ -28,9 +28,9 @@ const CONFIG = {
 
   // Schedules/Types par matériau (les plus courants)
   schedules: {
-    steel: ["40", "80", "120", "160"],
-    copper: ["K", "L", "M"],
-    stainless_steel: ["10S", "40S", "80S"],
+    steel: ['40', '80', '120', '160'],
+    copper: ['K', 'L', 'M'],
+    stainless_steel: ['10S', '40S', '80S'],
   },
 
   // Plages NPS par matériau
@@ -51,12 +51,7 @@ const CONFIG = {
   },
 
   // Matériaux d'isolation
-  insulationMaterials: [
-    "fiberglass",
-    "mineral_wool",
-    "polyurethane_foam",
-    "elastomeric_foam",
-  ],
+  insulationMaterials: ['fiberglass', 'mineral_wool', 'polyurethane_foam', 'elastomeric_foam'],
   insulationDistribution: {
     fiberglass: 0.3,
     mineral_wool: 0.25,
@@ -183,20 +178,20 @@ function generateCriticalCases() {
   const cases = [];
   let caseId = 1;
 
-  console.log("\n🔥 Génération des cas critiques (grille systématique)...");
+  console.log('\n🔥 Génération des cas critiques (grille systématique)...');
 
   // 1. Cas extrêmes température (6 cas)
   const extremeTempCases = [
-    { temp: 1, ambient: -50, desc: "Température eau minimale, air très froid" },
-    { temp: 1, ambient: 30, desc: "Température eau minimale, air chaud" },
+    { temp: 1, ambient: -50, desc: 'Température eau minimale, air très froid' },
+    { temp: 1, ambient: 30, desc: 'Température eau minimale, air chaud' },
     {
       temp: 100,
       ambient: -50,
-      desc: "Température eau maximale, air très froid",
+      desc: 'Température eau maximale, air très froid',
     },
-    { temp: 100, ambient: 30, desc: "Température eau maximale, air chaud" },
-    { temp: 50, ambient: -50, desc: "Température eau moyenne, air très froid" },
-    { temp: 50, ambient: 30, desc: "Température eau moyenne, air chaud" },
+    { temp: 100, ambient: 30, desc: 'Température eau maximale, air chaud' },
+    { temp: 50, ambient: -50, desc: 'Température eau moyenne, air très froid' },
+    { temp: 50, ambient: 30, desc: 'Température eau moyenne, air chaud' },
   ];
 
   for (const tc of extremeTempCases) {
@@ -205,8 +200,8 @@ function generateCriticalCases() {
       description: tc.desc,
       inputs: {
         pipe: {
-          material: "steel",
-          schedule: "40",
+          material: 'steel',
+          schedule: '40',
           nps: 2.0,
           length_m: 100,
         },
@@ -231,28 +226,28 @@ function generateCriticalCases() {
       ambient: -30,
       wind: 0,
       insul: null,
-      desc: "Risque gel élevé sans isolation",
+      desc: 'Risque gel élevé sans isolation',
     },
     {
       temp: 2,
       ambient: -30,
       wind: 50,
       insul: null,
-      desc: "Risque gel élevé avec vent sans isolation",
+      desc: 'Risque gel élevé avec vent sans isolation',
     },
     {
       temp: 2,
       ambient: -30,
       wind: 0,
-      insul: { material: "polyurethane_foam", thickness_mm: 50 },
-      desc: "Risque gel avec isolation épaisse",
+      insul: { material: 'polyurethane_foam', thickness_mm: 50 },
+      desc: 'Risque gel avec isolation épaisse',
     },
     {
       temp: 5,
       ambient: -40,
       wind: 30,
-      insul: { material: "fiberglass", thickness_mm: 25 },
-      desc: "Risque gel modéré avec isolation moyenne",
+      insul: { material: 'fiberglass', thickness_mm: 25 },
+      desc: 'Risque gel modéré avec isolation moyenne',
     },
   ];
 
@@ -262,8 +257,8 @@ function generateCriticalCases() {
       description: fc.desc,
       inputs: {
         pipe: {
-          material: "steel",
-          schedule: "40",
+          material: 'steel',
+          schedule: '40',
           nps: 2.0,
           length_m: 100,
         },
@@ -283,10 +278,10 @@ function generateCriticalCases() {
 
   // 3. Cas extrêmes débit (4 cas)
   const flowCases = [
-    { flow: 0.1, nps: 0.5, desc: "Débit minimal, petit diamètre" },
-    { flow: 0.1, nps: 4, desc: "Débit minimal, diamètre moyen" },
-    { flow: 6000, nps: 12, desc: "Débit maximal, grand diamètre" },
-    { flow: 1000, nps: 6, desc: "Débit élevé, diamètre moyen" },
+    { flow: 0.1, nps: 0.5, desc: 'Débit minimal, petit diamètre' },
+    { flow: 0.1, nps: 4, desc: 'Débit minimal, diamètre moyen' },
+    { flow: 6000, nps: 12, desc: 'Débit maximal, grand diamètre' },
+    { flow: 1000, nps: 6, desc: 'Débit élevé, diamètre moyen' },
   ];
 
   for (const flc of flowCases) {
@@ -295,8 +290,8 @@ function generateCriticalCases() {
       description: flc.desc,
       inputs: {
         pipe: {
-          material: "steel",
-          schedule: "40",
+          material: 'steel',
+          schedule: '40',
           nps: flc.nps,
           length_m: 100,
         },
@@ -317,46 +312,46 @@ function generateCriticalCases() {
   // 4. Cas extrêmes géométrie (6 cas - 2 par matériau)
   const geomCases = [
     {
-      material: "steel",
-      schedule: "40",
+      material: 'steel',
+      schedule: '40',
       nps: 0.5,
       length: 1,
-      desc: "Acier petit diamètre, longueur minimale",
+      desc: 'Acier petit diamètre, longueur minimale',
     },
     {
-      material: "steel",
-      schedule: "160",
+      material: 'steel',
+      schedule: '160',
       nps: 36,
       length: 2500,
-      desc: "Acier grand diamètre, longueur maximale (2500 m)",
+      desc: 'Acier grand diamètre, longueur maximale (2500 m)',
     },
     {
-      material: "copper",
-      schedule: "K",
+      material: 'copper',
+      schedule: 'K',
       nps: 0.25,
       length: 10,
-      desc: "Cuivre petit diamètre",
+      desc: 'Cuivre petit diamètre',
     },
     {
-      material: "copper",
-      schedule: "M",
+      material: 'copper',
+      schedule: 'M',
       nps: 12,
       length: 500,
-      desc: "Cuivre grand diamètre",
+      desc: 'Cuivre grand diamètre',
     },
     {
-      material: "stainless_steel",
-      schedule: "10S",
+      material: 'stainless_steel',
+      schedule: '10S',
       nps: 0.125,
       length: 5,
-      desc: "Inox petit diamètre",
+      desc: 'Inox petit diamètre',
     },
     {
-      material: "stainless_steel",
-      schedule: "80S",
+      material: 'stainless_steel',
+      schedule: '80S',
       nps: 24,
       length: 800,
-      desc: "Inox grand diamètre",
+      desc: 'Inox grand diamètre',
     },
   ];
 
@@ -388,24 +383,24 @@ function generateCriticalCases() {
   // 5. Cas extrêmes isolation (4 cas)
   const insulCases = [
     {
-      material: "fiberglass",
+      material: 'fiberglass',
       thickness: 13,
-      desc: "Isolation minimale fibre de verre",
+      desc: 'Isolation minimale fibre de verre',
     },
     {
-      material: "polyurethane_foam",
+      material: 'polyurethane_foam',
       thickness: 100,
-      desc: "Isolation maximale polyuréthane",
+      desc: 'Isolation maximale polyuréthane',
     },
     {
-      material: "mineral_wool",
+      material: 'mineral_wool',
       thickness: 50,
-      desc: "Isolation moyenne laine minérale",
+      desc: 'Isolation moyenne laine minérale',
     },
     {
-      material: "elastomeric_foam",
+      material: 'elastomeric_foam',
       thickness: 25,
-      desc: "Isolation élastomère",
+      desc: 'Isolation élastomère',
     },
   ];
 
@@ -415,8 +410,8 @@ function generateCriticalCases() {
       description: ic.desc,
       inputs: {
         pipe: {
-          material: "steel",
-          schedule: "40",
+          material: 'steel',
+          schedule: '40',
           nps: 2.0,
           length_m: 100,
         },
@@ -439,8 +434,8 @@ function generateCriticalCases() {
 
   // 6. Cas extrêmes pression (2 cas)
   const pressureCases = [
-    { pressure: 100, desc: "Pression minimale" },
-    { pressure: 1000, desc: "Pression maximale" },
+    { pressure: 100, desc: 'Pression minimale' },
+    { pressure: 1000, desc: 'Pression maximale' },
   ];
 
   for (const pc of pressureCases) {
@@ -449,8 +444,8 @@ function generateCriticalCases() {
       description: pc.desc,
       inputs: {
         pipe: {
-          material: "steel",
-          schedule: "40",
+          material: 'steel',
+          schedule: '40',
           nps: 2.0,
           length_m: 100,
         },
@@ -470,10 +465,10 @@ function generateCriticalCases() {
 
   // 7. Cas extrêmes vent (4 cas)
   const windCases = [
-    { wind: 0, desc: "Vent nul" },
-    { wind: 108, desc: "Vent maximal" },
-    { wind: 30, desc: "Vent modéré" },
-    { wind: 70, desc: "Vent élevé" },
+    { wind: 0, desc: 'Vent nul' },
+    { wind: 108, desc: 'Vent maximal' },
+    { wind: 30, desc: 'Vent modéré' },
+    { wind: 70, desc: 'Vent élevé' },
   ];
 
   for (const wc of windCases) {
@@ -482,8 +477,8 @@ function generateCriticalCases() {
       description: wc.desc,
       inputs: {
         pipe: {
-          material: "steel",
-          schedule: "40",
+          material: 'steel',
+          schedule: '40',
           nps: 2.0,
           length_m: 100,
         },
@@ -518,18 +513,12 @@ function generateLHSCases(n, startId) {
 
   // Générer échantillons LHS pour chaque dimension continue
   const tempSamples = lhsSample1D(n, 10, 90); // Focus 10-90°C
-  const flowSamples = lhsSample1D(n, Math.log(0.5), Math.log(100)).map(
-    Math.exp,
-  ); // Log-normal 0.5-100 m³/h
+  const flowSamples = lhsSample1D(n, Math.log(0.5), Math.log(100)).map(Math.exp); // Log-normal 0.5-100 m³/h
   const pressureSamples = lhsSample1D(n, 100, 1000);
   const ambientTempSamples = lhsSample1D(n, -30, 10); // Focus températures froides
   const windSamples = lhsSample1D(n, 0, 30); // Focus vents modérés (beta approximé)
-  const lengthSamples = lhsSample1D(n, Math.log(10), Math.log(500)).map(
-    Math.exp,
-  ); // Log-normal
-  const insulThicknessSamples = lhsSample1D(n, Math.log(15), Math.log(80)).map(
-    Math.exp,
-  ); // Log-normal
+  const lengthSamples = lhsSample1D(n, Math.log(10), Math.log(500)).map(Math.exp); // Log-normal
+  const insulThicknessSamples = lhsSample1D(n, Math.log(15), Math.log(80)).map(Math.exp); // Log-normal
 
   for (let i = 0; i < n; i++) {
     // Sélectionner matériau selon distribution
@@ -546,14 +535,12 @@ function generateLHSCases(n, startId) {
 
     // Arrondir NPS à des valeurs réalistes (0.125, 0.25, 0.375, 0.5, 0.75, 1, 1.25, 1.5, 2, 2.5, 3, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 30, 36)
     const commonNPS = [
-      0.125, 0.25, 0.375, 0.5, 0.75, 1, 1.25, 1.5, 2, 2.5, 3, 4, 6, 8, 10, 12,
-      14, 16, 18, 20, 24, 30, 36,
+      0.125, 0.25, 0.375, 0.5, 0.75, 1, 1.25, 1.5, 2, 2.5, 3, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24,
+      30, 36,
     ];
-    const validNPS = commonNPS.filter(
-      (n) => n >= npsRange.min && n <= npsRange.max,
-    );
+    const validNPS = commonNPS.filter((n) => n >= npsRange.min && n <= npsRange.max);
     const nps = validNPS.reduce((prev, curr) =>
-      Math.abs(curr - npsRaw) < Math.abs(prev - npsRaw) ? curr : prev,
+      Math.abs(curr - npsRaw) < Math.abs(prev - npsRaw) ? curr : prev
     );
 
     // Isolation: 50% des cas
@@ -604,7 +591,7 @@ function validateCase(testCase) {
   const errors = [];
 
   // Valider matériau
-  if (!["steel", "copper", "stainless_steel"].includes(pipe.material)) {
+  if (!['steel', 'copper', 'stainless_steel'].includes(pipe.material)) {
     errors.push(`Matériau invalide: ${pipe.material}`);
   }
 
@@ -615,24 +602,15 @@ function validateCase(testCase) {
   }
 
   // Valider plages opérationnelles
-  if (
-    pipe.length_m < CONFIG.ranges.length_m.min ||
-    pipe.length_m > CONFIG.ranges.length_m.max
-  ) {
+  if (pipe.length_m < CONFIG.ranges.length_m.min || pipe.length_m > CONFIG.ranges.length_m.max) {
     errors.push(`Longueur hors plage: ${pipe.length_m}`);
   }
 
-  if (
-    fluid.temp_C < CONFIG.ranges.temp_C.min ||
-    fluid.temp_C > CONFIG.ranges.temp_C.max
-  ) {
+  if (fluid.temp_C < CONFIG.ranges.temp_C.min || fluid.temp_C > CONFIG.ranges.temp_C.max) {
     errors.push(`Température eau hors plage: ${fluid.temp_C}`);
   }
 
-  if (
-    fluid.flow_m3h < CONFIG.ranges.flow_m3h.min ||
-    fluid.flow_m3h > CONFIG.ranges.flow_m3h.max
-  ) {
+  if (fluid.flow_m3h < CONFIG.ranges.flow_m3h.min || fluid.flow_m3h > CONFIG.ranges.flow_m3h.max) {
     errors.push(`Débit hors plage: ${fluid.flow_m3h}`);
   }
 
@@ -677,7 +655,7 @@ function validateCase(testCase) {
  * Valide tous les cas et affiche les erreurs
  */
 function validateAllCases(cases) {
-  console.log("\n✔️ Validation des cas...");
+  console.log('\n✔️ Validation des cas...');
 
   let validCount = 0;
   let invalidCount = 0;
@@ -705,8 +683,8 @@ function validateAllCases(cases) {
  * Calcule et affiche les statistiques de distribution
  */
 function displayStatistics(cases) {
-  console.log("\n📈 Statistiques de distribution:");
-  console.log("═".repeat(60));
+  console.log('\n📈 Statistiques de distribution:');
+  console.log('═'.repeat(60));
 
   // Distribution matériaux
   const materialCounts = {};
@@ -731,9 +709,13 @@ function displayStatistics(cases) {
     scheduleCounts[pipe.schedule] = (scheduleCounts[pipe.schedule] || 0) + 1;
 
     // Catégories NPS
-    if (pipe.nps <= 2) npsCounts.small++;
-    else if (pipe.nps <= 8) npsCounts.medium++;
-    else npsCounts.large++;
+    if (pipe.nps <= 2) {
+      npsCounts.small++;
+    } else if (pipe.nps <= 8) {
+      npsCounts.medium++;
+    } else {
+      npsCounts.large++;
+    }
 
     // Isolation
     if (insulation === null) {
@@ -755,49 +737,41 @@ function displayStatistics(cases) {
   }
 
   // Afficher distributions catégorielles
-  console.log("\n🔧 Matériaux de conduite:");
-  for (const [mat, count] of Object.entries(materialCounts).sort(
-    (a, b) => b[1] - a[1],
-  )) {
+  console.log('\n🔧 Matériaux de conduite:');
+  for (const [mat, count] of Object.entries(materialCounts).sort((a, b) => b[1] - a[1])) {
     const pct = ((count / cases.length) * 100).toFixed(1);
-    console.log(
-      `   ${mat.padEnd(20)} : ${count.toString().padStart(3)} (${pct}%)`,
-    );
+    console.log(`   ${mat.padEnd(20)} : ${count.toString().padStart(3)} (${pct}%)`);
   }
 
-  console.log("\n📏 Catégories NPS:");
+  console.log('\n📏 Catégories NPS:');
   console.log(
-    `   Petit (≤2")          : ${npsCounts.small.toString().padStart(3)} (${((npsCounts.small / cases.length) * 100).toFixed(1)}%)`,
+    `   Petit (≤2")          : ${npsCounts.small.toString().padStart(3)} (${((npsCounts.small / cases.length) * 100).toFixed(1)}%)`
   );
   console.log(
-    `   Moyen (2-8")         : ${npsCounts.medium.toString().padStart(3)} (${((npsCounts.medium / cases.length) * 100).toFixed(1)}%)`,
+    `   Moyen (2-8")         : ${npsCounts.medium.toString().padStart(3)} (${((npsCounts.medium / cases.length) * 100).toFixed(1)}%)`
   );
   console.log(
-    `   Grand (>8")          : ${npsCounts.large.toString().padStart(3)} (${((npsCounts.large / cases.length) * 100).toFixed(1)}%)`,
+    `   Grand (>8")          : ${npsCounts.large.toString().padStart(3)} (${((npsCounts.large / cases.length) * 100).toFixed(1)}%)`
   );
 
-  console.log("\n🧊 Isolation:");
+  console.log('\n🧊 Isolation:');
   console.log(
-    `   Sans isolation       : ${insulationCounts.none.toString().padStart(3)} (${((insulationCounts.none / cases.length) * 100).toFixed(1)}%)`,
+    `   Sans isolation       : ${insulationCounts.none.toString().padStart(3)} (${((insulationCounts.none / cases.length) * 100).toFixed(1)}%)`
   );
   console.log(
-    `   Avec isolation       : ${insulationCounts.with.toString().padStart(3)} (${((insulationCounts.with / cases.length) * 100).toFixed(1)}%)`,
+    `   Avec isolation       : ${insulationCounts.with.toString().padStart(3)} (${((insulationCounts.with / cases.length) * 100).toFixed(1)}%)`
   );
 
   if (Object.keys(insulMaterialCounts).length > 0) {
-    console.log("\n   Matériaux isolation:");
-    for (const [mat, count] of Object.entries(insulMaterialCounts).sort(
-      (a, b) => b[1] - a[1],
-    )) {
+    console.log('\n   Matériaux isolation:');
+    for (const [mat, count] of Object.entries(insulMaterialCounts).sort((a, b) => b[1] - a[1])) {
       const pct = ((count / insulationCounts.with) * 100).toFixed(1);
-      console.log(
-        `     ${mat.padEnd(25)} : ${count.toString().padStart(3)} (${pct}%)`,
-      );
+      console.log(`     ${mat.padEnd(25)} : ${count.toString().padStart(3)} (${pct}%)`);
     }
   }
 
   // Afficher statistiques continues
-  console.log("\n📊 Paramètres continus (min / médiane / max):");
+  console.log('\n📊 Paramètres continus (min / médiane / max):');
 
   const stats = (values, name, unit) => {
     values.sort((a, b) => a - b);
@@ -805,22 +779,22 @@ function displayStatistics(cases) {
     const max = values[values.length - 1];
     const median = values[Math.floor(values.length / 2)];
     console.log(
-      `   ${name.padEnd(25)} : ${min.toFixed(1).padStart(7)} / ${median.toFixed(1).padStart(7)} / ${max.toFixed(1).padStart(7)} ${unit}`,
+      `   ${name.padEnd(25)} : ${min.toFixed(1).padStart(7)} / ${median.toFixed(1).padStart(7)} / ${max.toFixed(1).padStart(7)} ${unit}`
     );
   };
 
-  stats(tempValues, "Température eau", "°C");
-  stats(flowValues, "Débit", "m³/h");
-  stats(pressureValues, "Pression", "kPag");
-  stats(lengthValues, "Longueur", "m");
-  stats(ambientTempValues, "Température air", "°C");
-  stats(windValues, "Vent", "km/h");
+  stats(tempValues, 'Température eau', '°C');
+  stats(flowValues, 'Débit', 'm³/h');
+  stats(pressureValues, 'Pression', 'kPag');
+  stats(lengthValues, 'Longueur', 'm');
+  stats(ambientTempValues, 'Température air', '°C');
+  stats(windValues, 'Vent', 'km/h');
 
   if (insulThicknessValues.length > 0) {
-    stats(insulThicknessValues, "Épaisseur isolation", "mm");
+    stats(insulThicknessValues, 'Épaisseur isolation', 'mm');
   }
 
-  console.log("\n" + "═".repeat(60));
+  console.log('\n' + '═'.repeat(60));
 }
 
 // ========== EXPORT JSON ==========
@@ -829,21 +803,20 @@ function displayStatistics(cases) {
  * Exporte les cas en format JSON
  */
 function exportJSON(cases, outputPath) {
-  console.log("\n💾 Export JSON...");
+  console.log('\n💾 Export JSON...');
 
   // Préparer structure finale
   const output = {
     metadata: {
-      generator: "ThermaFlow External Validation Sample Generator",
-      version: "1.0.1",
-      date: new Date().toISOString().split("T")[0],
+      generator: 'ThermaFlow External Validation Sample Generator',
+      version: '1.0.1',
+      date: new Date().toISOString().split('T')[0],
       total_cases: cases.length,
-      description:
-        "Échantillon pour validation croisée avec Aspen Hysys, AFT Fathom, DWSIM",
+      description: 'Échantillon pour validation croisée avec Aspen Hysys, AFT Fathom, DWSIM',
       sampling_strategy: {
         critical_cases: CONFIG.criticalCases,
         lhs_cases: CONFIG.lhsCases,
-        method: "Grille systématique + Latin Hypercube Sampling",
+        method: 'Grille systématique + Latin Hypercube Sampling',
       },
       ranges: CONFIG.ranges,
       nps_ranges: CONFIG.npsRanges,
@@ -852,32 +825,32 @@ function exportJSON(cases, outputPath) {
       ...c,
       outputs: {
         aspen_hysys: {
-          status: "not_run",
+          status: 'not_run',
           T_out_C: null,
           pressure_drop_kPa: null,
           heat_loss_W: null,
-          notes: "",
+          notes: '',
         },
         aft_fathom: {
-          status: "not_run",
+          status: 'not_run',
           T_out_C: null,
           pressure_drop_kPa: null,
           heat_loss_W: null,
-          notes: "",
+          notes: '',
         },
         dwsim: {
-          status: "not_run",
+          status: 'not_run',
           T_out_C: null,
           pressure_drop_kPa: null,
           heat_loss_W: null,
-          notes: "",
+          notes: '',
         },
         thermaflow: {
-          status: "not_run",
+          status: 'not_run',
           T_out_C: null,
           pressure_drop_kPa: null,
           heat_loss_W: null,
-          notes: "",
+          notes: '',
         },
       },
     })),
@@ -891,25 +864,17 @@ function exportJSON(cases, outputPath) {
   }
 
   // Écrire fichier
-  fs.writeFileSync(outputPath, JSON.stringify(output, null, 2), "utf8");
+  fs.writeFileSync(outputPath, JSON.stringify(output, null, 2), 'utf8');
   console.log(`✅ Fichier créé: ${outputPath}`);
-  console.log(
-    `   Taille: ${(fs.statSync(outputPath).size / 1024).toFixed(1)} KB`,
-  );
+  console.log(`   Taille: ${(fs.statSync(outputPath).size / 1024).toFixed(1)} KB`);
 }
 
 // ========== MAIN ==========
 
 function main() {
-  console.log(
-    "╔═══════════════════════════════════════════════════════════════╗",
-  );
-  console.log(
-    "║   ThermaFlow External Validation Sample Generator v1.0.1     ║",
-  );
-  console.log(
-    "╚═══════════════════════════════════════════════════════════════╝",
-  );
+  console.log('╔═══════════════════════════════════════════════════════════════╗');
+  console.log('║   ThermaFlow External Validation Sample Generator v1.0.1     ║');
+  console.log('╚═══════════════════════════════════════════════════════════════╝');
 
   // 1. Générer cas critiques
   const criticalCases = generateCriticalCases();
@@ -924,7 +889,7 @@ function main() {
   // 4. Valider
   const valid = validateAllCases(allCases);
   if (!valid) {
-    console.error("\n❌ Validation échouée. Arrêt.");
+    console.error('\n❌ Validation échouée. Arrêt.');
     process.exit(1);
   }
 
@@ -934,21 +899,21 @@ function main() {
   // 6. Export
   const outputPath = path.join(
     __dirname,
-    "..",
-    "validation",
-    "external_validation_sample_v1.0.1.json",
+    '..',
+    'validation',
+    'external_validation_sample_v1.0.1.json'
   );
   exportJSON(allCases, outputPath);
 
-  console.log("\n✅ Génération terminée avec succès!");
-  console.log("\n📋 Prochaines étapes:");
-  console.log("   1. Ouvrir le fichier JSON généré");
-  console.log("   2. Pour chaque cas, noter les résultats de:");
-  console.log("      - Aspen Hysys");
-  console.log("      - AFT Fathom");
-  console.log("      - DWSIM");
-  console.log("      - ThermaFlow (webapp)");
-  console.log("   3. Analyser les écarts statistiques\n");
+  console.log('\n✅ Génération terminée avec succès!');
+  console.log('\n📋 Prochaines étapes:');
+  console.log('   1. Ouvrir le fichier JSON généré');
+  console.log('   2. Pour chaque cas, noter les résultats de:');
+  console.log('      - Aspen Hysys');
+  console.log('      - AFT Fathom');
+  console.log('      - DWSIM');
+  console.log('      - ThermaFlow (webapp)');
+  console.log('   3. Analyser les écarts statistiques\n');
 }
 
 // Exécuter

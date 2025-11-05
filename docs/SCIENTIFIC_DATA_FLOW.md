@@ -191,24 +191,25 @@ Ce document trace le cheminement complet des données de l'input utilisateur jus
 
 ThermaFlow utilise exclusivement les **unités SI** dans tous les calculs internes. Les conversions depuis l'interface utilisateur sont:
 
-| Grandeur | Input utilisateur | Conversion | Unité SI calcul |
-|----------|-------------------|------------|-----------------|
-| Température eau | °C | *aucune* | °C (puis K si nécessaire) |
-| Température air | °C | *aucune* | °C (puis K si nécessaire) |
-| Pression | bar | × 1×10⁵ | Pa |
-| Diamètre | mm | × 1×10⁻³ | m |
-| Longueur | m | *aucune* | m |
-| Débit | kg/s | *aucune* | kg/s |
-| Épaisseur isolation | mm | × 1×10⁻³ | m |
+| Grandeur            | Input utilisateur | Conversion | Unité SI calcul           |
+| ------------------- | ----------------- | ---------- | ------------------------- |
+| Température eau     | °C                | _aucune_   | °C (puis K si nécessaire) |
+| Température air     | °C                | _aucune_   | °C (puis K si nécessaire) |
+| Pression            | bar               | × 1×10⁵    | Pa                        |
+| Diamètre            | mm                | × 1×10⁻³   | m                         |
+| Longueur            | m                 | _aucune_   | m                         |
+| Débit               | kg/s              | _aucune_   | kg/s                      |
+| Épaisseur isolation | mm                | × 1×10⁻³   | m                         |
 
 ### Conversions température (°C ↔ K)
 
 Les conversions °C → K sont appliquées **uniquement quand nécessaire**:
 
 - **Radiation** (h_rad): Conversion obligatoire car σ en [W/(m²·K⁴)]
+
   ```javascript
   T_K = T_C + 273.15;
-  h_rad = emissivity * STEFAN_BOLTZMANN * (T1_K**2 + T2_K**2) * (T1_K + T2_K);
+  h_rad = emissivity * STEFAN_BOLTZMANN * (T1_K ** 2 + T2_K ** 2) * (T1_K + T2_K);
   ```
 
 - **Propriétés fluides**: Tables en °C, pas de conversion
@@ -218,9 +219,11 @@ Les conversions °C → K sont appliquées **uniquement quand nécessaire**:
 ### Exemple de flow complet d'unités
 
 **Input utilisateur**:
+
 - T_eau = 60°C, P = 2.5 bar, DN50 (52.5 mm ID), L = 100m, débit = 0.5 kg/s
 
 **Après conversion**:
+
 - T_eau = 60°C (conservé)
 - P = 2.5 × 10⁵ = 250000 Pa
 - D = 0.0525 m
@@ -228,31 +231,38 @@ Les conversions °C → K sont appliquées **uniquement quand nécessaire**:
 - m_dot = 0.5 kg/s (conservé)
 
 **Lookup propriétés** (water-properties.js):
+
 - getWaterProperties(60, 2.5) → {rho: 983.2 kg/m³, mu: 4.67e-4 Pa·s, k: 0.651 W/(m·K), cp: 4185 J/(kg·K)}
 
 **Calcul Reynolds** (reynolds.js):
+
 - V = m_dot / (rho × A) = 0.5 / (983.2 × π×0.0525²/4) = 0.232 m/s
 - Re = (983.2 × 0.232 × 0.0525) / (4.67e-4) = **25 583** [-]
 
 **Calcul friction** (friction-factor.js):
+
 - Re > 4000 → Turbulent
 - Churchill: f = **0.0262** [-]
 
 **Perte de charge** (pressure-basic.js):
+
 - ΔP = 0.0262 × (100/0.0525) × (983.2 × 0.232²/2) = **656 Pa** (0.00656 bar)
 
 **Convection interne** (nusselt-internal.js):
+
 - Pr = (cp × μ) / k = (4185 × 4.67e-4) / 0.651 = 3.00
 - Gnielinski: Nu = **139.6** [-]
 - h_int = Nu × k / D = 139.6 × 0.651 / 0.0525 = **1728 W/(m²·K)**
 
 **Transfert thermique** (NTU-ε):
+
 - UA calculé depuis résistances thermiques
 - NTU = UA / (m_dot × cp)
 - T_out calculé
 - Q_loss = m_dot × cp × (T_in - T_out) **[W]**
 
 **Output utilisateur**:
+
 - T_out en °C
 - ΔP en Pa (ou converti en bar pour affichage)
 - Q_loss en W (ou kW pour affichage)
@@ -264,18 +274,21 @@ Les conversions °C → K sont appliquées **uniquement quand nécessaire**:
 ### Données de base (data/)
 
 **data/fluids/water-tables.js**
+
 - Source: **IAPWS-97** (International Association for the Properties of Water and Steam)
 - URL: https://iapws.readthedocs.io/
 - Plage: T = 0-100°C, P = 1-10 bar
 - Propriétés: ρ, μ, k, cp (grille 11×10 = 110 points)
 
 **data/fluids/air-tables.js**
+
 - Source: Corrélations standards (Sutherland, gaz parfait)
 - Référence: Perry's Handbook Section 2 (Physical and Chemical Data)
 - Plage: T = -50 à +50°C, P = 1 atm
 - Propriétés: ρ, μ, k, cp, Pr (grille 21 points)
 
 **data/materials/properties.js**
+
 - Source: **Perry's Handbook Table 2-314** (Thermal conductivities of materials)
 - Source: ASHRAE Fundamentals Handbook
 - Source: Incropera & DeWitt, "Fundamentals of Heat and Mass Transfer"
@@ -283,6 +296,7 @@ Les conversions °C → K sont appliquées **uniquement quand nécessaire**:
 - 17 matériaux validés (acier, cuivre, inox, isolants)
 
 **data/pipes/roughness.js**
+
 - Source: **Perry's Handbook Table 6-7** (Roughness factors for pipes)
 - Source: Moody Diagram (L.F. Moody, 1944)
 - Référence: fluids.readthedocs.io/fluids.friction.html
@@ -291,18 +305,21 @@ Les conversions °C → K sont appliquées **uniquement quand nécessaire**:
 ### Formules de base (js/formulas/)
 
 **reynolds.js**
+
 - Équation: Re = ρVD/μ
 - Référence: **Perry's Section 6-3** (Reynolds number)
 - Référence: fluids.readthedocs.io/fluids.core.html#fluids.core.Reynolds
 - Régimes: Laminaire (< 2300), Transitoire (2300-4000), Turbulent (> 4000)
 
 **geometry.js**
+
 - Aire: A = πD²/4
 - Vitesse: V = Q/A = (4m_dot)/(ρπD²)
 - Périmètre: P = πD
 - Standard engineering formulas
 
 **pressure-basic.js**
+
 - Équation de Darcy-Weisbach: ΔP = f × (L/D) × (ρV²/2)
 - Référence: **Perry's Section 6-4** (Pressure drop in pipes)
 - f = facteur de friction de Darcy [-]
@@ -311,49 +328,57 @@ Les conversions °C → K sont appliquées **uniquement quand nécessaire**:
 
 **friction-factor.js**
 
-*Laminaire (Re < 2300)*:
+_Laminaire (Re < 2300)_:
+
 - Équation: f = 64/Re
 - Référence: **Perry's Section 6-4**
 - Valide: Conduite circulaire, écoulement laminaire pleinement développé
 
-*Turbulent - Colebrook-White (Re > 4000)*:
+_Turbulent - Colebrook-White (Re > 4000)_:
+
 - Équation implicite: 1/√f = -2.0 log₁₀(ε/D/3.7 + 2.51/(Re√f))
 - Référence: **Perry's Section 6-4, Table 6-7**
 - Référence: Colebrook, C.F. (1939), "Turbulent Flow in Pipes"
 - Méthode: Itération point fixe, estimation initiale Swamee-Jain
 - Standard industriel, correspond exactement au diagramme de Moody
 
-*Turbulent - Churchill (Re > 4000)*:
+_Turbulent - Churchill (Re > 4000)_:
+
 - Équation explicite (pas d'itération)
 - Référence: Churchill, S.W. (1977), Chemical Engineering, Nov. 7, 1977
 - Référence: **Perry's Section 6-4**
 - Bonne approximation de Colebrook (< 1% différence)
 
-*Zone transitoire (2300 < Re < 4000)*:
+_Zone transitoire (2300 < Re < 4000)_:
+
 - Interpolation linéaire entre f_lam(2300) et f_turb(4000)
 - **Incertitude: ±30%** (zone physiquement instable)
 - Référence: Cengel & Cimbala, "Fluid Mechanics", Chapter 8
 
 **nusselt-internal.js**
 
-*Laminaire pleinement développé*:
+_Laminaire pleinement développé_:
+
 - Nu = 3.66 (température paroi constante)
 - Nu = 4.36 (flux thermique constant)
 - Référence: **Perry's Section 5-12**
 - Valide: Re < 2300, L/D > 100
 
-*Hausen (laminaire avec effet d'entrée)*:
+_Hausen (laminaire avec effet d'entrée)_:
+
 - Équation: Nu = 3.66 + (0.0668 × (D/L) × Re × Pr) / (1 + 0.04 × [(D/L) × Re × Pr]^(2/3))
 - Référence: **Perry's Section 5-12**
 - Référence: VDI Heat Atlas
 - Valide: Re < 2300, Pr > 0.6
 
-*Dittus-Boelter (turbulent standard)*:
+_Dittus-Boelter (turbulent standard)_:
+
 - Équation: Nu = 0.023 × Re^0.8 × Pr^n (n=0.4 chauffage, n=0.3 refroidissement)
 - Référence: **Perry's Section 5-12**
 - Valide: Re > 10000, 0.7 < Pr < 160, L/D > 10
 
-*Gnielinski (turbulent amélioré)*:
+_Gnielinski (turbulent amélioré)_:
+
 - Équation: Nu = (f/8)(Re-1000)Pr / (1 + 12.7√(f/8)(Pr^(2/3)-1))
 - Référence: **Perry's Section 5-12**
 - Référence: Gnielinski, V. (1976), "New equations for heat and mass transfer"
@@ -362,19 +387,22 @@ Les conversions °C → K sont appliquées **uniquement quand nécessaire**:
 
 **nusselt-external.js**
 
-*Churchill-Bernstein (cylindre en écoulement croisé)*:
+_Churchill-Bernstein (cylindre en écoulement croisé)_:
+
 - Équation complexe (voir code pour formulation complète)
 - Référence: **Perry's Section 5-13** (External flow convection)
 - Référence: Churchill & Bernstein (1977), "Correlating equations for forced convection"
 - Valide: Large plage de Re et Pr
 
-*Richardson Number (convection mixte)*:
+_Richardson Number (convection mixte)_:
+
 - Ri = Gr / Re² (ratio convection naturelle / forcée)
 - Si Ri > 0.1: convection mixte (forcée + naturelle)
 - Référence: Bergman et al., "Fundamentals of Heat and Mass Transfer"
 - Correction: Nu_mixed = Nu_forced + Nu_natural (cas conservatif)
 
 **radiation.js**
+
 - Équation linéarisée: h_rad = εσ(T₁²+T₂²)(T₁+T₂)
 - Constante Stefan-Boltzmann: σ = 5.67×10⁻⁸ W/(m²·K⁴)
 - Référence: **Perry's Section 5-17** (Radiation heat transfer)
@@ -384,10 +412,12 @@ Les conversions °C → K sont appliquées **uniquement quand nécessaire**:
 ### Calculs composés (js/calculations/)
 
 **pressure-drop.js**
+
 - Orchestration: ρ,V,D,μ → Re → f → ΔP
 - Combine: reynolds.js + friction-factor.js + pressure-basic.js
 
 **thermal-resistance.js**
+
 - Résistance convection: R_conv = 1/(h × A) [K/W]
 - Résistance conduction cylindre: R_cyl = ln(r₂/r₁)/(2πkL) [K/W]
 - Référence: **Perry's Section 5-3** (Conduction heat transfer)
@@ -395,11 +425,12 @@ Les conversions °C → K sont appliquées **uniquement quand nécessaire**:
 - Coefficient global: U = 1/(R_total × A_ref) [W/(m²·K)]
 
 **heat-transfer.js**
+
 - Méthode NTU-ε (Number of Transfer Units - Effectiveness)
 - Référence: **Perry's Section 5-18** (Heat exchangers)
 - Équations:
   - NTU = UA / (m_dot × cp)
-  - ε = 1 - exp(-NTU)  (échangeur à T_amb constante)
+  - ε = 1 - exp(-NTU) (échangeur à T_amb constante)
   - T_out = T_amb + (T_in - T_amb) × (1 - ε)
   - Q_loss = m_dot × cp × (T_in - T_out)
 - Avantage vs LMTD: Formule explicite pour T_out, pas d'itération
@@ -407,6 +438,7 @@ Les conversions °C → K sont appliquées **uniquement quand nécessaire**:
 ### Moteur de simulation (js/engine/)
 
 **pipe-segment.js**
+
 - Intégration complète de tous les modules Phase 1-5
 - **Itération sur T_moy** (amélioration v1.0):
   - Itération 1: Propriétés à T_in (estimation)
@@ -416,13 +448,15 @@ Les conversions °C → K sont appliquées **uniquement quand nécessaire**:
 - Référence: Méthode standard pour calculs segments thermiques
 
 **pipe-network.js**
-- Propagation température: T_out_i → T_in_(i+1)
+
+- Propagation température: T*out_i → T_in*(i+1)
 - Détection gel: Si T_out ≤ 0°C → figé à 0°C, flag frozenDetected
 - Accumulation: ΣΔP, ΣQ_loss
 
 **freeze-detector.js**
+
 - Interpolation linéaire position gel entre segments i et i+1:
-  - x_freeze = x_i + Δx × (T_i - 0)/(T_i - T_(i+1))
+  - x*freeze = x_i + Δx × (T_i - 0)/(T_i - T*(i+1))
 - Calcul marge sécurité: margin = T_final - 0°C
 - Verdict: 'FREEZE_RISK' ou 'NO_FREEZE'
 
@@ -433,6 +467,7 @@ Les conversions °C → K sont appliquées **uniquement quand nécessaire**:
 ### Validation des entrées (js/ui/input-form.js)
 
 **Plages physiques vérifiées**:
+
 - Température eau: 1-100°C (limite IAPWS-97)
 - Température air: -50 à +30°C (limite tables air)
 - Pression: 1-10 bar (limite IAPWS-97)
@@ -446,16 +481,19 @@ Les conversions °C → K sont appliquées **uniquement quand nécessaire**:
 ### Validation des calculs (dans chaque module)
 
 **Checks systématiques**:
+
 ```javascript
 if (typeof param !== 'number' || !isFinite(param)) {
   throw new Error(`Paramètre invalide: ${param}`);
 }
-if (param <= 0) {  // ou autre contrainte physique
+if (param <= 0) {
+  // ou autre contrainte physique
   throw new Error(`Paramètre doit être > 0: ${param}`);
 }
 ```
 
 **Limites de validité documentées**:
+
 - Reynolds: Warnings si Re transitoire (2300-4000)
 - Nusselt: Warnings si hors limites corrélation (ex: Gnielinski Re < 3000)
 - Température: Warnings si près limites IAPWS (< 5°C ou > 95°C)
@@ -463,6 +501,7 @@ if (param <= 0) {  // ou autre contrainte physique
 ### Validation croisée (tests/)
 
 **Tests unitaires** couvrant:
+
 - Propriétés fluides: Comparaison valeurs de référence (IAPWS, fluids.readthedocs.io)
 - Corrélations: Validation contre Perry's + fluids.readthedocs.io
 - Cas limites: Re=1000, Re=100000, T=0°C, T=100°C, etc.
@@ -474,16 +513,17 @@ if (param <= 0) {  // ou autre contrainte physique
 
 ### Constantes physiques
 
-| Constante | Valeur | Unité | Précision |
-|-----------|--------|-------|-----------|
-| Stefan-Boltzmann (σ) | 5.67×10⁻⁸ | W/(m²·K⁴) | 3 décimales |
-| π | Math.PI | - | Précision JS native |
-| RE_LAMINAR_MAX | 2300 | - | Entier (convention) |
-| RE_TURBULENT_MIN | 4000 | - | Entier (convention) |
+| Constante            | Valeur    | Unité     | Précision           |
+| -------------------- | --------- | --------- | ------------------- |
+| Stefan-Boltzmann (σ) | 5.67×10⁻⁸ | W/(m²·K⁴) | 3 décimales         |
+| π                    | Math.PI   | -         | Précision JS native |
+| RE_LAMINAR_MAX       | 2300      | -         | Entier (convention) |
+| RE_TURBULENT_MIN     | 4000      | -         | Entier (convention) |
 
 ### Propriétés matériaux (data/materials/properties.js)
 
 **Standards appliqués**:
+
 - Conductivité k: 1-3 décimales selon ordre de grandeur
   - Métaux (k > 10): 1 décimale (ex: 50.2 W/(m·K))
   - Isolants (k < 1): 3 décimales (ex: 0.038 W/(m·K))
@@ -494,12 +534,14 @@ if (param <= 0) {  // ou autre contrainte physique
 ### Résultats de calcul
 
 **Affichage UI**:
+
 - Température: 1-2 décimales (ex: 45.3°C, -12.45°C)
 - Perte de charge: Adapté à l'ordre de grandeur (0.05 bar, 500 Pa)
 - Perte thermique: 1-2 décimales (ex: 125.4 W, 12.34 kW)
 - Distance gel: 1 décimale (ex: 234.5 m)
 
 **Tests (tolérance)**:
+
 - Propriétés fluides: ±0.1% (ou ±1e-3 pour valeurs < 1)
 - Corrélations: ±1% (ou ±1e-6 pour facteurs < 0.1)
 - Bilan énergie: ±0.5%
@@ -509,22 +551,26 @@ if (param <= 0) {  // ou autre contrainte physique
 ## Optimisations et performance
 
 ### Recherche binaire (water-properties.js, air-properties.js)
+
 - Recherche linéaire remplacée par binaire pour grilles T et P
 - Gain: O(n) → O(log n)
 - Impact: Négligeable (grilles petites), mais bonne pratique
 
 ### Interpolation bilinéaire 2D
+
 - Eau: 2D (T, P)
 - Air: 1D (T seulement, P fixe 1 atm)
 - Performance: < 0.2 ms par lookup
 
 ### Itération température moyenne
+
 - Compromis précision / performance
 - 1 itération: Rapide mais -5 à -15% précision si ΔT élevé
 - 2 itérations: Optimal (défaut)
 - 3+ itérations: Amélioration < 1%, pas justifié
 
 ### Système de recalcul réactif (js/ui/calculation-manager.js)
+
 - Debouncing 300ms: Évite calculs pendant frappe
 - File d'attente avec priorités: IMMEDIATE > HIGH > LOW
 - Cache intelligent: -80% calculs inutiles
@@ -537,12 +583,14 @@ if (param <= 0) {  // ou autre contrainte physique
 ### Friction Factor (js/correlations/friction-factor.js)
 
 **Régime laminaire (Re < 2300)**:
+
 - Équation: f = 64/Re
 - Validité: Conduite circulaire, écoulement pleinement développé
 - Précision: Exacte (solution analytique)
 - **Aucune restriction** sur rugosité (effet négligeable en laminaire)
 
 **Colebrook-White (turbulent, Re > 4000)**:
+
 - Validité: Re > 4000, toute rugosité relative ε/D
 - Convergence: Typiquement 5-10 itérations (tolérance 1×10⁻⁶)
 - Précision: **Exacte** (équation de référence du diagramme de Moody)
@@ -550,12 +598,14 @@ if (param <= 0) {  // ou autre contrainte physique
 - Standard: Industrie mondiale (pétrole, procédés, HVAC)
 
 **Churchill (turbulent, Re > 2000)**:
+
 - Validité: Re > 2000
 - Précision: < 1% vs Colebrook sur plage Re 4000-10⁸
 - Avantage: **Explicite** (pas d'itération nécessaire)
 - Limitation: Légèrement moins précis que Colebrook en régime transitoire
 
 **Zone transitoire (2300 < Re < 4000)**:
+
 - Méthode: Interpolation linéaire entre f_lam(2300) et f_turb(4000)
 - **ATTENTION**: Zone physiquement instable (fluctuations turbulence)
 - **Incertitude: ±30%** sur friction factor
@@ -564,11 +614,13 @@ if (param <= 0) {  // ou autre contrainte physique
 ### Nusselt Internal (js/correlations/nusselt-internal.js)
 
 **Régime laminaire pleinement développé (Re < 2300)**:
+
 - Nu = 3.66 (T paroi constante) ou 4.36 (flux constant)
 - Validité stricte: Re < 2300, L/D > 100 (développement complet)
 - Précision: Exacte (solution analytique)
 
 **Hausen (laminaire avec effet d'entrée)**:
+
 - Équation: Nu = 3.66 + (0.0668×(D/L)×Re×Pr) / (1 + 0.04×[(D/L)×Re×Pr]^(2/3))
 - Validité: Re < 2300, Pr > 0.6
 - Inclut: Effet thermique d'entrée (Nu > 3.66 si L/D petit)
@@ -576,12 +628,14 @@ if (param <= 0) {  // ou autre contrainte physique
 - Référence: VDI Heat Atlas, Perry's Section 5-12
 
 **Dittus-Boelter (turbulent standard)**:
+
 - Équation: Nu = 0.023 × Re^0.8 × Pr^n (n=0.4 chauffage, n=0.3 refroidissement)
 - Validité stricte: Re > 10000, 0.7 < Pr < 160, L/D > 10
 - Limitation: Ne prend pas en compte rugosité
 - Usage: Conduite lisse uniquement
 
 **Gnielinski (turbulent amélioré)**:
+
 - Équation: Nu = (f/8)(Re-1000)Pr / (1 + 12.7√(f/8)(Pr^(2/3)-1))
 - Validité stricte: **3000 < Re < 5×10⁶**, 0.5 < Pr < 2000
 - Extension raisonnable: 2300 < Re < 3000 (avec prudence, warning généré)
@@ -590,12 +644,14 @@ if (param <= 0) {  // ou autre contrainte physique
 - **ATTENTION**: Si Re < 3000 → console.warn() émis
 
 **Zone transitoire convection (2300 < Re < 3000)**:
+
 - Interpolation linéaire entre Nu_lam(2300) et Nu_Gnielinski(3000)
 - Incertitude: ±15-20%
 
 ### Nusselt External (js/correlations/nusselt-external.js)
 
 **Churchill-Bernstein (cylindre en écoulement croisé)**:
+
 - Validité: **Re × Pr > 0.2**
 - Large plage Reynolds: Re = 0.1 à 10⁷
 - Géométrie: Cylindre en écoulement croisé **perpendiculaire**
@@ -603,6 +659,7 @@ if (param <= 0) {  // ou autre contrainte physique
 - Référence: Perry's Section 5-13, Churchill & Bernstein (1977)
 
 **Richardson Number (convection mixte forcée + naturelle)**:
+
 - Définition: Ri = Gr / Re²
 - Critère: Si Ri > 0.1 → convection mixte significative
 - Si Ri ≤ 0.1: Convection forcée domine (Nu_forced utilisé seul)
@@ -610,12 +667,14 @@ if (param <= 0) {  // ou autre contrainte physique
 - Référence: Bergman et al., "Fundamentals of Heat Transfer"
 
 **Limitation géométrie**:
+
 - ⚠️ Conduite horizontale → Gr basé sur D (OK)
 - ⚠️ Conduite verticale → Gr différent, corrélation non validée (non supporté actuellement)
 
 ### Radiation (js/correlations/radiation.js)
 
 **Linéarisation coefficient radiatif**:
+
 - Équation: h_rad = εσ(T₁²+T₂²)(T₁+T₂)
 - Validité: **ΔT < 100K** (linéarisation acceptable)
 - **CRITIQUE**: Températures DOIVENT être en **Kelvin**
@@ -623,11 +682,13 @@ if (param <= 0) {  // ou autre contrainte physique
 - **Erreur typique**: Oublier conversion °C → K → résultats complètement faux
 
 **Émissivité**:
+
 - Valeurs typiques: 0.8-0.95 (surfaces non métalliques)
 - Métaux polis: 0.02-0.10 (radiation négligeable)
 - Source: Perry's Table 5-17, ASHRAE Fundamentals
 
 **Si ΔT > 100K**:
+
 - Utiliser équation complète: Q_rad = εσA(T₁⁴ - T₂⁴)
 - ThermaFlow utilise linéarisation → léger biais si ΔT très grand
 
@@ -638,21 +699,25 @@ if (param <= 0) {  // ou autre contrainte physique
 ### Limites actuelles du modèle
 
 **Fluide**:
+
 - ✅ Eau pure uniquement
 - ❌ Glycol (eau + éthylène glycol) non supporté
 - ❌ Autres fluides non supportés
 
 **Régime**:
+
 - ✅ Permanent (état stationnaire)
 - ❌ Transitoire (variation temporelle) non supporté
 
 **Géométrie**:
+
 - ✅ Conduite droite horizontale
 - ❌ Conduites verticales (effet gravité) non supporté
 - ❌ Coudes, raccords, vannes: Pertes singulières non prises en compte
 - ❌ Réseaux complexes (branches) non supportés
 
 **Plages de validité**:
+
 - Température eau: 1-100°C (IAPWS-97)
 - Température air: -50 à +30°C (tables air)
 - Pression: 1-10 bar (IAPWS-97)
@@ -661,33 +726,37 @@ if (param <= 0) {  // ou autre contrainte physique
 ### Zones d'incertitude
 
 **Régime transitoire (2300 < Re < 4000)**:
+
 - Friction factor: **±30%** (zone physiquement instable)
 - Recommandation: Facteur de sécurité 1.5 pour applications critiques
 
 **Sans isolation**:
+
 - Sous-estimation possible: **5-15%** sur Q_loss
 - Cause: Convection naturelle externe peut être sous-estimée
 - Recommandation: Facteur 1.2 pour applications sans marge
 
 **Températures extrêmes**:
+
 - Eau 0-5°C ou 80-100°C: Propriétés près limites tables
 - Air < -30°C: Extrapolation au-delà données mesurées
 - Recommandation: Facteur 1.3
 
 **Grande variation ΔT**:
+
 - ΔT > 30K par segment: Propriétés fluides varient significativement
 - Solution: Augmenter nombre de segments (→ ΔT plus petit)
 - Ou: Augmenter itérations T_moy (défaut 2 → 3 ou 4)
 
 ### Facteurs de sécurité recommandés
 
-| Condition | Application critique | Application standard |
-|-----------|---------------------|---------------------|
-| Conditions idéales (Re 4000-100k, ΔT<10K) | 1.0-1.1 | 1.0 |
-| Régime transitoire (Re 2300-4000) | 1.5-2.0 | 1.5 |
-| Sans isolation | 1.2-1.5 | 1.2 |
-| Températures extrêmes | 1.3-1.5 | 1.3 |
-| ΔT élevé (>30K par segment) | 1.2-1.3 | 1.2 |
+| Condition                                 | Application critique | Application standard |
+| ----------------------------------------- | -------------------- | -------------------- |
+| Conditions idéales (Re 4000-100k, ΔT<10K) | 1.0-1.1              | 1.0                  |
+| Régime transitoire (Re 2300-4000)         | 1.5-2.0              | 1.5                  |
+| Sans isolation                            | 1.2-1.5              | 1.2                  |
+| Températures extrêmes                     | 1.3-1.5              | 1.3                  |
+| ΔT élevé (>30K par segment)               | 1.2-1.3              | 1.2                  |
 
 **Application**: Si longueur critique calculée = 200m avec Re transitoire (incertitude ±30%):
 → Longueur sécuritaire = 200 / 1.5 = **133m**
@@ -697,6 +766,7 @@ if (param <= 0) {  // ou autre contrainte physique
 ## Pour aller plus loin
 
 ### Documentation dans le code
+
 - Chaque module contient JSDoc complet avec:
   - Description détaillée
   - Références scientifiques précises
@@ -705,11 +775,13 @@ if (param <= 0) {  // ou autre contrainte physique
   - Tests associés
 
 ### Validation expérimentale
+
 - Comparaison avec cas réels documentés recommandée
 - Tests sur installations existantes avec mesures terrain
 - Calibration facteurs sécurité selon expérience
 
 ### Extensions futures possibles
+
 - Support fluides avec glycol (corrélations additionnelles requises)
 - Analyse transitoire (équations différentielles temporelles)
 - Optimisation automatique (épaisseur isolation minimale)
@@ -721,4 +793,3 @@ if (param <= 0) {  // ou autre contrainte physique
 **Document rédigé pour**: Ingénieurs en piping et procédés  
 **Version**: 1.0.1  
 **Dernière mise à jour**: 29 octobre 2025
-

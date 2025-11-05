@@ -1,14 +1,14 @@
 /**
  * test_gnielinski_roughness.js
- * 
- * Tests validant l'amélioration v1.1: paramètre friction factor optionnel 
+ *
+ * Tests validant l'amélioration v1.1: paramètre friction factor optionnel
  * dans nusseltGnielinski pour conduite rugueuse.
- * 
+ *
  * Valide:
  * - Différence Nu avec f lisse (Petukhov) vs f rugueux (Churchill)
  * - Impact sur h_conv et Q_loss
  * - Warning émis si f non fourni
- * 
+ *
  * Exécution: node tests/test_gnielinski_roughness.js
  */
 
@@ -23,7 +23,7 @@ let testsFailed = 0;
 function assertClose(actual, expected, tolerance = 0.01, message = '') {
   testsRun++;
   const relativeError = Math.abs((actual - expected) / expected);
-  
+
   if (relativeError <= tolerance) {
     testsPassed++;
     console.log(`  ✓ ${message}`);
@@ -31,7 +31,9 @@ function assertClose(actual, expected, tolerance = 0.01, message = '') {
   } else {
     testsFailed++;
     console.log(`  ✗ ${message}`);
-    console.log(`    Attendu: ${expected}, Obtenu: ${actual}, Erreur: ${(relativeError * 100).toFixed(2)}%`);
+    console.log(
+      `    Attendu: ${expected}, Obtenu: ${actual}, Erreur: ${(relativeError * 100).toFixed(2)}%`
+    );
     return false;
   }
 }
@@ -57,30 +59,39 @@ console.log('Test 1: Conduite lisse (ε/D = 0) - f Petukhov vs Churchill < 2% é
 const Re_smooth = 50000;
 const epsilon_D_smooth = 0.0;
 const f_churchill_smooth = friction.frictionFactorChurchill(Re_smooth, epsilon_D_smooth);
-const f_petukhov = Math.pow(0.79 * Math.log(Re_smooth) - 1.64, -2);  // Formule Petukhov
+const f_petukhov = Math.pow(0.79 * Math.log(Re_smooth) - 1.64, -2); // Formule Petukhov
 
-assertClose(f_churchill_smooth, f_petukhov, 0.02, `f Churchill (${f_churchill_smooth.toFixed(6)}) ≈ f Petukhov (${f_petukhov.toFixed(6)})`);
+assertClose(
+  f_churchill_smooth,
+  f_petukhov,
+  0.02,
+  `f Churchill (${f_churchill_smooth.toFixed(6)}) ≈ f Petukhov (${f_petukhov.toFixed(6)})`
+);
 
 console.log('\nTest 2: Conduite rugueuse (ε/D = 0.001) - f Churchill avec rugosité');
 const Re_rough = 50000;
-const epsilon_D_rough = 0.001;  // Acier commercial
+const epsilon_D_rough = 0.001; // Acier commercial
 const f_churchill_rough = friction.frictionFactorChurchill(Re_rough, epsilon_D_rough);
 
 // f rugueux devrait être significativement > f lisse
-assertGreater(f_churchill_rough, f_churchill_smooth, `f rugueux (${f_churchill_rough.toFixed(6)}) > f lisse (${f_churchill_smooth.toFixed(6)})`);
+assertGreater(
+  f_churchill_rough,
+  f_churchill_smooth,
+  `f rugueux (${f_churchill_rough.toFixed(6)}) > f lisse (${f_churchill_smooth.toFixed(6)})`
+);
 
 console.log('\nTest 3: Gnielinski avec f lisse vs f rugueux - Nu différence 15-25%');
-const Pr = 7.0;  // Eau à 20°C
+const Pr = 7.0; // Eau à 20°C
 
 // Gnielinski sans f (Petukhov par défaut)
 let warningEmitted = false;
 const originalWarn = console.warn;
-console.warn = function(...args) {
+console.warn = function (...args) {
   if (args[0] && args[0].includes('friction factor lisse')) {
     warningEmitted = true;
   }
 };
-const Nu_smooth_default = nusseltInt.nusseltGnielinski(Re_rough, Pr);  // Sans f → Petukhov
+const Nu_smooth_default = nusseltInt.nusseltGnielinski(Re_rough, Pr); // Sans f → Petukhov
 console.warn = originalWarn;
 
 // Gnielinski avec f rugueux explicite
@@ -131,12 +142,12 @@ if (warningEmitted) {
 
 console.log('\nTest 8: Gnielinski avec f fourni - pas de warning');
 let warningEmitted2 = false;
-console.warn = function(...args) {
+console.warn = function (...args) {
   if (args[0] && args[0].includes('friction factor lisse')) {
     warningEmitted2 = true;
   }
 };
-nusseltInt.nusseltGnielinski(Re_rough, Pr, f_churchill_rough);  // Avec f
+nusseltInt.nusseltGnielinski(Re_rough, Pr, f_churchill_rough); // Avec f
 console.warn = originalWarn;
 
 testsRun++;
@@ -150,15 +161,20 @@ if (!warningEmitted2) {
 
 console.log('\nTest 9: Impact sur h_conv (proportionnel à Nu)');
 // h = Nu × k / D
-const k_water = 0.6;  // W/(m·K) pour eau à 20°C
-const D = 0.05;  // m
+const k_water = 0.6; // W/(m·K) pour eau à 20°C
+const D = 0.05; // m
 
 const h_smooth = (Nu_smooth_default * k_water) / D;
 const h_rough = (Nu_rough * k_water) / D;
 
 const diff_h = ((h_rough - h_smooth) / h_smooth) * 100;
 
-assertClose(diff_h, diff_pct, 0.01, `Différence h_conv = différence Nu: ${diff_h.toFixed(1)}% ≈ ${diff_pct.toFixed(1)}%`);
+assertClose(
+  diff_h,
+  diff_pct,
+  0.01,
+  `Différence h_conv = différence Nu: ${diff_h.toFixed(1)}% ≈ ${diff_pct.toFixed(1)}%`
+);
 
 console.log('\nTest 10: Impact sur Q_loss segment complet (cascade)');
 // Q = h × A × ΔT, donc différence h → différence Q
@@ -166,15 +182,20 @@ console.log('\nTest 10: Impact sur Q_loss segment complet (cascade)');
 // Si h augmente de 15-25%, Q_loss augmente aussi de 15-25%
 // (pour même ΔT, même géométrie)
 
-const A = Math.PI * D * 10;  // Surface 10m de conduite
-const DT_log_mean = 50;  // K (exemple)
+const A = Math.PI * D * 10; // Surface 10m de conduite
+const DT_log_mean = 50; // K (exemple)
 
 const Q_smooth = h_smooth * A * DT_log_mean;
 const Q_rough = h_rough * A * DT_log_mean;
 
 const diff_Q = ((Q_rough - Q_smooth) / Q_smooth) * 100;
 
-assertClose(diff_Q, diff_pct, 0.01, `Différence Q_loss = différence Nu/h: ${diff_Q.toFixed(1)}% ≈ ${diff_pct.toFixed(1)}%`);
+assertClose(
+  diff_Q,
+  diff_pct,
+  0.01,
+  `Différence Q_loss = différence Nu/h: ${diff_Q.toFixed(1)}% ≈ ${diff_pct.toFixed(1)}%`
+);
 
 // ===== RÉSUMÉ =====
 console.log('\n\n' + '='.repeat(60));
@@ -188,4 +209,3 @@ console.log('='.repeat(60));
 
 // Code de sortie
 process.exit(testsFailed > 0 ? 1 : 0);
-

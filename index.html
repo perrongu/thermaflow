@@ -1,485 +1,648 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="ThermaFlow - Détection du risque de gel dans les conduites d'eau">
-  <title>ThermaFlow - Risque de gel dans les conduites</title>
-  
-  <!-- Styles -->
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/components.css">
-  
-  <!-- KaTeX pour rendu mathématique (Section 3) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-</head>
-<body>
-  <!-- Header -->
-  <header class="header">
-    <div class="container">
-      <h1 class="header__title" data-i18n="app.title">❄️ ThermaFlow</h1>
-      <p class="header__subtitle" data-i18n="app.subtitle">Détection du risque de gel dans les conduites d'eau</p>
-      <div class="header__status-container">
-        <span id="calc-status-badge" class="calc-status-badge" style="display: none;"></span>
-        <select id="lang-select" class="lang-dropdown" data-i18n-attr="aria-label" data-i18n="header.langAria" aria-label="Langue">
-          <option value="fr" selected>FR</option>
-          <option value="en">EN</option>
-          <option value="es">ES</option>
-          <option value="pt">PT</option>
-        </select>
-      </div>
-    </div>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="ThermaFlow - Détection du risque de gel dans les conduites d'eau"
+    />
+    <title>ThermaFlow - Risque de gel dans les conduites</title>
 
-  <!-- Main Content -->
-  <main class="main">
-    <div class="container">
-      
-      <!-- Schéma de tuyauterie avec disposition intégrée -->
-      <div class="diagram-wrapper">
-      <!-- Ligne du haut: Contrôles de tuyau -->
-      <div class="diagram-controls-top">
-        <div class="diagram-controls-left">
-          <div class="control-inline">
-            <label class="control-inline__label" data-i18n="controls.material">MATÉRIEL:</label>
-            <select id="pipe-material" class="control-inline__input" required>
-              <option value="steel" data-i18n="materials.steel">Acier</option>
-              <option value="copper" data-i18n="materials.copper">Cuivre</option>
-              <option value="stainless_steel" data-i18n="materials.stainless_steel">Acier inoxydable</option>
-            </select>
-          </div>
-          <div class="control-inline">
-            <label class="control-inline__label" id="pipe-schedule-label" data-i18n="controls.schedule">SCHEDULE:</label>
-            <select id="pipe-schedule" class="control-inline__input" required>
-              <!-- Rempli dynamiquement -->
-            </select>
-          </div>
-          <div class="control-inline">
-            <label class="control-inline__label" data-i18n="controls.nps">NPS:</label>
-            <select id="pipe-nps" class="control-inline__input" required>
-              <!-- Rempli dynamiquement -->
-            </select>
-          </div>
-        </div>
-        
-        <div class="diagram-controls-right">
-          <div class="control-inline">
-            <label class="form__checkbox" style="margin: 0; cursor: pointer;">
-              <input type="checkbox" id="has-insulation" style="width: 1.25rem; height: 1.25rem; cursor: pointer;">
-              <span style="font-size: 12px; font-weight: 600; color: #374151;" data-i18n="insulation.checkbox">La conduite est isolée</span>
-            </label>
-          </div>
-          
-          <!-- Champs d'isolation (visibles seulement si case cochée) -->
-          <div id="insulation-fields-diagram" style="display: none; gap: 12px; margin-left: 20px;">
-            <div class="control-inline">
-              <label class="control-inline__label" data-i18n="insulation.materialLabel" style="font-size: 11px;">Matériau isolation</label>
-              <select id="insulation-material" class="control-inline__input" style="min-width: 160px;">
-                <option value="fiberglass" selected data-i18n="insulation.materials.fiberglass">Laine de verre</option>
-                <option value="mineral_wool" data-i18n="insulation.materials.rockwool">Laine de roche</option>
-                <option value="polyurethane_foam" data-i18n="insulation.materials.foam">Mousse polyuréthane</option>
-                <option value="polystyrene_extruded" data-i18n="insulation.materials.polystyrene">Polystyrène extrudé (XPS)</option>
-                <option value="elastomeric_foam" data-i18n="insulation.materials.elastomeric">Mousse élastomère</option>
-              </select>
-            </div>
-            
-            <div class="control-inline">
-              <label class="control-inline__label" data-i18n="insulation.thicknessLabel" style="font-size: 11px;">Épaisseur (mm)</label>
-              <input type="number" id="insulation-thickness" class="control-inline__input" 
-                     min="5" max="100" step="5" value="20" style="width: 90px;">
-            </div>
-          </div>
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/components.css" />
+
+    <!-- KaTeX pour rendu mathématique (Section 3) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    ></script>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="container">
+        <h1 class="header__title" data-i18n="app.title">❄️ ThermaFlow</h1>
+        <p class="header__subtitle" data-i18n="app.subtitle">
+          Détection du risque de gel dans les conduites d'eau
+        </p>
+        <div class="header__status-container">
+          <span id="calc-status-badge" class="calc-status-badge" style="display: none"></span>
+          <select
+            id="lang-select"
+            class="lang-dropdown"
+            data-i18n-attr="aria-label"
+            data-i18n="header.langAria"
+            aria-label="Langue"
+          >
+            <option value="fr" selected>FR</option>
+            <option value="en">EN</option>
+            <option value="es">ES</option>
+            <option value="pt">PT</option>
+          </select>
         </div>
       </div>
-        
-        <!-- Schéma central (les inputs EAU et AIR sont intégrés dans le SVG via foreignObject) -->
-        <div class="diagram-center">
-          <div id="pipe-diagram-container"></div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+      <div class="container">
+        <!-- Schéma de tuyauterie avec disposition intégrée -->
+        <div class="diagram-wrapper">
+          <!-- Ligne du haut: Contrôles de tuyau -->
+          <div class="diagram-controls-top">
+            <div class="diagram-controls-left">
+              <div class="control-inline">
+                <label class="control-inline__label" data-i18n="controls.material">MATÉRIEL:</label>
+                <select id="pipe-material" class="control-inline__input" required>
+                  <option value="steel" data-i18n="materials.steel">Acier</option>
+                  <option value="copper" data-i18n="materials.copper">Cuivre</option>
+                  <option value="stainless_steel" data-i18n="materials.stainless_steel">
+                    Acier inoxydable
+                  </option>
+                </select>
+              </div>
+              <div class="control-inline">
+                <label
+                  class="control-inline__label"
+                  id="pipe-schedule-label"
+                  data-i18n="controls.schedule"
+                  >SCHEDULE:</label
+                >
+                <select id="pipe-schedule" class="control-inline__input" required>
+                  <!-- Rempli dynamiquement -->
+                </select>
+              </div>
+              <div class="control-inline">
+                <label class="control-inline__label" data-i18n="controls.nps">NPS:</label>
+                <select id="pipe-nps" class="control-inline__input" required>
+                  <!-- Rempli dynamiquement -->
+                </select>
+              </div>
+            </div>
+
+            <div class="diagram-controls-right">
+              <div class="control-inline">
+                <label class="form__checkbox" style="margin: 0; cursor: pointer">
+                  <input
+                    type="checkbox"
+                    id="has-insulation"
+                    style="width: 1.25rem; height: 1.25rem; cursor: pointer"
+                  />
+                  <span
+                    style="font-size: 12px; font-weight: 600; color: #374151"
+                    data-i18n="insulation.checkbox"
+                    >La conduite est isolée</span
+                  >
+                </label>
+              </div>
+
+              <!-- Champs d'isolation (visibles seulement si case cochée) -->
+              <div
+                id="insulation-fields-diagram"
+                style="display: none; gap: 12px; margin-left: 20px"
+              >
+                <div class="control-inline">
+                  <label
+                    class="control-inline__label"
+                    data-i18n="insulation.materialLabel"
+                    style="font-size: 11px"
+                    >Matériau isolation</label
+                  >
+                  <select
+                    id="insulation-material"
+                    class="control-inline__input"
+                    style="min-width: 160px"
+                  >
+                    <option value="fiberglass" selected data-i18n="insulation.materials.fiberglass">
+                      Laine de verre
+                    </option>
+                    <option value="mineral_wool" data-i18n="insulation.materials.rockwool">
+                      Laine de roche
+                    </option>
+                    <option value="polyurethane_foam" data-i18n="insulation.materials.foam">
+                      Mousse polyuréthane
+                    </option>
+                    <option
+                      value="polystyrene_extruded"
+                      data-i18n="insulation.materials.polystyrene"
+                    >
+                      Polystyrène extrudé (XPS)
+                    </option>
+                    <option value="elastomeric_foam" data-i18n="insulation.materials.elastomeric">
+                      Mousse élastomère
+                    </option>
+                  </select>
+                </div>
+
+                <div class="control-inline">
+                  <label
+                    class="control-inline__label"
+                    data-i18n="insulation.thicknessLabel"
+                    style="font-size: 11px"
+                    >Épaisseur (mm)</label
+                  >
+                  <input
+                    type="number"
+                    id="insulation-thickness"
+                    class="control-inline__input"
+                    min="5"
+                    max="100"
+                    step="5"
+                    value="20"
+                    style="width: 90px"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Schéma central (les inputs EAU et AIR sont intégrés dans le SVG via foreignObject) -->
+          <div class="diagram-center">
+            <div id="pipe-diagram-container"></div>
+          </div>
         </div>
-      </div>
 
-      <!-- Input Form (vide maintenant, tous les inputs sont dans le diagramme) -->
-      <section class="form-section" id="input-section" style="display: none;">
-        <form id="analysis-form" class="form">
-          <!-- Tous les inputs sont maintenant dans le diagramme SVG via foreignObject -->
-        </form>
-      </section>
-
-      <!-- Results Sections (hidden by default) -->
-      <div id="results-container" style="display: none;">
-        
-        <!-- SECTION 1: Paramètres et résultats -->
-        <section class="section section-1" id="section-parameters">
-          <h2 class="section__title" data-i18n="sections.s1">1. Paramètres et résultats</h2>
-          
-          <!-- Configuration Summary (visible uniquement en impression) -->
-          <div class="config-summary">
-            <h3 class="config-summary__title" data-i18n="configSummary.title">Configuration analysée</h3>
-            <div class="config-summary__grid">
-              <div class="config-summary__group">
-                <h4 data-i18n="configSummary.pipe">Conduite</h4>
-                <dl>
-                  <dt data-i18n="configSummary.pipeMaterial">Matériau:</dt>
-                  <dd id="summary-material">--</dd>
-                  <dt data-i18n="configSummary.pipeSpec">Spécification:</dt>
-                  <dd id="summary-spec">--</dd>
-                  <dt data-i18n="configSummary.pipeLength">Longueur:</dt>
-                  <dd id="summary-length">--</dd>
-                </dl>
-              </div>
-              <div class="config-summary__group">
-                <h4 data-i18n="configSummary.water">Eau</h4>
-                <dl>
-                  <dt data-i18n="configSummary.waterTemp">Température:</dt>
-                  <dd id="summary-water-temp">--</dd>
-                  <dt data-i18n="configSummary.waterFlow">Débit:</dt>
-                  <dd id="summary-water-flow">--</dd>
-                  <dt data-i18n="configSummary.waterPressure">Pression:</dt>
-                  <dd id="summary-water-pressure">--</dd>
-                </dl>
-              </div>
-              <div class="config-summary__group">
-                <h4 data-i18n="configSummary.air">Air ambiant</h4>
-                <dl>
-                  <dt data-i18n="configSummary.airTemp">Température:</dt>
-                  <dd id="summary-air-temp">--</dd>
-                  <dt data-i18n="configSummary.wind">Vitesse vent:</dt>
-                  <dd id="summary-wind-speed">--</dd>
-                </dl>
-              </div>
-              <div class="config-summary__group">
-                <h4 data-i18n="configSummary.insulation">Isolation</h4>
-                <dl>
-                  <dt data-i18n="configSummary.insulationType">Type:</dt>
-                  <dd id="summary-insulation-type">--</dd>
-                  <dt data-i18n="configSummary.insulationThickness">Épaisseur:</dt>
-                  <dd id="summary-insulation-thickness">--</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Verdict Card -->
-          <div class="verdict-card" id="verdict-card">
-            <div class="verdict-card__icon" id="verdict-icon"></div>
-            <h2 class="verdict-card__title" id="verdict-title"></h2>
-            <p class="verdict-card__message" id="verdict-message"></p>
-          </div>
-
-          <!-- Physical Limits Warning -->
-          <div id="physical-limits-warning" class="physical-limits-warning" style="display: none;">
-            <h3 class="physical-limits-warning__title" data-i18n="corrective.warningTitle">⚠️ Configuration proche des limites physiques</h3>
-            <div class="physical-limits-warning__content" id="physical-limits-warning-content"></div>
-          </div>
-
-          <!-- Temperature Profile Chart -->
-          <div id="temperature-chart-card" class="card card--full">
-            <h3 class="card__title" data-i18n="chart.title">📊 Profil de température</h3>
-            <div class="chart-container">
-              <canvas id="temperature-chart"></canvas>
-            </div>
-            <div class="chart-legend">
-              <div class="chart-legend__item">
-                <span class="chart-legend__color" style="background: #DFFFD6;"></span>
-                <span data-i18n="chart.legendSafe">Sécuritaire (≥ 5°C)</span>
-              </div>
-              <div class="chart-legend__item">
-                <span class="chart-legend__color" style="background: #FFF4CC;"></span>
-                <span data-i18n="chart.legendUnder">Sous la marge (0-5°C)</span>
-              </div>
-              <div class="chart-legend__item">
-                <span class="chart-legend__color" style="background: #FFD6D6;"></span>
-                <span data-i18n="chart.legendFreeze">Risque de gel (≤ 0°C)</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Key Results Grid -->
-          <div class="results-grid">
-            <!-- Thermal Results -->
-            <div class="card">
-              <h3 class="card__title" data-i18n="results.thermalTitle">🌡️ Résultats thermiques</h3>
-              <dl class="results-list">
-                <dt data-i18n="results.tempFinal">Température finale</dt>
-                <dd id="result-temp-final">--</dd>
-                
-                <dt data-i18n="results.tempMin">Température minimale</dt>
-                <dd id="result-temp-min">--</dd>
-                
-                <dt data-i18n="results.margin">Marge avant gel</dt>
-                <dd id="result-margin">--</dd>
-                
-                <dt data-i18n="results.heatLoss">Perte thermique totale</dt>
-                <dd id="result-heat-loss">--</dd>
-              </dl>
-            </div>
-
-            <!-- Hydraulic Results -->
-            <div class="card">
-              <h3 class="card__title" data-i18n="results.hydraulicTitle">⚙️ Résultats hydrauliques</h3>
-              <dl class="results-list">
-                <dt data-i18n="results.regime">Régime d'écoulement</dt>
-                <dd id="result-regime">--</dd>
-                
-                <dt data-i18n="results.reynolds">Nombre de Reynolds</dt>
-                <dd id="result-reynolds">--</dd>
-                
-                <dt data-i18n="results.pressureDrop">Perte de charge</dt>
-                <dd id="result-pressure-drop">--</dd>
-                
-                <dt data-i18n="results.velocity">Vitesse moyenne</dt>
-                <dd id="result-velocity">--</dd>
-              </dl>
-            </div>
-          </div>
+        <!-- Input Form (vide maintenant, tous les inputs sont dans le diagramme) -->
+        <section class="form-section" id="input-section" style="display: none">
+          <form id="analysis-form" class="form">
+            <!-- Tous les inputs sont maintenant dans le diagramme SVG via foreignObject -->
+          </form>
         </section>
 
-        <!-- SECTION 2: Analyse de sensibilité -->
-        <section class="section section-2" id="section-sensitivity">
-          <h2 class="section__title" data-i18n="sections.s2">2. Analyse de sensibilité</h2>
-          
-          <!-- Sous-section 2.1: Analyse paramétrique (1D) -->
-          <div class="subsection subsection-2-1" id="subsection-sensitivity-1d">
-            <h3 class="subsection__title" data-i18n="sections.s21">2.1 Analyse paramétrique (graphiques tornado)</h3>
-            
-            <div class="interpretation-guide">
-              <h4 data-i18n="sensitivity.interpTitle">📖 Interprétation</h4>
-              <p style="margin: 0; font-size: 0.9rem; line-height: 1.5;">
-                <strong data-i18n="sensitivity.interp1">Analyse individuelle :</strong> <span data-i18n="sensitivity.interp1">Chaque graphique montre l'impact d'un seul paramètre qui varie sur toute sa plage, </span>
-                <em data-i18n="sensitivity.interp2">tous les autres paramètres restant fixés à leur valeur actuelle</em>. 
-                <span data-i18n="sensitivity.interp3">Cela permet d'identifier quels paramètres ont le plus d'influence sur le risque de gel.</span>
-              </p>
-            </div>
-            
-            <!-- Tableau récapitulatif -->
-            <div id="tornado-summary-container" class="tornado-summary-container">
-              <!-- Tableau généré dynamiquement -->
-            </div>
-            
-            <!-- Graphiques individuels -->
-            <div class="tornado-charts-grid" id="tornado-charts-grid">
-              <!-- Graphiques générés dynamiquement -->
-            </div>
-            
-            <!-- Légende -->
-            <div class="tornado-legend">
-              <div class="legend-item">
-                <div class="legend-line legend-line--base"></div>
-                <span data-i18n="sensitivity.legendBase">Valeur de base (actuelle)</span>
-              </div>
-              <div class="legend-item">
-                <div class="legend-line legend-line--freeze"></div>
-                <span data-i18n="sensitivity.legendFreeze">Point critique gel (0°C)</span>
-              </div>
-              <div class="legend-item">
-                <div class="legend-line legend-line--safety"></div>
-                <span data-i18n="sensitivity.legendSafety">Point critique sécurité (5°C)</span>
-              </div>
-              <div class="legend-item">
-                <div class="legend-line legend-line--limit"></div>
-                <span data-i18n="sensitivity.legendLimit">Limites de la plage du paramètre</span>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Sous-section 2.2: Analyse combinée (2D) -->
-          <div class="subsection subsection-2-2" id="subsection-sensitivity-2d">
-            <h3 class="subsection__title" data-i18n="sections.s22">2.2 Analyse combinée (heatmap 2D)</h3>
-            
-            <div class="interpretation-guide">
-              <h4 data-i18n="sensitivity.interpTitle">📖 Interprétation</h4>
-              <p style="margin: 0; font-size: 0.9rem; line-height: 1.5;">
-                <strong data-i18n="sensitivity.interp2d1">Analyse combinée :</strong> <span data-i18n="sensitivity.interp2d1">La carte thermique (heatmap) montre la plage complète des résultats possibles </span>
-                <span data-i18n="sensitivity.interp2d2">lorsque deux paramètres varient simultanément sur l'ensemble de leur spectre</span>, 
-                <span data-i18n="sensitivity.interp2d3">tous les autres paramètres restant fixés. Cela permet d'identifier les combinaisons critiques et les marges de sécurité disponibles.</span>
-              </p>
-            </div>
-          
-          <div class="sensitivity-controls">
-            <div class="sensitivity-ranges-container">
-              <div class="sensitivity-ranges" id="sensitivity-ranges-x">
-                <div class="sensitivity-ranges__header">
-                  <label class="sensitivity-ranges__label" data-i18n="sensitivity.paramX">Paramètre X</label>
-                  <select id="sensitivity-param-x" class="sensitivity-ranges__select"></select>
-                </div>
-                <div class="sensitivity-ranges__inputs">
-                  <div class="sensitivity-ranges__control sensitivity-ranges__control--min">
-                    <label class="sensitivity-ranges__input-label" data-i18n="sensitivity.min">Min</label>
-                    <input type="number" id="range-x-min" class="sensitivity-ranges__input" step="any">
-                    <input type="range" id="range-x-min-slider" class="sensitivity-ranges__slider">
-                  </div>
-                  <span class="sensitivity-ranges__separator" data-i18n="sensitivity.to">à</span>
-                  <div class="sensitivity-ranges__control sensitivity-ranges__control--max">
-                    <label class="sensitivity-ranges__input-label" data-i18n="sensitivity.max">Max</label>
-                    <input type="range" id="range-x-max-slider" class="sensitivity-ranges__slider">
-                    <input type="number" id="range-x-max" class="sensitivity-ranges__input" step="any">
-                  </div>
-                </div>
-              </div>
-              
-              <div class="sensitivity-ranges" id="sensitivity-ranges-y">
-                <div class="sensitivity-ranges__header">
-                  <label class="sensitivity-ranges__label" data-i18n="sensitivity.paramY">Paramètre Y</label>
-                  <select id="sensitivity-param-y" class="sensitivity-ranges__select"></select>
-                </div>
-                <div class="sensitivity-ranges__inputs">
-                  <div class="sensitivity-ranges__control sensitivity-ranges__control--min">
-                    <label class="sensitivity-ranges__input-label" data-i18n="sensitivity.min">Min</label>
-                    <input type="number" id="range-y-min" class="sensitivity-ranges__input" step="any">
-                    <input type="range" id="range-y-min-slider" class="sensitivity-ranges__slider">
-                  </div>
-                  <span class="sensitivity-ranges__separator" data-i18n="sensitivity.to">à</span>
-                  <div class="sensitivity-ranges__control sensitivity-ranges__control--max">
-                    <label class="sensitivity-ranges__input-label" data-i18n="sensitivity.max">Max</label>
-                    <input type="range" id="range-y-max-slider" class="sensitivity-ranges__slider">
-                    <input type="number" id="range-y-max" class="sensitivity-ranges__input" step="any">
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Erreurs de validation -->
-            <div id="sensitivity-errors" class="sensitivity-errors" style="display: none;"></div>
-            
-            <div class="sensitivity-actions">
-              <span class="badge badge--warning" id="sensitivity-status" style="display: none;">Pas à jour</span>
-            </div>
-          </div>
-          
-          <div class="sensitivity-heatmap-container">
-            <canvas id="sensitivity-heatmap"></canvas>
-          </div>
-          </div><!-- Fin subsection-2-2 -->
-        </section>
+        <!-- Results Sections (hidden by default) -->
+        <div id="results-container" style="display: none">
+          <!-- SECTION 1: Paramètres et résultats -->
+          <section class="section section-1" id="section-parameters">
+            <h2 class="section__title" data-i18n="sections.s1">1. Paramètres et résultats</h2>
 
-        <!-- SECTION 3: Explication des calculs -->
-        <section class="section section-3" id="section-explanations">
-          <div class="section-header-collapsible">
-            <h2 class="section__title" data-i18n="sections.s3">3. Explication des calculs</h2>
-            <button class="btn-collapse" id="btn-toggle-section3" aria-expanded="false">
-              <span class="collapse-icon">▶</span>
-              <span class="collapse-text" data-i18n="sections.toggleDetails">Afficher les détails techniques</span>
+            <!-- Configuration Summary (visible uniquement en impression) -->
+            <div class="config-summary">
+              <h3 class="config-summary__title" data-i18n="configSummary.title">
+                Configuration analysée
+              </h3>
+              <div class="config-summary__grid">
+                <div class="config-summary__group">
+                  <h4 data-i18n="configSummary.pipe">Conduite</h4>
+                  <dl>
+                    <dt data-i18n="configSummary.pipeMaterial">Matériau:</dt>
+                    <dd id="summary-material">--</dd>
+                    <dt data-i18n="configSummary.pipeSpec">Spécification:</dt>
+                    <dd id="summary-spec">--</dd>
+                    <dt data-i18n="configSummary.pipeLength">Longueur:</dt>
+                    <dd id="summary-length">--</dd>
+                  </dl>
+                </div>
+                <div class="config-summary__group">
+                  <h4 data-i18n="configSummary.water">Eau</h4>
+                  <dl>
+                    <dt data-i18n="configSummary.waterTemp">Température:</dt>
+                    <dd id="summary-water-temp">--</dd>
+                    <dt data-i18n="configSummary.waterFlow">Débit:</dt>
+                    <dd id="summary-water-flow">--</dd>
+                    <dt data-i18n="configSummary.waterPressure">Pression:</dt>
+                    <dd id="summary-water-pressure">--</dd>
+                  </dl>
+                </div>
+                <div class="config-summary__group">
+                  <h4 data-i18n="configSummary.air">Air ambiant</h4>
+                  <dl>
+                    <dt data-i18n="configSummary.airTemp">Température:</dt>
+                    <dd id="summary-air-temp">--</dd>
+                    <dt data-i18n="configSummary.wind">Vitesse vent:</dt>
+                    <dd id="summary-wind-speed">--</dd>
+                  </dl>
+                </div>
+                <div class="config-summary__group">
+                  <h4 data-i18n="configSummary.insulation">Isolation</h4>
+                  <dl>
+                    <dt data-i18n="configSummary.insulationType">Type:</dt>
+                    <dd id="summary-insulation-type">--</dd>
+                    <dt data-i18n="configSummary.insulationThickness">Épaisseur:</dt>
+                    <dd id="summary-insulation-thickness">--</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+
+            <!-- Verdict Card -->
+            <div class="verdict-card" id="verdict-card">
+              <div class="verdict-card__icon" id="verdict-icon"></div>
+              <h2 class="verdict-card__title" id="verdict-title"></h2>
+              <p class="verdict-card__message" id="verdict-message"></p>
+            </div>
+
+            <!-- Physical Limits Warning -->
+            <div id="physical-limits-warning" class="physical-limits-warning" style="display: none">
+              <h3 class="physical-limits-warning__title" data-i18n="corrective.warningTitle">
+                ⚠️ Configuration proche des limites physiques
+              </h3>
+              <div
+                class="physical-limits-warning__content"
+                id="physical-limits-warning-content"
+              ></div>
+            </div>
+
+            <!-- Temperature Profile Chart -->
+            <div id="temperature-chart-card" class="card card--full">
+              <h3 class="card__title" data-i18n="chart.title">📊 Profil de température</h3>
+              <div class="chart-container">
+                <canvas id="temperature-chart"></canvas>
+              </div>
+              <div class="chart-legend">
+                <div class="chart-legend__item">
+                  <span class="chart-legend__color" style="background: #dfffd6"></span>
+                  <span data-i18n="chart.legendSafe">Sécuritaire (≥ 5°C)</span>
+                </div>
+                <div class="chart-legend__item">
+                  <span class="chart-legend__color" style="background: #fff4cc"></span>
+                  <span data-i18n="chart.legendUnder">Sous la marge (0-5°C)</span>
+                </div>
+                <div class="chart-legend__item">
+                  <span class="chart-legend__color" style="background: #ffd6d6"></span>
+                  <span data-i18n="chart.legendFreeze">Risque de gel (≤ 0°C)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Key Results Grid -->
+            <div class="results-grid">
+              <!-- Thermal Results -->
+              <div class="card">
+                <h3 class="card__title" data-i18n="results.thermalTitle">
+                  🌡️ Résultats thermiques
+                </h3>
+                <dl class="results-list">
+                  <dt data-i18n="results.tempFinal">Température finale</dt>
+                  <dd id="result-temp-final">--</dd>
+
+                  <dt data-i18n="results.tempMin">Température minimale</dt>
+                  <dd id="result-temp-min">--</dd>
+
+                  <dt data-i18n="results.margin">Marge avant gel</dt>
+                  <dd id="result-margin">--</dd>
+
+                  <dt data-i18n="results.heatLoss">Perte thermique totale</dt>
+                  <dd id="result-heat-loss">--</dd>
+                </dl>
+              </div>
+
+              <!-- Hydraulic Results -->
+              <div class="card">
+                <h3 class="card__title" data-i18n="results.hydraulicTitle">
+                  ⚙️ Résultats hydrauliques
+                </h3>
+                <dl class="results-list">
+                  <dt data-i18n="results.regime">Régime d'écoulement</dt>
+                  <dd id="result-regime">--</dd>
+
+                  <dt data-i18n="results.reynolds">Nombre de Reynolds</dt>
+                  <dd id="result-reynolds">--</dd>
+
+                  <dt data-i18n="results.pressureDrop">Perte de charge</dt>
+                  <dd id="result-pressure-drop">--</dd>
+
+                  <dt data-i18n="results.velocity">Vitesse moyenne</dt>
+                  <dd id="result-velocity">--</dd>
+                </dl>
+              </div>
+            </div>
+          </section>
+
+          <!-- SECTION 2: Analyse de sensibilité -->
+          <section class="section section-2" id="section-sensitivity">
+            <h2 class="section__title" data-i18n="sections.s2">2. Analyse de sensibilité</h2>
+
+            <!-- Sous-section 2.1: Analyse paramétrique (1D) -->
+            <div class="subsection subsection-2-1" id="subsection-sensitivity-1d">
+              <h3 class="subsection__title" data-i18n="sections.s21">
+                2.1 Analyse paramétrique (graphiques tornado)
+              </h3>
+
+              <div class="interpretation-guide">
+                <h4 data-i18n="sensitivity.interpTitle">📖 Interprétation</h4>
+                <p style="margin: 0; font-size: 0.9rem; line-height: 1.5">
+                  <strong data-i18n="sensitivity.interp1">Analyse individuelle :</strong>
+                  <span data-i18n="sensitivity.interp1"
+                    >Chaque graphique montre l'impact d'un seul paramètre qui varie sur toute sa
+                    plage,
+                  </span>
+                  <em data-i18n="sensitivity.interp2"
+                    >tous les autres paramètres restant fixés à leur valeur actuelle</em
+                  >.
+                  <span data-i18n="sensitivity.interp3"
+                    >Cela permet d'identifier quels paramètres ont le plus d'influence sur le risque
+                    de gel.</span
+                  >
+                </p>
+              </div>
+
+              <!-- Tableau récapitulatif -->
+              <div id="tornado-summary-container" class="tornado-summary-container">
+                <!-- Tableau généré dynamiquement -->
+              </div>
+
+              <!-- Graphiques individuels -->
+              <div class="tornado-charts-grid" id="tornado-charts-grid">
+                <!-- Graphiques générés dynamiquement -->
+              </div>
+
+              <!-- Légende -->
+              <div class="tornado-legend">
+                <div class="legend-item">
+                  <div class="legend-line legend-line--base"></div>
+                  <span data-i18n="sensitivity.legendBase">Valeur de base (actuelle)</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-line legend-line--freeze"></div>
+                  <span data-i18n="sensitivity.legendFreeze">Point critique gel (0°C)</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-line legend-line--safety"></div>
+                  <span data-i18n="sensitivity.legendSafety">Point critique sécurité (5°C)</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-line legend-line--limit"></div>
+                  <span data-i18n="sensitivity.legendLimit">Limites de la plage du paramètre</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sous-section 2.2: Analyse combinée (2D) -->
+            <div class="subsection subsection-2-2" id="subsection-sensitivity-2d">
+              <h3 class="subsection__title" data-i18n="sections.s22">
+                2.2 Analyse combinée (heatmap 2D)
+              </h3>
+
+              <div class="interpretation-guide">
+                <h4 data-i18n="sensitivity.interpTitle">📖 Interprétation</h4>
+                <p style="margin: 0; font-size: 0.9rem; line-height: 1.5">
+                  <strong data-i18n="sensitivity.interp2d1">Analyse combinée :</strong>
+                  <span data-i18n="sensitivity.interp2d1"
+                    >La carte thermique (heatmap) montre la plage complète des résultats possibles
+                  </span>
+                  <span data-i18n="sensitivity.interp2d2"
+                    >lorsque deux paramètres varient simultanément sur l'ensemble de leur
+                    spectre</span
+                  >,
+                  <span data-i18n="sensitivity.interp2d3"
+                    >tous les autres paramètres restant fixés. Cela permet d'identifier les
+                    combinaisons critiques et les marges de sécurité disponibles.</span
+                  >
+                </p>
+              </div>
+
+              <div class="sensitivity-controls">
+                <div class="sensitivity-ranges-container">
+                  <div class="sensitivity-ranges" id="sensitivity-ranges-x">
+                    <div class="sensitivity-ranges__header">
+                      <label class="sensitivity-ranges__label" data-i18n="sensitivity.paramX"
+                        >Paramètre X</label
+                      >
+                      <select id="sensitivity-param-x" class="sensitivity-ranges__select"></select>
+                    </div>
+                    <div class="sensitivity-ranges__inputs">
+                      <div class="sensitivity-ranges__control sensitivity-ranges__control--min">
+                        <label class="sensitivity-ranges__input-label" data-i18n="sensitivity.min"
+                          >Min</label
+                        >
+                        <input
+                          type="number"
+                          id="range-x-min"
+                          class="sensitivity-ranges__input"
+                          step="any"
+                        />
+                        <input
+                          type="range"
+                          id="range-x-min-slider"
+                          class="sensitivity-ranges__slider"
+                        />
+                      </div>
+                      <span class="sensitivity-ranges__separator" data-i18n="sensitivity.to"
+                        >à</span
+                      >
+                      <div class="sensitivity-ranges__control sensitivity-ranges__control--max">
+                        <label class="sensitivity-ranges__input-label" data-i18n="sensitivity.max"
+                          >Max</label
+                        >
+                        <input
+                          type="range"
+                          id="range-x-max-slider"
+                          class="sensitivity-ranges__slider"
+                        />
+                        <input
+                          type="number"
+                          id="range-x-max"
+                          class="sensitivity-ranges__input"
+                          step="any"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="sensitivity-ranges" id="sensitivity-ranges-y">
+                    <div class="sensitivity-ranges__header">
+                      <label class="sensitivity-ranges__label" data-i18n="sensitivity.paramY"
+                        >Paramètre Y</label
+                      >
+                      <select id="sensitivity-param-y" class="sensitivity-ranges__select"></select>
+                    </div>
+                    <div class="sensitivity-ranges__inputs">
+                      <div class="sensitivity-ranges__control sensitivity-ranges__control--min">
+                        <label class="sensitivity-ranges__input-label" data-i18n="sensitivity.min"
+                          >Min</label
+                        >
+                        <input
+                          type="number"
+                          id="range-y-min"
+                          class="sensitivity-ranges__input"
+                          step="any"
+                        />
+                        <input
+                          type="range"
+                          id="range-y-min-slider"
+                          class="sensitivity-ranges__slider"
+                        />
+                      </div>
+                      <span class="sensitivity-ranges__separator" data-i18n="sensitivity.to"
+                        >à</span
+                      >
+                      <div class="sensitivity-ranges__control sensitivity-ranges__control--max">
+                        <label class="sensitivity-ranges__input-label" data-i18n="sensitivity.max"
+                          >Max</label
+                        >
+                        <input
+                          type="range"
+                          id="range-y-max-slider"
+                          class="sensitivity-ranges__slider"
+                        />
+                        <input
+                          type="number"
+                          id="range-y-max"
+                          class="sensitivity-ranges__input"
+                          step="any"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Erreurs de validation -->
+                <div id="sensitivity-errors" class="sensitivity-errors" style="display: none"></div>
+
+                <div class="sensitivity-actions">
+                  <span class="badge badge--warning" id="sensitivity-status" style="display: none"
+                    >Pas à jour</span
+                  >
+                </div>
+              </div>
+
+              <div class="sensitivity-heatmap-container">
+                <canvas id="sensitivity-heatmap"></canvas>
+              </div>
+            </div>
+            <!-- Fin subsection-2-2 -->
+          </section>
+
+          <!-- SECTION 3: Explication des calculs -->
+          <section class="section section-3" id="section-explanations">
+            <div class="section-header-collapsible">
+              <h2 class="section__title" data-i18n="sections.s3">3. Explication des calculs</h2>
+              <button class="btn-collapse" id="btn-toggle-section3" aria-expanded="false">
+                <span class="collapse-icon">▶</span>
+                <span class="collapse-text" data-i18n="sections.toggleDetails"
+                  >Afficher les détails techniques</span
+                >
+              </button>
+            </div>
+
+            <div class="section-collapsible-content" id="section3-content" style="display: none">
+              <div class="calc-intro">
+                <p data-i18n="calcDetails.introText">
+                  Cette section détaille la méthodologie de calcul permettant à un ingénieur de
+                  valider la rigueur des résultats obtenus.
+                </p>
+              </div>
+
+              <!-- Résumé exécutif -->
+              <div id="calc-summary"></div>
+
+              <!-- Exemple détaillé : Segment 1 (avec tableau collapsible intégré) -->
+              <div id="calc-segment-first" class="calc-segment-detailed"></div>
+            </div>
+          </section>
+
+          <!-- Actions -->
+          <div class="results-actions">
+            <button class="btn btn--secondary" id="btn-export-pdf" data-i18n="buttons.exportPDF">
+              Exporter PDF
             </button>
           </div>
-          
-          <div class="section-collapsible-content" id="section3-content" style="display: none;">
-            <div class="calc-intro">
-              <p data-i18n="calcDetails.introText">
-                Cette section détaille la méthodologie de calcul permettant à un ingénieur 
-                de valider la rigueur des résultats obtenus.
-              </p>
-            </div>
-            
-          <!-- Résumé exécutif -->
-          <div id="calc-summary"></div>
-          
-          <!-- Exemple détaillé : Segment 1 (avec tableau collapsible intégré) -->
-          <div id="calc-segment-first" class="calc-segment-detailed"></div>
-          </div>
-        </section>
-
-        <!-- Actions -->
-        <div class="results-actions">
-          <button class="btn btn--secondary" id="btn-export-pdf" data-i18n="buttons.exportPDF">Exporter PDF</button>
         </div>
       </div>
+    </main>
 
-    </div>
-  </main>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <p class="footer__text">
-        ThermaFlow v1.1.0 | 
-        <a href="https://github.com/perrongu/thermaflow" target="_blank">GitHub</a> | 
-        <span data-i18n="footer.license">Licence MIT</span>
-      </p>
-      <p class="footer__credits" data-i18n="footer.basedOn">
-        Calculs basés sur Perry's Handbook et IAPWS-97
-      </p>
-    </div>
-  </footer>
-
-  <!-- i18n dictionaries -->
-  <script src="data/i18n/fr.js"></script>
-  <script src="data/i18n/en.js"></script>
-  <script src="data/i18n/es.js"></script>
-  <script src="data/i18n/pt.js"></script>
-  <!-- i18n runtime -->
-  <script src="js/ui/i18n.js"></script>
-
-  <!-- Data - Tables pures -->
-  <script src="data/fluids/air-tables.js"></script>
-  <script src="data/fluids/water-tables.js"></script>
-  <script src="data/materials/properties.js"></script>
-  <script src="data/pipespecs/steel.js"></script>
-  <script src="data/pipespecs/copper.js"></script>
-  <script src="data/pipespecs/stainless_steel.js"></script>
-  <script src="data/pipespecs/loader.js"></script>
-
-  <!-- Scripts - Lookup dans tables -->
-  <script src="js/properties/air-properties.js"></script>
-  <script src="js/properties/water-properties.js"></script>
-  <script src="js/properties/material-properties.js"></script>
-
-  <!-- Scripts - Constantes partagées -->
-  <script src="js/constants/flow-regimes.js"></script>
-
-  <!-- Scripts - Formules de base -->
-  <script src="js/formulas/reynolds.js"></script>
-  <script src="js/formulas/geometry.js"></script>
-  <script src="js/formulas/pressure-basic.js"></script>
-
-  <!-- Scripts - Corrélations empiriques -->
-  <script src="js/correlations/friction-factor.js"></script>
-  <script src="js/correlations/nusselt-internal.js"></script>
-  <script src="js/correlations/nusselt-external.js"></script>
-  <script src="js/correlations/radiation.js"></script>
-
-  <!-- Scripts - Calculs composés -->
-  <script src="js/calculations/pressure-drop.js"></script>
-  <script src="js/calculations/thermal-resistance.js"></script>
-  <script src="js/calculations/heat-transfer.js"></script>
-
-  <!-- Scripts - Phase 2 (Engine) -->
-  <script src="js/engine/pipe-segment.js"></script>
-  <script src="js/engine/pipe-network.js"></script>
-  <script src="js/engine/freeze-detector.js"></script>
-
-  <!-- Scripts - Phase 3 (UI) -->
-  <script src="js/ui/unit-converter.js"></script>
-  <script src="js/ui/utils.js"></script>
-  <script src="js/ui/calculation-manager.js"></script>
-  <script src="js/ui/pipe-diagram.js"></script>
-  <script src="js/ui/input-form.js"></script>
-  <script src="js/ui/temperature-chart.js"></script>
-  <script src="js/ui/sensitivity-analysis-1d.js"></script>
-  <script src="js/ui/sensitivity-analysis.js"></script>
-  <script src="js/ui/calculation-details.js"></script>
-  <script src="js/ui/storage.js"></script>
-  <script src="js/ui/export.js"></script>
-  <script src="js/ui/app.js"></script>
-
-  <!-- Modal d'acceptation des risques -->
-  <div id="disclaimer-modal" class="disclaimer-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="disclaimer-title" aria-describedby="disclaimer-content">
-    <div class="disclaimer-modal">
-      <div class="disclaimer-modal-header">
-        <select id="disclaimer-lang-select" class="disclaimer-lang-select" aria-label="Language">
-          <option value="fr">Français</option>
-          <option value="en">English</option>
-          <option value="es">Español</option>
-          <option value="pt">Português</option>
-        </select>
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <p class="footer__text">
+          ThermaFlow v1.1.0 |
+          <a href="https://github.com/perrongu/thermaflow" target="_blank">GitHub</a> |
+          <span data-i18n="footer.license">Licence MIT</span>
+        </p>
+        <p class="footer__credits" data-i18n="footer.basedOn">
+          Calculs basés sur Perry's Handbook et IAPWS-97
+        </p>
       </div>
-      <h2 id="disclaimer-title"></h2>
-      <div id="disclaimer-content" class="disclaimer-text"></div>
-      <button id="disclaimer-accept" class="disclaimer-button"></button>
-    </div>
-  </div>
-</body>
-</html>
+    </footer>
 
+    <!-- i18n dictionaries -->
+    <script src="data/i18n/fr.js"></script>
+    <script src="data/i18n/en.js"></script>
+    <script src="data/i18n/es.js"></script>
+    <script src="data/i18n/pt.js"></script>
+    <!-- i18n runtime -->
+    <script src="js/ui/i18n.js"></script>
+
+    <!-- Data - Tables pures -->
+    <script src="data/fluids/air-tables.js"></script>
+    <script src="data/fluids/water-tables.js"></script>
+    <script src="data/materials/properties.js"></script>
+    <script src="data/pipespecs/steel.js"></script>
+    <script src="data/pipespecs/copper.js"></script>
+    <script src="data/pipespecs/stainless_steel.js"></script>
+    <script src="data/pipespecs/loader.js"></script>
+
+    <!-- Scripts - Lookup dans tables -->
+    <script src="js/properties/air-properties.js"></script>
+    <script src="js/properties/water-properties.js"></script>
+    <script src="js/properties/material-properties.js"></script>
+
+    <!-- Scripts - Constantes partagées -->
+    <script src="js/constants/flow-regimes.js"></script>
+
+    <!-- Scripts - Formules de base -->
+    <script src="js/formulas/reynolds.js"></script>
+    <script src="js/formulas/geometry.js"></script>
+    <script src="js/formulas/pressure-basic.js"></script>
+
+    <!-- Scripts - Corrélations empiriques -->
+    <script src="js/correlations/friction-factor.js"></script>
+    <script src="js/correlations/nusselt-internal.js"></script>
+    <script src="js/correlations/nusselt-external.js"></script>
+    <script src="js/correlations/radiation.js"></script>
+
+    <!-- Scripts - Calculs composés -->
+    <script src="js/calculations/pressure-drop.js"></script>
+    <script src="js/calculations/thermal-resistance.js"></script>
+    <script src="js/calculations/heat-transfer.js"></script>
+
+    <!-- Scripts - Phase 2 (Engine) -->
+    <script src="js/engine/pipe-segment.js"></script>
+    <script src="js/engine/pipe-network.js"></script>
+    <script src="js/engine/freeze-detector.js"></script>
+
+    <!-- Scripts - Phase 3 (UI) -->
+    <script src="js/ui/unit-converter.js"></script>
+    <script src="js/ui/utils.js"></script>
+    <script src="js/ui/calculation-manager.js"></script>
+    <script src="js/ui/pipe-diagram.js"></script>
+    <script src="js/ui/input-form.js"></script>
+    <script src="js/ui/temperature-chart.js"></script>
+    <script src="js/ui/sensitivity-analysis-1d.js"></script>
+    <script src="js/ui/sensitivity-analysis.js"></script>
+    <script src="js/ui/calculation-details.js"></script>
+    <script src="js/ui/storage.js"></script>
+    <script src="js/ui/export.js"></script>
+    <script src="js/ui/app.js"></script>
+
+    <!-- Modal d'acceptation des risques -->
+    <div
+      id="disclaimer-modal"
+      class="disclaimer-overlay"
+      style="display: none"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="disclaimer-title"
+      aria-describedby="disclaimer-content"
+    >
+      <div class="disclaimer-modal">
+        <div class="disclaimer-modal-header">
+          <select id="disclaimer-lang-select" class="disclaimer-lang-select" aria-label="Language">
+            <option value="fr">Français</option>
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="pt">Português</option>
+          </select>
+        </div>
+        <h2 id="disclaimer-title"></h2>
+        <div id="disclaimer-content" class="disclaimer-text"></div>
+        <button id="disclaimer-accept" class="disclaimer-button"></button>
+      </div>
+    </div>
+  </body>
+</html>

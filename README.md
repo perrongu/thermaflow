@@ -15,13 +15,14 @@ ThermaFlow calcule scientifiquement l'évolution de la température de l'eau le 
 ## 🎯 Pour qui?
 
 - **Ingénieurs** - Dimensionnement d'installations
-- **Techniciens** - Vérification systèmes existants  
+- **Techniciens** - Vérification systèmes existants
 - **Gestionnaires** - Évaluation risques hivernaux
 - **Étudiants** - Apprentissage transfert thermique
 
 ## ✨ Fonctionnalités
 
 ### Interface visuelle
+
 - ⚖️ **Disclaimer légal**: Avertissement conditions d'utilisation (multilingue, accessible)
 - 🎨 **Schéma 3D interactif**: Vue isométrique de la tuyauterie
 - 📊 **Graphique T(x)**: Visualisation du profil de température
@@ -33,12 +34,14 @@ ThermaFlow calcule scientifiquement l'évolution de la température de l'eau le 
 - ♿ **Accessibilité**: Conforme WCAG 2.1, navigation clavier, focus trap
 
 ### Calculs scientifiques
+
 - **Hydraulique**: Reynolds, friction (Colebrook), perte de charge
 - **Thermique**: Convection, conduction, rayonnement
 - **Matériaux**: Acier, cuivre, inox + isolants
 - **Fluides**: Eau (IAPWS-97) et air (-50 à +30°C)
 
 ### Avantages
+
 - ⚡ **Instantané**: Résultats en < 1 seconde
 - 🌐 **Sans installation**: Fonctionne dans le navigateur
 - 🔒 **100% local**: Aucune donnée envoyée en ligne
@@ -48,9 +51,11 @@ ThermaFlow calcule scientifiquement l'évolution de la température de l'eau le 
 ## 🚀 Démarrage rapide
 
 ### En ligne
+
 Visitez: **[https://perrongu.github.io/thermaflow](https://perrongu.github.io/thermaflow)**
 
 ### Local
+
 1. Téléchargez le dépôt
 2. Ouvrez `index.html` dans votre navigateur
 3. Entrez les paramètres de votre installation
@@ -59,10 +64,12 @@ Visitez: **[https://perrongu.github.io/thermaflow](https://perrongu.github.io/th
 **Aucune installation requise** - Fonctionne directement dans le navigateur
 
 ### Changer la langue
+
 - Sélecteur en haut à droite (initiales): `FR` `EN` `ES` `PT`
 - La préférence est mémorisée. Le contenu dynamique (diagramme SVG, graphiques, sections repliables) se met à jour instantanément.
 
 ### Changer les unités
+
 - Dropdowns dans le schéma **EAU**: m³/h ↔ USGPM (débit), kPag ↔ psig (pression)
 - La conversion est automatique et maintient les conditions identiques
 - Préférence mémorisée entre sessions
@@ -71,24 +78,30 @@ Visitez: **[https://perrongu.github.io/thermaflow](https://perrongu.github.io/th
 ## 📖 Exemples d'utilisation
 
 ### Vérification conduite extérieure
+
 **Situation**: Tuyau acier DN50, 50m exposé, eau 60°C, air -10°C  
 **Question**: Va-t-elle geler?  
 **Réponse**: ✅ PAS DE GEL (marge 59°C)
 
 ### Évaluation d'isolation
+
 **Test**: Comparer avec/sans isolation 20mm  
 **Résultat**: Économie de 93% sur pertes thermiques
 
 ### Dimensionnement installation
+
 **Objectif**: Déterminer isolation minimale requise  
 **Méthode**: Tester différentes épaisseurs jusqu'à sécurité
 
 ### Étude de sensibilité
+
 **Analyse 1D (Tornado charts)**: Impact individuel de chaque paramètre
+
 - Identification rapide des paramètres critiques
 - Valeurs limites de gel et sécurité
 
 **Analyse 2D (Heatmap)**: Effet combiné de deux paramètres
+
 - Température air (-10 à -40°C)
 - Débit d'eau (faible → élevé)
 - Longueur exposée
@@ -139,6 +152,7 @@ js/
 ```
 
 **Cette structure est intentionnelle** - Elle permet aux ingénieurs de:
+
 1. **Valider les données** (`data/`) - Tables scientifiques pures
 2. **Identifier les constantes** (`constants/`) - Source unique de vérité
 3. **Comprendre l'accès** (`properties/`) - Comment récupérer une valeur
@@ -152,9 +166,11 @@ js/
 ## 📚 Documentation
 
 ### Pour utilisateurs
+
 - **README.md** (ce fichier) - Guide d'utilisation complet
 
 ### Pour développeurs/ingénieurs
+
 - **JSDoc dans le code** - Documentation technique inline avec références scientifiques
 - **[docs/SCIENTIFIC_DATA_FLOW.md](docs/SCIENTIFIC_DATA_FLOW.md)** - Flow complet des données et références scientifiques
 - **[memory-bank/systemPatterns.md](memory-bank/systemPatterns.md)** - Organisation du code par niveaux
@@ -167,18 +183,20 @@ js/
 **Important**: À l'ouverture de l'application, un avertissement détaillé s'affiche. Vous devez l'accepter pour continuer. Ce disclaimer rappelle que les résultats sont indicatifs et ne remplacent pas l'analyse d'un professionnel qualifié.
 
 ### Plages de validité
+
 - **Température eau**: 1 à 100°C
 - **Température air**: -50 à +30°C
 - **Pression**: 1 à 10 bar
 - **Longueur**: 1 à 2500 m
 
 ### Hypothèses
+
 - Fluide: Eau pure (sans glycol ni additifs)
 - Régime: Permanent (état stationnaire)
 - Environnement: Air ambiant
 - Géométrie: Conduite droite horizontale
 
-*Pour des configurations plus complexes, consultez la documentation technique.*
+_Pour des configurations plus complexes, consultez la documentation technique._
 
 ## 📏 Limitations et Facteurs de Sécurité
 
@@ -210,9 +228,9 @@ js/
 ### Facteurs de sécurité recommandés
 
 | Condition | Application critique | Application standard |
-|-----------|---------------------|---------------------|
-| Idéale | 1.0-1.1 | 1.0 |
-| Limite | 1.5-2.0 | 1.2-1.5 |
+| --------- | -------------------- | -------------------- |
+| Idéale    | 1.0-1.1              | 1.0                  |
+| Limite    | 1.5-2.0              | 1.2-1.5              |
 
 **Application**: Si longueur critique calculée = 200m avec Re transitoire → Longueur sécuritaire = 200 / 1.5 = **133m**
 

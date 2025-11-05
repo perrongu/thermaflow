@@ -11,11 +11,11 @@
 
 /**
  * Récupère les propriétés d'un matériau par son identifiant.
- * 
+ *
  * @param {string} material_id - Identifiant du matériau (ex: 'steel', 'copper', 'fiberglass')
  * @returns {MaterialProperties} Propriétés du matériau
  * @throws {Error} Si le matériau n'existe pas
- * 
+ *
  * @example
  * const steel = getMaterialProperties('steel');
  * console.log(steel.k);   // 50.2 W/(m·K)
@@ -25,7 +25,7 @@ function getMaterialProperties(material_id) {
   if (typeof material_id !== 'string') {
     throw new Error(`ID de matériau doit être une chaîne: ${material_id}`);
   }
-  
+
   // Récupérer les tables (depuis window ou module)
   let materialData;
   if (typeof window !== 'undefined' && window.MaterialPropertiesData) {
@@ -35,29 +35,27 @@ function getMaterialProperties(material_id) {
   } else {
     throw new Error('Tables de données matériaux non disponibles');
   }
-  
+
   const props = materialData[material_id];
-  
+
   if (!props) {
     const available = Object.keys(materialData).join(', ');
-    throw new Error(
-      `Matériau inconnu: '${material_id}'. Matériaux disponibles: ${available}`
-    );
+    throw new Error(`Matériau inconnu: '${material_id}'. Matériaux disponibles: ${available}`);
   }
-  
-  return { ...props };  // Retourne une copie pour éviter modifications
+
+  return { ...props }; // Retourne une copie pour éviter modifications
 }
 
 /**
  * Liste tous les matériaux disponibles par catégorie.
- * 
+ *
  * @param {string} [category] - Catégorie optionnelle: 'metal', 'insulation', 'plastic'
  * @returns {Array<string>} Liste des identifiants de matériaux
- * 
+ *
  * @example
  * const metals = listMaterials('metal');
  * // ['steel', 'steel_polished', 'stainless_steel', ...]
- * 
+ *
  * @example
  * const all = listMaterials();
  * // Tous les matériaux
@@ -72,14 +70,14 @@ function listMaterials(category = null) {
   } else {
     throw new Error('Tables de données matériaux non disponibles');
   }
-  
+
   const materials = Object.keys(materialData);
-  
+
   if (category === null) {
     return materials;
   }
-  
-  return materials.filter(id => {
+
+  return materials.filter((id) => {
     return materialData[id].category === category;
   });
 }
@@ -88,7 +86,7 @@ function listMaterials(category = null) {
 if (typeof window !== 'undefined') {
   window.MaterialProperties = {
     getMaterialProperties,
-    listMaterials
+    listMaterials,
   };
 }
 
@@ -96,7 +94,6 @@ if (typeof window !== 'undefined') {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     getMaterialProperties,
-    listMaterials
+    listMaterials,
   };
 }
-

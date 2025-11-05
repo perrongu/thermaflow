@@ -5,11 +5,13 @@ Modules d'interface utilisateur pour interaction et visualisation.
 ## Structure prévue
 
 ### Composants d'entrée
+
 - `pipe-selector.js` - Sélection du type de conduite
 - `input-form.js` - Formulaire de paramètres
 - `validation.js` - Validation des saisies utilisateur
 
 ### Visualisation
+
 - `temperature-chart.js` - Graphique du profil de température
 - `pressure-chart.js` - Graphique du profil de pression
 - `results-table.js` - Tableau des résultats détaillés
@@ -18,12 +20,14 @@ Modules d'interface utilisateur pour interaction et visualisation.
 - `sensitivity-analysis.js` - Section 2: Analyse de sensibilité 2D
 
 ### Utilitaires
+
 - `utils.js` ✅ - Fonctions utilitaires (debounce, throttle, promises annulables)
 - `calculation-manager.js` ✅ - Gestionnaire centralisé des recalculs avec file d'attente et priorités
 - `storage.js` ✅ - Sauvegarde/chargement de scénarios
 - `export.js` ✅ - Export des résultats (PDF, CSV)
 
 ### Orchestration
+
 - `app.js` ✅ - Point d'entrée principal, coordination des modules
 
 ## Principes
@@ -81,10 +85,8 @@ Callbacks d'affichage (badge, spinner, résultats)
 
 - **IMMEDIATE** (3): Bypass tout, exécute maintenant
   - Utilisé pour: Enter
-  
 - **HIGH** (2): Cancel les requêtes LOW en attente
   - Utilisé pour: blur, change (menus), toggle isolation
-  
 - **LOW** (1): Peut être remplacée par HIGH
   - Utilisé pour: input debounced (frappe utilisateur)
 
@@ -103,4 +105,3 @@ Callbacks d'affichage (badge, spinner, résultats)
 - ✅ Feedback visuel immédiat (<100ms)
 - ✅ Expérience utilisateur fluide
 - ✅ Code maintenable et centralisé
-

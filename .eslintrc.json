@@ -1,0 +1,72 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": ["eslint:recommended", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "script"
+  },
+  "rules": {
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "no-var": "error",
+    "prefer-const": "error",
+    "eqeqeq": ["error", "always"],
+    "curly": ["warn", "all"],
+    "no-eval": "error",
+    "no-implied-eval": "error",
+    "no-new-func": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["js/ui/*.js"],
+      "rules": {
+        "no-undef": "error"
+      },
+      "globals": {
+        "document": "readonly",
+        "window": "readonly",
+        "I18n": "readonly",
+        "UnitConverter": "readonly",
+        "UIUtils": "readonly",
+        "MaterialProperties": "readonly",
+        "WaterProperties": "readonly",
+        "AirProperties": "readonly",
+        "PipeDiagram": "readonly",
+        "PipeSpecsLoader": "readonly",
+        "InputForm": "readonly",
+        "CalculationManager": "readonly",
+        "CalculationDetails": "readonly",
+        "TemperatureChart": "readonly",
+        "SensitivityAnalysis": "readonly",
+        "SensitivityAnalysis1D": "readonly",
+        "Export": "readonly",
+        "displayConfigSummary": "readonly",
+        "calculatePipeSegment": "readonly",
+        "calculatePipeNetwork": "readonly",
+        "detectFreeze": "readonly",
+        "renderMathInElement": "readonly",
+        "Chart": "readonly"
+      }
+    },
+    {
+      "files": ["js/properties/*.js", "js/formulas/*.js", "js/correlations/*.js", "js/calculations/*.js", "js/engine/*.js", "js/constants/*.js"],
+      "rules": {
+        "no-undef": "error"
+      },
+      "globals": {
+        "module": "readonly",
+        "require": "readonly"
+      }
+    },
+    {
+      "files": ["tests/**/*.js", "scripts/**/*.js"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ]
+}
