@@ -59,7 +59,7 @@ function assertEqual(actual, expected, message = '') {
   }
 }
 
-function assertThrows(fn, message = '') {
+function _assertThrows(fn, message = '') {
   testsRun++;
   try {
     fn();

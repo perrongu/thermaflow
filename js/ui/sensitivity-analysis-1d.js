@@ -377,9 +377,6 @@
           const result = calculatePipeNetwork(testConfig);
           T_atMin = result.T_final;
           if (effectiveMin !== minToUse) {
-            console.log(
-              `✓ MIN ajusté pour ${paramKey}: ${minToUse.toFixed(2)} → ${effectiveMin.toFixed(2)}`
-            );
             minToUse = effectiveMin; // Mettre à jour pour le reste
           }
           break; // Succès!
@@ -406,9 +403,6 @@
           const result = calculatePipeNetwork(testConfig);
           T_atMax = result.T_final;
           if (effectiveMax !== maxToUse) {
-            console.log(
-              `✓ MAX ajusté pour ${paramKey}: ${maxToUse.toFixed(2)} → ${effectiveMax.toFixed(2)}`
-            );
             maxToUse = effectiveMax; // Mettre à jour pour le reste
           }
           break; // Succès!

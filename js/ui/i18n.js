@@ -142,7 +142,6 @@
 
     const evt = new CustomEvent('thermaflow:language-changed', { detail: { lang } });
     document.dispatchEvent(evt);
-    console.log('🌐 I18n: événement language-changed dispatché →', lang);
   }
 
   function init() {

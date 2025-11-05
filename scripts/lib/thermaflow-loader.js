@@ -45,31 +45,31 @@ function loadThermaFlowModules(rootDir) {
   // Charger TOUS les modules dans l'ordre des dépendances
   // 1. Properties
   const waterProperties = require(path.join(rootDir, 'js', 'properties', 'water-properties.js'));
-  const airProperties = require(path.join(rootDir, 'js', 'properties', 'air-properties.js'));
-  const materialPropertiesModule = require(
+  const _airProperties = require(path.join(rootDir, 'js', 'properties', 'air-properties.js'));
+  const _materialPropertiesModule = require(
     path.join(rootDir, 'js', 'properties', 'material-properties.js')
   );
 
   // 2. Formulas
-  const reynolds = require(path.join(rootDir, 'js', 'formulas', 'reynolds.js'));
-  const geometry = require(path.join(rootDir, 'js', 'formulas', 'geometry.js'));
-  const pressureBasic = require(path.join(rootDir, 'js', 'formulas', 'pressure-basic.js'));
+  const _reynolds = require(path.join(rootDir, 'js', 'formulas', 'reynolds.js'));
+  const _geometry = require(path.join(rootDir, 'js', 'formulas', 'geometry.js'));
+  const _pressureBasic = require(path.join(rootDir, 'js', 'formulas', 'pressure-basic.js'));
 
   // 3. Correlations
-  const frictionFactor = require(path.join(rootDir, 'js', 'correlations', 'friction-factor.js'));
-  const nusseltInternal = require(path.join(rootDir, 'js', 'correlations', 'nusselt-internal.js'));
-  const nusseltExternal = require(path.join(rootDir, 'js', 'correlations', 'nusselt-external.js'));
-  const radiation = require(path.join(rootDir, 'js', 'correlations', 'radiation.js'));
+  const _frictionFactor = require(path.join(rootDir, 'js', 'correlations', 'friction-factor.js'));
+  const _nusseltInternal = require(path.join(rootDir, 'js', 'correlations', 'nusselt-internal.js'));
+  const _nusseltExternal = require(path.join(rootDir, 'js', 'correlations', 'nusselt-external.js'));
+  const _radiation = require(path.join(rootDir, 'js', 'correlations', 'radiation.js'));
 
   // 4. Calculations
-  const pressureDrop = require(path.join(rootDir, 'js', 'calculations', 'pressure-drop.js'));
-  const thermalResistance = require(
+  const _pressureDrop = require(path.join(rootDir, 'js', 'calculations', 'pressure-drop.js'));
+  const _thermalResistance = require(
     path.join(rootDir, 'js', 'calculations', 'thermal-resistance.js')
   );
-  const heatTransfer = require(path.join(rootDir, 'js', 'calculations', 'heat-transfer.js'));
+  const _heatTransfer = require(path.join(rootDir, 'js', 'calculations', 'heat-transfer.js'));
 
   // 5. Engine
-  const pipeSegment = require(path.join(rootDir, 'js', 'engine', 'pipe-segment.js'));
+  const _pipeSegment = require(path.join(rootDir, 'js', 'engine', 'pipe-segment.js'));
   const pipeNetwork = require(path.join(rootDir, 'js', 'engine', 'pipe-network.js'));
 
   return { waterProperties, pipeNetwork };
@@ -84,6 +84,7 @@ function loadPipeSpecsHelper(rootDir) {
   // Charger steel
   const steelCode = fs.readFileSync(path.join(rootDir, 'data', 'pipespecs', 'steel.js'), 'utf8');
   const steelCodeModified = steelCode.replace(/^const steelData =/m, 'pipespecsData.steelData =');
+  // eslint-disable-next-line no-new-func
   const steelFunc = new Function('pipespecsData', steelCodeModified);
   steelFunc(pipespecsData);
 
@@ -93,6 +94,7 @@ function loadPipeSpecsHelper(rootDir) {
     /^const copperData =/m,
     'pipespecsData.copperData ='
   );
+  // eslint-disable-next-line no-new-func
   const copperFunc = new Function('pipespecsData', copperCodeModified);
   copperFunc(pipespecsData);
 
@@ -105,6 +107,7 @@ function loadPipeSpecsHelper(rootDir) {
     /^const stainlessData =/m,
     'pipespecsData.stainlessData ='
   );
+  // eslint-disable-next-line no-new-func
   const stainlessFunc = new Function('pipespecsData', stainlessCodeModified);
   stainlessFunc(pipespecsData);
 

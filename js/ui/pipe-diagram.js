@@ -67,8 +67,6 @@
     svgElement.setAttribute('preserveAspectRatio', 'xMidYMid meet');
 
     container.appendChild(svgElement);
-
-    console.log('✅ PipeDiagram initialisé');
   }
 
   // ========== MISE À JOUR ==========
@@ -728,14 +726,9 @@
   }
 
   // ========== LISTENER CHANGEMENT DE LANGUE ==========
-  document.addEventListener('thermaflow:language-changed', function (e) {
+  document.addEventListener('thermaflow:language-changed', function (_event) {
     try {
-      console.log(
-        '🌐 PipeDiagram: changement de langue détecté →',
-        e.detail ? e.detail.lang : 'no detail'
-      );
       if (currentSpecs) {
-        console.log('🔄 PipeDiagram: régénération du diagramme avec specs:', currentSpecs);
         update(currentSpecs);
       } else {
         console.warn('⚠️ PipeDiagram: pas de specs à régénérer (currentSpecs est null)');
@@ -744,8 +737,6 @@
       console.error('❌ PipeDiagram: erreur dans listener language-changed:', err);
     }
   });
-
-  console.log('🔍 PipeDiagram: listener language-changed attaché au niveau module');
 
   // ========== API PUBLIQUE ==========
   window.PipeDiagram = {

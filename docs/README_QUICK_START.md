@@ -34,6 +34,17 @@ Voir: **[QUICK_VERIFICATION_GUIDE.md](QUICK_VERIFICATION_GUIDE.md)** (3 pages)
 
 ---
 
+## 🧭 Version applicative
+
+- Source unique: `js/constants/version.js`
+- UI: `window.ThermaFlowVersion.VERSION`
+- Scripts Node: `require('./js/constants/version.js').VERSION`
+- `package.json`: synchroniser manuellement avec `VERSION`
+
+**Important**: ne jamais hardcoder la version dans les UI/tests/scripts.
+
+---
+
 ## 🎯 WORKFLOW SIMPLIFIÉ
 
 ```

@@ -331,10 +331,10 @@ assertLess(f_very_rough, 0.09, `f(ε/D=0.05) = ${f_very_rough.toFixed(5)} < 0.09
 
 console.log('\nTest D4: ε/D = 0.06 (warning hors limite)');
 // Colebrook valide jusqu'à ε/D ≈ 0.05
-let warning_rough = false;
+let _warningRough = false;
 console.warn = function (...args) {
   if (args[0] && args[0].includes('rugosité')) {
-    warning_rough = true;
+    _warningRough = true;
   }
 };
 friction.frictionFactorColebrook(50000, 0.06);

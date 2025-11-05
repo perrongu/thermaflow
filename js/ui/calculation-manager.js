@@ -58,9 +58,6 @@
    */
   function init(callbackHandlers = {}) {
     callbacks = { ...callbacks, ...callbackHandlers };
-    if (DEBUG) {
-      console.log('✅ CalculationManager initialisé');
-    }
   }
 
   // ========== DEMANDE DE RECALCUL ==========
@@ -77,10 +74,6 @@
     const { priority = 'high', reason = 'unknown', delay = getPriorityDelay(priority) } = options;
 
     const priorityLevel = Priorities[priority.toUpperCase()] || Priorities.HIGH;
-
-    if (DEBUG) {
-      console.log(`🔄 Recalcul demandé: priority=${priority}, reason=${reason}, delay=${delay}ms`);
-    }
 
     // Cas 1: IMMEDIATE - Exécuter maintenant, annuler tout
     if (priorityLevel === Priorities.IMMEDIATE) {
@@ -141,7 +134,7 @@
     if (state.pendingRequest) {
       clearTimeout(state.pendingRequest.timeoutId);
       if (DEBUG) {
-        console.log(`❌ Requête annulée: ${state.pendingRequest.reason}`);
+        console.warn(`Requête annulée: ${state.pendingRequest.reason}`);
       }
       state.pendingRequest = null;
     }
@@ -149,10 +142,6 @@
 
   // ========== EXÉCUTER CALCUL ==========
   function executeCalculation(config, reason) {
-    if (DEBUG) {
-      console.log(`🔬 Exécution calcul: reason=${reason}`);
-    }
-
     setState(States.CALCULATING, { reason });
 
     if (callbacks.onCalculationStart) {
@@ -228,7 +217,7 @@
     if (state.currentCalculation) {
       clearTimeout(state.currentCalculation.timeoutId);
       if (DEBUG) {
-        console.log(`❌ Calcul annulé: ${state.currentCalculation.reason}`);
+        console.warn(`Calcul annulé: ${state.currentCalculation.reason}`);
       }
       state.currentCalculation = null;
     }
@@ -240,7 +229,7 @@
     cancelCurrentCalculation();
     setState(States.IDLE);
     if (DEBUG) {
-      console.log('🛑 Tous les calculs annulés');
+      console.warn('Tous les calculs annulés');
     }
   }
 
@@ -260,12 +249,7 @@
 
   // ========== METTRE À JOUR ÉTAT ==========
   function setState(newState, data = {}) {
-    const oldState = state.current;
     state.current = newState;
-
-    if (DEBUG) {
-      console.log(`📊 État: ${oldState} → ${newState}`, data);
-    }
 
     if (callbacks.onStateChange) {
       callbacks.onStateChange(newState, data);
