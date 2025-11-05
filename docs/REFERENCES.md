@@ -225,17 +225,17 @@ Si vous utilisez ThermaFlow dans un rapport d'ingénierie ou une publication:
 
 ```
 Perron, G. (2025). ThermaFlow - Outil de simulation d'écoulement thermique en conduites.
-Version 1.1.1. Disponible: https://github.com/perrongu/thermaflow
+Version 1.1.2. Disponible: https://github.com/perrongu/thermaflow
 ```
 
 **Note importante**: ThermaFlow implémente des corrélations standards de l'industrie. Dans un rapport technique, **citez toujours les sources originales** (Perry's, IAPWS-97, etc.) et non ThermaFlow lui-même.
 
 **Exemple de citation correcte dans un rapport**:
 
-> "Le facteur de friction a été calculé avec la corrélation de Colebrook-White (Perry's Handbook Section 6-4) en utilisant le logiciel ThermaFlow v1.1.1."
+> "Le facteur de friction a été calculé avec la corrélation de Colebrook-White (Perry's Handbook Section 6-4) en utilisant le logiciel ThermaFlow v1.1.2."
 
 ---
 
 **Document rédigé pour**: Ingénieurs en piping et procédés  
-**Version**: 1.1.1  
+**Version**: 1.1.2  
 **Dernière mise à jour**: 5 novembre 2025

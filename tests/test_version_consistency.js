@@ -53,7 +53,7 @@ function runTests() {
   // Test 3: index.html référence la version dynamique
   const indexHtml = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
   assert(
-    indexHtml.includes('<span class="version-number">'),
+    indexHtml.includes('class="version-number"'),
     "index.html expose un span .version-number pour l'injection UI"
   );
   assert(

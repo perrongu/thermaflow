@@ -1,7 +1,7 @@
 # RAPPORT DE VÉRIFICATION AUTOMATIQUE - THERMAFLOW
 
-**Date**: 2025-11-05 14:53:17  
-**Version**: 1.1.1  
+**Date**: 2025-11-05 17:03:54  
+**Version**: 1.1.2  
 **Durée**: 0.0 minutes  
 **Statut global**: VALIDÉ ✓
 
@@ -13,7 +13,7 @@
 |-----------|-------|------|------|------|
 | **Constantes physiques** | 14 | 14 | 0 | 100.0% |
 | **Conversions d'unités** | 25 | 25 | 0 | 100.0% |
-| **Tests unitaires** | 14 | 14 | 0 | 100.0% |
+| **Tests unitaires** | 15 | 15 | 0 | 100.0% |
 
 
 ---
@@ -111,6 +111,7 @@
 | test_storage_persistence.js | ✓ PASS |
 | test_temperature_iteration.js | ✓ PASS |
 | test_unit_conversions.js | ✓ PASS |
+| test_version_consistency.js | ✓ PASS |
 
 ---
 
@@ -187,12 +188,12 @@
 ✓ **TOUS LES CRITÈRES SONT VALIDÉS**
 
 Ce rapport confirme que:
-- 100% des tests unitaires passent (14/14) ✓
+- 100% des tests unitaires passent (15/15) ✓
 - 100% des conversions d'unités sont correctes (25/25) ✓
 - 14/14 constantes extraites et validées automatiquement
 - 50 cas de validation externe comparés aux logiciels de référence
 
-**Je certifie l'exactitude scientifique et technique de ThermaFlow v1.1.1**
+**Je certifie l'exactitude scientifique et technique de ThermaFlow v1.1.2**
 
 **Nom**: ________________________________
 
@@ -204,6 +205,6 @@ Ce rapport confirme que:
 
 ---
 
-*Rapport généré automatiquement le 2025-11-05 14:53:17*  
+*Rapport généré automatiquement le 2025-11-05 17:03:54*  
 *Durée d'exécution: 0.0 minutes*  
-*ThermaFlow v1.1.1 - Automated Verification System*
+*ThermaFlow v1.1.2 - Automated Verification System*

@@ -27,6 +27,7 @@ docs/references/
 # Fichiers temporaires
 *.tmp
 *.log
+*.backup
 .DS_Store
 
 # IDE
