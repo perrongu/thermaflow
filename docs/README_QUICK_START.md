@@ -85,4 +85,4 @@ Pour signer le rapport:
 
 **Vérification scientifique rigoureuse en 30 minutes ⚡**
 
-_ThermaFlow v1.0.1 - Automated Verification System_
+_ThermaFlow v1.1.1 - Automated Verification System_

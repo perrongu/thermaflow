@@ -1,5 +1,26 @@
 # Historique des versions - ThermaFlow
 
+## Version 1.1.1 (5 novembre 2025)
+
+### Infrastructure développement
+
+- Configuration hook pre-commit automatique (format, lint, tests)
+- Installation ESLint et Prettier avec règles strictes
+- Documentation setup développeurs (.git/hooks/README.md)
+- Ajout scripts npm (lint, format:check, verify)
+
+### Nettoyage
+
+- Suppression fichier backup validation
+- Déplacement CHANGELOG.md vers docs/
+- Ajout pattern rapports auto-générés à .prettierignore
+
+### Notes
+
+Aucun changement fonctionnel. Validation complète: 14/14 constantes, 25/25 conversions, 14/14 tests (100%).
+
+---
+
 ## Version 1.1.0 (4 novembre 2025)
 
 ### Nouvelles fonctionnalités

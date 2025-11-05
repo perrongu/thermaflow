@@ -2,7 +2,7 @@
 
 **Analyse du risque de gel dans les conduites d'eau**
 
-[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/perrongu/thermaflow)
+[![Version](https://img.shields.io/badge/version-1.1.1-blue.svg)](https://github.com/perrongu/thermaflow)
 [![Licence](https://img.shields.io/badge/licence-MIT-green.svg)](LICENSE)
 
 > **Déterminez en quelques secondes si votre conduite d'eau risque de geler**
@@ -168,6 +168,7 @@ js/
 ### Pour utilisateurs
 
 - **README.md** (ce fichier) - Guide d'utilisation complet
+- **[docs/CHANGELOG.md](docs/CHANGELOG.md)** - Historique des versions et modifications
 
 ### Pour développeurs/ingénieurs
 
@@ -177,6 +178,12 @@ js/
 - **[docs/REFERENCES.md](docs/REFERENCES.md)** - Liste compilée des sources scientifiques
 - **[docs/references/](docs/references/)** - Informations sur les sources et validations
 - **Tests unitaires** - Validation par l'exemple (voir tests/)
+
+### Outils qualité
+
+- **Hook pre-commit** - Validation automatique (format + lint + tests) avant chaque commit
+- **ESLint + Prettier** - Standards de code maintenus automatiquement
+- **Suite de tests** - 14 fichiers tests, validation complète en ~15s
 
 ## ⚠️ Conditions d'utilisation
 
@@ -246,6 +253,6 @@ MIT License - Voir [LICENSE](LICENSE) pour détails.
 
 ---
 
-**ThermaFlow v1.1.0** | Calculs scientifiques rigoureux | 100% open source
+**ThermaFlow v1.1.1** | Calculs scientifiques rigoureux | 100% open source
 
 Pour questions ou support: [Ouvrez une issue sur GitHub](https://github.com/perrongu/thermaflow/issues)

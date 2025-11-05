@@ -320,4 +320,4 @@ Pour questions sur:
 ---
 
 _Guide créé le 2025-10-30_  
-_ThermaFlow v1.0.1 - Quick Verification System_
+_ThermaFlow v1.1.1 - Quick Verification System_
