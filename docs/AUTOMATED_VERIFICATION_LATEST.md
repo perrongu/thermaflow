@@ -1,6 +1,6 @@
 # RAPPORT DE VÉRIFICATION AUTOMATIQUE - THERMAFLOW
 
-**Date**: 2025-11-05 17:35:23  
+**Date**: 2025-11-05 23:41:31  
 **Version**: 1.1.3  
 **Durée**: 0.0 minutes  
 **Statut global**: VALIDÉ ✓
@@ -11,9 +11,9 @@
 
 | Catégorie | Total | Pass | Fail | Taux |
 |-----------|-------|------|------|------|
-| **Constantes physiques** | 14 | 14 | 0 | 100.0% |
-| **Conversions d'unités** | 25 | 25 | 0 | 100.0% |
-| **Tests unitaires** | 15 | 15 | 0 | 100.0% |
+  | **Constantes physiques** | 14 | 14 | 0 | 100.0% |
+  | **Conversions d'unités** | 25 | 25 | 0 | 100.0% |
+  | **Tests unitaires** | 19 | 19 | 0 | 100.0% |
 
 
 ---
@@ -107,6 +107,10 @@
 | test_phase1_materials.js | ✓ PASS |
 | test_pipe_network.js | ✓ PASS |
 | test_pipe_segment.js | ✓ PASS |
+| test_precommit_adds_report.js | ✓ PASS |
+| test_report_filename.js | ✓ PASS |
+| test_report_no_signature.js | ✓ PASS |
+| test_report_timezone.js | ✓ PASS |
 | test_richardson_convection.js | ✓ PASS |
 | test_storage_persistence.js | ✓ PASS |
 | test_temperature_iteration.js | ✓ PASS |
@@ -188,23 +192,15 @@
 ✓ **TOUS LES CRITÈRES SONT VALIDÉS**
 
 Ce rapport confirme que:
-- 100% des tests unitaires passent (15/15) ✓
+- 100% des tests unitaires passent (19/19) ✓
 - 100% des conversions d'unités sont correctes (25/25) ✓
 - 14/14 constantes extraites et validées automatiquement
 - 50 cas de validation externe comparés aux logiciels de référence
 
 **Je certifie l'exactitude scientifique et technique de ThermaFlow v1.1.3**
 
-**Nom**: ________________________________
-
-**Titre/Position**: ________________________________
-
-**Signature**: ________________________________
-
-**Date**: ________________________________
-
 ---
 
-*Rapport généré automatiquement le 2025-11-05 17:35:23*  
+*Rapport généré automatiquement le 2025-11-05 23:41:31*  
 *Durée d'exécution: 0.0 minutes*  
 *ThermaFlow v1.1.3 - Automated Verification System*

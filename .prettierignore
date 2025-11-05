@@ -1,7 +1,7 @@
 node_modules/
 memory-bank/
 docs/references/
-docs/AUTOMATED_VERIFICATION_*.md
+docs/AUTOMATED_VERIFICATION_LATEST.md
 validation/external_validation_sample_v1.0.1.json
 data/fluids/*.js
 *.min.js

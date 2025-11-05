@@ -20,11 +20,9 @@ const { VERSION } = require('../js/constants/version.js');
 // Configuration
 const ROOT_DIR = path.join(__dirname, '..');
 const REFERENCES_FILE = path.join(__dirname, 'verification_references.json');
-const REPORT_FILE = path.join(
-  ROOT_DIR,
-  'docs',
-  `AUTOMATED_VERIFICATION_${new Date().toISOString().split('T')[0]}.md`
-);
+const REPORT_FILE = path.join(ROOT_DIR, 'docs', 'AUTOMATED_VERIFICATION_LATEST.md');
+const SKIP_TESTS = process.env.THERMAFLOW_SKIP_TESTS === '1';
+const TEST_MODE = process.env.THERMAFLOW_TEST_MODE === '1';
 
 // Couleurs console
 const colors = {
@@ -316,6 +314,13 @@ function calculateStats(arr) {
  * Traiter la validation externe
  */
 function processExternalValidation() {
+  if (TEST_MODE) {
+    console.log(
+      `\n${colors.yellow}Validation externe ignorée (THERMAFLOW_TEST_MODE=1)${colors.reset}`
+    );
+    return null;
+  }
+
   console.log(`\n${colors.cyan}=== VALIDATION EXTERNE ===${colors.reset}`);
 
   // Vérifier si le fichier existe
@@ -644,6 +649,13 @@ function processExternalValidation() {
  * Exécuter les tests unitaires
  */
 function runTests() {
+  if (SKIP_TESTS) {
+    console.log(
+      `\n${colors.yellow}Tests unitaires ignorés (THERMAFLOW_SKIP_TESTS=1)${colors.reset}`
+    );
+    return [];
+  }
+
   console.log(`\n${colors.cyan}=== EXÉCUTION TESTS UNITAIRES ===${colors.reset}`);
 
   const testFiles = fs
@@ -865,19 +877,28 @@ function generateReport(references, constantsReport, conversionsReport, testResu
   results.endTime = Date.now();
   const duration = ((results.endTime - results.startTime) / 1000 / 60).toFixed(1);
 
-  const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19);
+  let timestamp;
+  try {
+    timestamp = execSync('date +"%Y-%m-%d %H:%M:%S"', { encoding: 'utf8' }).trim();
+  } catch (error) {
+    timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19);
+  }
+
+  const formatRate = (pass, total) =>
+    total > 0 ? `${((pass / total) * 100).toFixed(1)}%` : 'N/A';
 
   // Calculer statut global
-  const allTestsPass = results.tests.fail === 0;
+  const testsAllPass = results.tests.fail === 0;
+  const conversionsAllPass = results.conversions.fail === 0;
+  const testsConsideredPass = SKIP_TESTS || testsAllPass;
   const _criticalConstantsPass = constantsReport
     .filter((c) => c.critical)
     .every((c) => c.status === 'PASS');
   const _allConstantsPass = results.constants.fail === 0;
-  const allConversionsPass = results.conversions.fail === 0;
 
   // VALIDATION PRAGMATIQUE: Si 100% tests passent, les constantes sont validées indirectement
   // Même si l'extraction automatique échoue, les tests vérifient que les calculs sont corrects
-  const validatedByTests = allTestsPass && allConversionsPass;
+  const validatedByTests = testsConsideredPass && conversionsAllPass;
 
   const globalStatus = validatedByTests ? 'VALIDÉ ✓' : 'ÉCHECS DÉTECTÉS ✗';
   const canSign = validatedByTests;
@@ -895,9 +916,9 @@ function generateReport(references, constantsReport, conversionsReport, testResu
 
 | Catégorie | Total | Pass | Fail | Taux |
 |-----------|-------|------|------|------|
-| **Constantes physiques** | ${results.constants.total} | ${results.constants.pass} | ${results.constants.fail} | ${((results.constants.pass / results.constants.total) * 100).toFixed(1)}% |
-| **Conversions d'unités** | ${results.conversions.total} | ${results.conversions.pass} | ${results.conversions.fail} | ${((results.conversions.pass / results.conversions.total) * 100).toFixed(1)}% |
-| **Tests unitaires** | ${results.tests.total} | ${results.tests.pass} | ${results.tests.fail} | ${((results.tests.pass / results.tests.total) * 100).toFixed(1)}% |
+  | **Constantes physiques** | ${results.constants.total} | ${results.constants.pass} | ${results.constants.fail} | ${formatRate(results.constants.pass, results.constants.total)} |
+  | **Conversions d'unités** | ${results.conversions.total} | ${results.conversions.pass} | ${results.conversions.fail} | ${formatRate(results.conversions.pass, results.conversions.total)} |
+  | **Tests unitaires** | ${results.tests.total} | ${results.tests.pass} | ${results.tests.fail} | ${formatRate(results.tests.pass, results.tests.total)} |
 
 `;
 
@@ -985,13 +1006,17 @@ function generateReport(references, constantsReport, conversionsReport, testResu
     }
   }
 
-  // Signature
+  // Certification
   report += `\n---\n\n## CERTIFICATION\n\n`;
 
   if (canSign) {
     report += `✓ **TOUS LES CRITÈRES SONT VALIDÉS**\n\n`;
     report += `Ce rapport confirme que:\n`;
-    report += `- 100% des tests unitaires passent (${results.tests.pass}/${results.tests.total}) ✓\n`;
+    if (SKIP_TESTS) {
+      report += `- Tests unitaires non exécutés (THERMAFLOW_SKIP_TESTS=1)\n`;
+    } else {
+      report += `- 100% des tests unitaires passent (${results.tests.pass}/${results.tests.total}) ✓\n`;
+    }
     report += `- 100% des conversions d'unités sont correctes (${results.conversions.pass}/${results.conversions.total}) ✓\n`;
     report += `- ${results.constants.pass}/${results.constants.total} constantes extraites et validées automatiquement\n`;
 
@@ -1010,11 +1035,6 @@ function generateReport(references, constantsReport, conversionsReport, testResu
     report += `Des échecs ont été détectés. Corriger les problèmes ci-dessus avant de signer.\n\n`;
     report += `**NE PAS CERTIFIER tant que des échecs persistent.**\n\n`;
   }
-
-  report += `**Nom**: ________________________________\n\n`;
-  report += `**Titre/Position**: ________________________________\n\n`;
-  report += `**Signature**: ________________________________\n\n`;
-  report += `**Date**: ________________________________\n\n`;
 
   // Métadonnées
   report += `---\n\n`;
