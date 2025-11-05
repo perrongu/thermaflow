@@ -744,6 +744,7 @@
     content.innerHTML = html;
     container.style.display = 'block';
   }
+  */
 
   // ========== AFFICHAGE RÉSUMÉ CONFIGURATION ==========
   function displayConfigSummary(config) {
@@ -803,7 +804,6 @@
       document.getElementById('summary-insulation-thickness').textContent = '--';
     }
   }
-  */
 
   // ========== AFFICHAGE VERDICT ==========
   function displayVerdict(analysis) {

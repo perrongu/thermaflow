@@ -1,5 +1,17 @@
 # Historique des versions - ThermaFlow
 
+## Version 1.1.3 (5 novembre 2025)
+
+### Corrections
+
+- Fonction displayConfigSummary réactivée (était commentée par erreur)
+
+### Notes
+
+Bug fix critique: ReferenceError bloquait affichage des résultats. Validation complète: 15/15 tests (100%).
+
+---
+
 ## Version 1.1.2 (5 novembre 2025)
 
 ### Infrastructure
