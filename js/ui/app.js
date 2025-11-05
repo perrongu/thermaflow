@@ -184,6 +184,12 @@
 
   // ========== INITIALISATION AU CHARGEMENT DOM ==========
   document.addEventListener('DOMContentLoaded', function () {
+    const versionSpan = document.querySelector('.version-number');
+    if (versionSpan && window.ThermaFlowVersion && window.ThermaFlowVersion.VERSION) {
+      versionSpan.textContent = `v${window.ThermaFlowVersion.VERSION}`;
+      versionSpan.style.visibility = 'visible';
+    }
+
     // AVANT tout le reste, vérifier le disclaimer
     if (!checkDisclaimerAccepted()) {
       showDisclaimerModal();

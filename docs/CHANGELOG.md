@@ -1,5 +1,20 @@
 # Historique des versions - ThermaFlow
 
+## Version 1.1.2 (5 novembre 2025)
+
+### Infrastructure
+
+- Centralisation version dans js/constants/version.js
+- Suppression console.log non conformes ESLint
+- Test cohérence version automatisé
+- Injection dynamique version dans footer
+
+### Notes
+
+Aucun changement fonctionnel. Validation complète: 15/15 tests (100%), 0 warning ESLint.
+
+---
+
 ## Version 1.1.1 (5 novembre 2025)
 
 ### Infrastructure développement

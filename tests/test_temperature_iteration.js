@@ -218,7 +218,6 @@ const result_conv = pipeSegment.calculatePipeSegment(
 
 // Recalcul Q_loss avec propriétés à T_moy pour vérification
 // Note: Q_loss déjà calculé dans le module utilise cp correct
-const Q_expected = result_conv.Q_loss;
 const Q_verify = fluid_high.m_dot * 4180 * (fluid_high.T_in - result_conv.T_out); // cp eau ≈ 4180 J/(kg·K)
 
 // Tolérance élargie car cp varie avec T

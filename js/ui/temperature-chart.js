@@ -76,8 +76,6 @@
     drawMarginLine(ctx, scales, temperatureGel);
     drawTemperatureCurve(ctx, scales, x_profile, T_profile);
     drawLabels(ctx, scales);
-
-    console.log('📊 Graphique T(x) dessiné avec zones de risque');
   }
 
   // ========== REDIMENSIONNEMENT CANVAS ==========

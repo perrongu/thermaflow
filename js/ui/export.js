@@ -19,8 +19,6 @@
    * @param {Object} config - Configuration utilisée
    */
   function exportToPDF(networkResult, freezeAnalysis, config) {
-    console.log('📄 Export PDF demandé');
-
     // Préparer l'interface pour impression
     prepareForPrint(networkResult, freezeAnalysis, config);
 
@@ -44,8 +42,6 @@
 
     // Marquer body pour styles print
     document.body.classList.add('print-mode');
-
-    console.log('✅ Interface préparée pour impression');
   }
 
   // ========== CRÉATION HEADER PDF ==========
@@ -97,8 +93,6 @@
 
     // Retirer classe print
     document.body.classList.remove('print-mode');
-
-    console.log('✅ Interface restaurée après impression');
   }
 
   // ========== EXPORT ==========

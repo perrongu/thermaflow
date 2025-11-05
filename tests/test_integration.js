@@ -11,7 +11,7 @@
  * Exécution: node tests/test_integration.js
  */
 
-const pipeSegment = require('../js/engine/pipe-segment.js');
+const _pipeSegment = require('../js/engine/pipe-segment.js');
 const pipeNetwork = require('../js/engine/pipe-network.js');
 const freezeDetector = require('../js/engine/freeze-detector.js');
 
@@ -250,7 +250,7 @@ const perfScenario = {
 };
 
 const startTime = Date.now();
-const perfResult = pipeNetwork.calculatePipeNetwork(perfScenario);
+const _perfResult = pipeNetwork.calculatePipeNetwork(perfScenario);
 const endTime = Date.now();
 const duration = endTime - startTime;
 

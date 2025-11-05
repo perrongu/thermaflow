@@ -111,7 +111,6 @@
     }
 
     currentUnits[paramType] = unitKey;
-    console.log(`📐 Unité changée: ${paramType} → ${unitKey}`);
   }
 
   /**
@@ -229,7 +228,6 @@
       if (preferences.pressure && UNITS.pressure[preferences.pressure]) {
         currentUnits.pressure = preferences.pressure;
       }
-      console.log('📂 Préférences unités chargées:', currentUnits);
     }
   }
 
@@ -267,6 +265,4 @@
     // Constantes (pour tests)
     CONVERSION_FACTORS,
   };
-
-  console.log('✅ UnitConverter initialisé');
 })();

@@ -48,8 +48,6 @@
      * @param {Object} config - Configuration de l'analyse
      */
     display: function (networkResult, config) {
-      console.log('📐 Génération des détails de calcul...');
-
       const numSegments = networkResult.segmentResults.length;
 
       if (numSegments === 0) {
@@ -91,8 +89,6 @@
 
       // Rendre les équations LaTeX avec KaTeX
       this.renderLatex();
-
-      console.log('✅ Détails de calcul générés');
     },
 
     /**
@@ -932,7 +928,6 @@
           ],
           throwOnError: false,
         });
-        console.log('✅ Équations LaTeX rendues avec KaTeX');
       }
     },
   };

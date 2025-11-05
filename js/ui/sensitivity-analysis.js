@@ -776,7 +776,6 @@
     const paramDefY = PARAMETER_DEFINITIONS[state.selectedParamY];
 
     // Pour chaque combinaison
-    let successCount = 0;
     let errorCount = 0;
     const errors = [];
 
@@ -814,7 +813,6 @@
             adjusted: adjustedConfig !== config,
             frozen: isFrozen,
           });
-          successCount++;
         } catch (error) {
           // Tenter un calcul de secours avec paramètres plus conservateurs
           try {
@@ -838,7 +836,6 @@
               fallback: true,
               frozen: isFrozen,
             });
-            successCount++;
           } catch (fallbackError) {
             // Vraiment impossible - marquer comme invalide
             // Ne pas estimer pour éviter des valeurs aberrantes dans la heatmap
@@ -864,10 +861,6 @@
         errors.slice(0, 3)
       );
     }
-    console.log(
-      `📊 Matrice ${resolution}x${resolution} calculée: ${successCount} valides, ${errorCount} invalides`
-    );
-
     return {
       matrix: matrix,
       valuesX: valuesX,

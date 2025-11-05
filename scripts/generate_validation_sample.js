@@ -11,6 +11,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { VERSION } = require('../js/constants/version.js');
 
 // ========== CONFIGURATION ==========
 
@@ -84,7 +85,7 @@ const rng = new SeededRandom(42); // Seed fixe pour reproductibilité
 /**
  * Échantillonnage uniforme dans [min, max]
  */
-function uniformSample(min, max) {
+function _uniformSample(min, max) {
   return min + rng.next() * (max - min);
 }
 
@@ -92,7 +93,7 @@ function uniformSample(min, max) {
  * Échantillonnage log-normal (pour distributions asymétriques)
  * Plus de valeurs basses, quelques valeurs hautes
  */
-function logNormalSample(min, max) {
+function _logNormalSample(min, max) {
   const logMin = Math.log(min);
   const logMax = Math.log(max);
   const logValue = logMin + rng.next() * (logMax - logMin);
@@ -103,7 +104,7 @@ function logNormalSample(min, max) {
  * Échantillonnage beta (forme de cloche asymétrique)
  * alpha=2, beta=5 donne plus de valeurs basses
  */
-function betaSample(min, max, alpha = 2, beta = 5) {
+function _betaSample(min, max, alpha = 2, beta = 5) {
   // Approximation simple de Beta via méthode de rejet
   let u1, u2, sample;
   do {
@@ -809,7 +810,7 @@ function exportJSON(cases, outputPath) {
   const output = {
     metadata: {
       generator: 'ThermaFlow External Validation Sample Generator',
-      version: '1.0.1',
+      version: VERSION,
       date: new Date().toISOString().split('T')[0],
       total_cases: cases.length,
       description: 'Échantillon pour validation croisée avec Aspen Hysys, AFT Fathom, DWSIM',
@@ -873,7 +874,7 @@ function exportJSON(cases, outputPath) {
 
 function main() {
   console.log('╔═══════════════════════════════════════════════════════════════╗');
-  console.log('║   ThermaFlow External Validation Sample Generator v1.0.1     ║');
+  console.log(`║   ThermaFlow External Validation Sample Generator v${VERSION}     ║`);
   console.log('╚═══════════════════════════════════════════════════════════════╝');
 
   // 1. Générer cas critiques

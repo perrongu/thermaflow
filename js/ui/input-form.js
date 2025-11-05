@@ -91,8 +91,6 @@
 
     // État initial de l'isolation
     toggleInsulationFields();
-
-    console.log('✅ InputForm initialisé');
   }
 
   // ========== VALEURS PAR DÉFAUT ==========
@@ -797,7 +795,6 @@
     if (savedData && savedData.unitPreferences) {
       currentUnits = { ...currentUnits, ...savedData.unitPreferences };
       UnitConverter.loadPreferences(savedData.unitPreferences);
-      console.log('📂 Préférences unités chargées:', currentUnits);
     }
   }
 
@@ -881,10 +878,6 @@
 
     // Déclencher recalcul
     triggerAnalysis({ priority: 'high', reason: 'unit-change' });
-
-    console.log(
-      `🔄 Unité changée: ${paramType} ${oldUnit} → ${newUnit}, valeur: ${currentValue} → ${convertedValue.toFixed(2)}`
-    );
   }
 
   /**
@@ -924,9 +917,6 @@
       savedData.unitPreferences = { ...currentUnits };
       // Sauvegarder le config existant
       Storage.save(savedData.config);
-    } else {
-      // Pas de données existantes, juste logger
-      console.log('💾 Préférences unités seront sauvegardées lors du prochain calcul');
     }
   }
 
