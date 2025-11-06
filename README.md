@@ -1,206 +1,107 @@
 # ❄️ ThermaFlow
 
-**Analyse du risque de gel dans les conduites d'eau**
+<div align="center">
+  <img src="screenshots/schema-3d.png" width="400"/>
+  <img src="screenshots/graphique-tx.png" width="400"/>
+</div>
 
-[![Version](https://img.shields.io/badge/version-1.1.4-blue.svg)](https://github.com/perrongu/thermaflow)
+<div align="center">
+  <img src="screenshots/verdict.png" width="400"/>
+  <img src="screenshots/sensitivity.png" width="400"/>
+</div>
+
+<div align="center">
+
+[![Version](https://img.shields.io/badge/version-1.1.5-blue.svg)](https://github.com/perrongu/thermaflow)
 [![Licence](https://img.shields.io/badge/licence-MIT-green.svg)](LICENSE)
 
-> **Déterminez en quelques secondes si votre conduite d'eau risque de geler**
+</div>
 
-ThermaFlow calcule scientifiquement l'évolution de la température de l'eau le long d'une conduite exposée au froid et vous indique immédiatement:
+**Déterminez en quelques secondes si votre conduite d'eau risque de geler.**
 
-✅ **PAS DE RISQUE DE GEL** - La conduite est protégée  
-🔴 **RISQUE DE GEL** - Mesures de protection nécessaires
+ThermaFlow calcule scientifiquement l'évolution de la température de l'eau le long d'une conduite exposée au froid et vous indique immédiatement: ✅ **PAS DE RISQUE DE GEL** ou 🔴 **RISQUE DE GEL**.
 
-## 🎯 Pour qui?
-
-- **Ingénieurs** - Dimensionnement d'installations
-- **Techniciens** - Vérification systèmes existants
-- **Gestionnaires** - Évaluation risques hivernaux
-- **Étudiants** - Apprentissage transfert thermique
+Application web gratuite pour **ingénieurs**, **techniciens**, **gestionnaires** et **étudiants** qui doivent analyser le risque de gel dans les conduites d'eau.
 
 ## ✨ Fonctionnalités
 
-### Interface visuelle
+### Interface
 
-- ⚖️ **Disclaimer légal**: Avertissement conditions d'utilisation (multilingue, accessible)
-- 🎨 **Schéma 3D interactif**: Vue isométrique de la tuyauterie
-- 📊 **Graphique T(x)**: Visualisation du profil de température
-- 🔴 **Verdict immédiat**: Résultat clair et sans ambiguïté
-- 📈 **Analyse de sensibilité**: Graphiques tornado (1D) + heatmap (2D)
-- 📄 **Export rapport**: Sauvegarde des résultats
-- 🌐 **Interface multilingue**: FR (par défaut), EN, ES, PT
-- 🔄 **Unités flexibles**: Métrique (m³/h, kPag) ou Impérial (USGPM, psig)
-- ♿ **Accessibilité**: Conforme WCAG 2.1, navigation clavier, focus trap
+- 🎨 **Schéma 3D interactif** - Vue isométrique de la tuyauterie
+- 📊 **Graphique T(x)** - Profil de température avec zones de risque
+- 🔴 **Verdict immédiat** - Résultat clair et sans ambiguïté
+- 📈 **Analyse de sensibilité** - Tornado charts (1D) + Heatmap (2D)
+- 📄 **Export rapport** - Sauvegarde des résultats
 
-### Calculs scientifiques
+### Capacités
 
-- **Hydraulique**: Reynolds, friction (Colebrook), perte de charge
-- **Thermique**: Convection, conduction, rayonnement
-- **Matériaux**: Acier, cuivre, inox + isolants
-- **Fluides**: Eau (IAPWS-97) et air (-50 à +30°C)
+- 🌐 **4 langues** - FR, EN, ES, PT
+- 🔄 **Unités flexibles** - Métrique (m³/h, kPag) ou Impérial (USGPM, psig)
+- ♿ **Accessible** - Conforme WCAG 2.1, navigation clavier
+- ⚡ **Instantané** - Résultats en < 1 seconde
+- 🔒 **100% local** - Aucune donnée envoyée en ligne
 
-### Avantages
+### Calculs
 
-- ⚡ **Instantané**: Résultats en < 1 seconde
-- 🌐 **Sans installation**: Fonctionne dans le navigateur
-- 🔒 **100% local**: Aucune donnée envoyée en ligne
-- 📖 **Scientifiquement validé**: Perry's Handbook, IAPWS-97
-- ♿ **Accessible**: Navigation clavier, lecteurs d'écran, WCAG 2.1
+- **Hydraulique** - Reynolds, friction (Colebrook), perte de charge
+- **Thermique** - Convection (Gnielinski, Churchill-Bernstein), conduction, rayonnement (méthode NTU-ε)
+- **Matériaux** - Acier, cuivre, inox + isolants
+- **Fluides** - Eau (IAPWS-97) et air (-50 à +30°C)
 
-## 🚀 Démarrage rapide
+## 🚀 Installation
 
 ### En ligne
 
-Visitez: **[https://perrongu.github.io/thermaflow](https://perrongu.github.io/thermaflow)**
+Visitez **[https://perrongu.github.io/thermaflow](https://perrongu.github.io/thermaflow)**
 
 ### Local
 
-1. Téléchargez le dépôt
-2. Ouvrez `index.html` dans votre navigateur
-3. Entrez les paramètres de votre installation
-4. Obtenez le verdict instantanément
+**Option 1: Téléchargement ZIP** (recommandé pour la plupart des utilisateurs)
 
-**Aucune installation requise** - Fonctionne directement dans le navigateur
+1. Cliquez sur le bouton **`<> Code`** en haut de cette page
+2. Sélectionnez **`Download ZIP`**
+3. Extrayez le fichier ZIP
+4. Ouvrez `index.html` dans votre navigateur
 
-### Changer la langue
+**Option 2: Git**
 
-- Sélecteur en haut à droite (initiales): `FR` `EN` `ES` `PT`
-- La préférence est mémorisée. Le contenu dynamique (diagramme SVG, graphiques, sections repliables) se met à jour instantanément.
-
-### Changer les unités
-
-- Dropdowns dans le schéma **EAU**: m³/h ↔ USGPM (débit), kPag ↔ psig (pression)
-- La conversion est automatique et maintient les conditions identiques
-- Préférence mémorisée entre sessions
-- Toutes les valeurs (résultats, graphiques, analyses, export PDF) utilisent l'unité sélectionnée
-
-## 📖 Exemples d'utilisation
-
-### Vérification conduite extérieure
-
-**Situation**: Tuyau acier DN50, 50m exposé, eau 60°C, air -10°C  
-**Question**: Va-t-elle geler?  
-**Réponse**: ✅ PAS DE GEL (marge 59°C)
-
-### Évaluation d'isolation
-
-**Test**: Comparer avec/sans isolation 20mm  
-**Résultat**: Économie de 93% sur pertes thermiques
-
-### Dimensionnement installation
-
-**Objectif**: Déterminer isolation minimale requise  
-**Méthode**: Tester différentes épaisseurs jusqu'à sécurité
-
-### Étude de sensibilité
-
-**Analyse 1D (Tornado charts)**: Impact individuel de chaque paramètre
-
-- Identification rapide des paramètres critiques
-- Valeurs limites de gel et sécurité
-
-**Analyse 2D (Heatmap)**: Effet combiné de deux paramètres
-
-- Température air (-10 à -40°C)
-- Débit d'eau (faible → élevé)
-- Longueur exposée
-- Type d'isolation
-
-## 🔬 Validation scientifique
-
-ThermaFlow est basé sur des standards industriels reconnus:
-
-- **Perry's Chemical Engineers' Handbook** (9th Ed.) - Corrélations thermiques et hydrauliques
-- **IAPWS-97** - Propriétés de l'eau (standard international)
-- **PINT** - Conversions d'unités (compatibilité bibliothèque Python standard)
-- **Suite de tests complète** - Validation de tous les modules de calcul (25/25 conversions, 14/14 fichiers tests)
-- **Validation externe** - 130 cas comparés avec Aspen Hysys, AFT Fathom et DWSIM (excellent accord température ±1.5°C)
-- **Conservation d'énergie** - Vérifiée sur tous les calculs
-
-## 🏗️ Architecture du code
-
-ThermaFlow est organisé par **niveaux de complexité** pour faciliter la compréhension par les ingénieurs de procédé:
-
-```
-data/                  # 📊 TABLES PURES - Données scientifiques
-├── fluids/           # Propriétés air/eau (IAPWS-97, ASHRAE)
-├── materials/        # Matériaux (Perry's Table 2-314)
-└── pipes/            # Rugosités (Diagramme de Moody)
-
-js/
-├── constants/        # 🔢 CONSTANTES PARTAGÉES
-│                     # (source unique de vérité, ex: RE_LAMINAR_MAX)
-│
-├── properties/       # 🔍 LOOKUP - Accès aux données
-│                     # (interpolation, recherche dans tables)
-│
-├── formulas/         # 📐 FORMULES DE BASE
-│                     # (Re = ρVD/μ, ΔP = fLD·ρV²/2)
-│
-├── correlations/     # 🔬 CORRÉLATIONS EMPIRIQUES
-│                     # (Colebrook, Gnielinski, Churchill-Bernstein)
-│
-├── calculations/     # ⚙️ CALCULS COMPOSÉS
-│                     # (assemblages multi-étapes)
-│
-├── engine/           # 🚀 ORCHESTRATION
-│                     # (segment → network → détection gel)
-│
-└── ui/               # 🎨 INTERFACE
-                      # (formulaire, graphiques, export)
+```bash
+git clone https://github.com/perrongu/thermaflow.git
+cd thermaflow
+open index.html
 ```
 
-**Cette structure est intentionnelle** - Elle permet aux ingénieurs de:
+**Aucune installation requise** - L'application fonctionne directement dans le navigateur (HTML/CSS/JS pur).
 
-1. **Valider les données** (`data/`) - Tables scientifiques pures
-2. **Identifier les constantes** (`constants/`) - Source unique de vérité
-3. **Comprendre l'accès** (`properties/`) - Comment récupérer une valeur
-4. **Reconnaître les équations** (`formulas/`) - Formules classiques
-5. **Utiliser les corrélations** (`correlations/`) - "Boîtes noires" empiriques
-6. **Voir l'assemblage** (`calculations/`) - Comment tout s'intègre
+### Configuration
 
-📖 **[Voir memory-bank/systemPatterns.md](memory-bank/systemPatterns.md)** pour l'organisation complète du code  
-📖 **[Voir docs/SCIENTIFIC_DATA_FLOW.md](docs/SCIENTIFIC_DATA_FLOW.md)** pour le flow technique détaillé
+- **Langue**: Sélecteur en haut à droite (`FR` `EN` `ES` `PT`)
+- **Unités**: Dropdowns dans le formulaire (m³/h ↔ USGPM, kPag ↔ psig)
+- **Préférences**: Sauvegardées automatiquement entre sessions
 
-## 📚 Documentation
+## 📖 Cas d'utilisation
 
-### Pour utilisateurs
+### 1. Shutdown avec circulation réduite
 
-- **README.md** (ce fichier) - Guide d'utilisation complet
-- **[docs/CHANGELOG.md](docs/CHANGELOG.md)** - Historique des versions et modifications
+**Situation**: Arrêt d'urgence prévu 48h, conduite DN80 acier, 150m extérieure non isolée, eau 15°C, température -20°C. Débit normal 50 USGPM impossible, réduction à 5 USGPM possible.  
+**Question**: Est-ce que 5 USGPM de circulation minimale empêche le gel?  
+**Utilisation**: Tester différents débits réduits pour déterminer le débit critique de protection.
 
-### Pour développeurs/ingénieurs
+### 2. Design nouveau pipeline
 
-**📖 Point d'entrée: [Memory Bank](memory-bank/)** - Documentation stratégique complète
+**Situation**: Nouvelle conduite extérieure 300m, eau 60°C, débit 25 USGPM, air -15°C hiver typique.  
+**Question**: Quelle épaisseur d'isolation minimale requise?  
+**Utilisation**: Tester différentes configurations (matériau, isolation) pour dimensionnement optimal.
 
-- **[activeContext.md](memory-bank/activeContext.md)** - État actuel projet, dernière session, prochaines étapes
-- **[progress.md](memory-bank/progress.md)** - Ce qui fonctionne, ce qui reste à faire
-- **[systemPatterns.md](memory-bank/systemPatterns.md)** - Architecture et organisation du code
-- **[techContext.md](memory-bank/techContext.md)** - Choix techniques et contraintes
-- **[projectbrief.md](memory-bank/projectbrief.md)** - Vision et objectifs du projet
+### 3. Estimation bénéfice énergétique isolant
 
-**Références scientifiques:**
-
-- **[docs/SCIENTIFIC_DATA_FLOW.md](docs/SCIENTIFIC_DATA_FLOW.md)** - Traçabilité tables → calculs
-- **[docs/REFERENCES.md](docs/REFERENCES.md)** - Sources scientifiques compilées
-- **[docs/references/](docs/references/)** - Validations détaillées
-- **JSDoc dans le code** - Documentation inline avec références Perry's/IAPWS
-
-**Validation:**
-
-- **[docs/AUTOMATED_VERIFICATION_LATEST.md](docs/AUTOMATED_VERIFICATION_LATEST.md)** - Rapport validation complet
-- **Tests unitaires** - 19 fichiers, validation par l'exemple (voir tests/)
-
-### Outils qualité
-
-- **Hook pre-commit** - Validation automatique (format + lint + tests + rapport)
-- **ESLint + Prettier** - Standards code maintenus automatiquement
-- **`npm run verify`** - Suite complète en ~15s (19/19 tests)
+**Situation**: Conduite existante DN50 cuivre, 80m exposée, non isolée actuellement.  
+**Question**: Économie sur pertes thermiques avec isolation 20mm?  
+**Utilisation**: Comparer scénarios avec/sans isolation. Analyse de sensibilité pour identifier paramètres critiques.
 
 ## ⚠️ Conditions d'utilisation
 
-**Important**: À l'ouverture de l'application, un avertissement détaillé s'affiche. Vous devez l'accepter pour continuer. Ce disclaimer rappelle que les résultats sont indicatifs et ne remplacent pas l'analyse d'un professionnel qualifié.
+**Important**: Les résultats sont à titre **indicatif seulement**. Cette application ne remplace pas l'analyse d'un professionnel qualifié.
 
 ### Plages de validité
 
@@ -216,49 +117,86 @@ js/
 - Environnement: Air ambiant
 - Géométrie: Conduite droite horizontale
 
-_Pour des configurations plus complexes, consultez la documentation technique._
+### Responsabilité
 
-## 📏 Limitations et Facteurs de Sécurité
+L'utilisateur assume l'entière responsabilité de l'utilisation des résultats. Toujours consulter un ingénieur qualifié pour les applications critiques.
 
-### Quand faire confiance aux résultats
+## 🔬 Validation scientifique
 
-#### ✅ Conditions idéales (Confiance > 95%, Facteur 1.0)
+ThermaFlow est basé sur des standards industriels reconnus et validé scientifiquement.
 
-- **Température**: Eau 5-80°C, Air -30 à +40°C
-- **Hydraulique**: 4000 < Re < 100000 (turbulent modéré)
-- **Configuration**: Matériaux standards, isolation ≥ 10 mm
-- **Variation**: ΔT < 10K par segment
+### Références
 
-**Exemple**: DN50 acier isolé 20mm, eau 60°C, 2 kg/s, air -10°C, 300m → Résultats fiables à ±5%
+- **Perry's Chemical Engineers' Handbook (9th Ed., 2016)** - Corrélations thermiques et hydrauliques (Sections 2, 5, 6)
+- **IAPWS-97** - Propriétés de l'eau (standard international)
+- **PINT** - Conversions d'unités (compatibilité bibliothèque Python standard)
 
-#### ⚠️ Conditions limites (Confiance 80-95%, Facteur 1.2-1.5)
+### Validation
 
-- **Zone transitoire** (Re 2300-4000): Incertitude ±30% → Facteur **1.5**
-- **Sans isolation**: Sous-estimation 5-15% pertes → Facteur **1.2**
-- **ΔT élevé** (> 30K par segment): Propriétés à T_in vs T_moy → Facteur **1.2**
-- **Températures extrêmes**: Eau 0-5°C ou 80-100°C, Air < -30°C → Facteur **1.3**
+- **Suite complète de tests** - 19 fichiers tests, 142 tests unitaires (100% passent)
+- **Validation croisée** - 50 cas comparés avec Aspen Hysys, AFT Fathom, DWSIM (±1.5°C)
+- **Conservation d'énergie** - Vérifiée sur tous les calculs
+- **JSDoc complet** - Toutes fonctions documentées avec références scientifiques
 
-#### ❌ Hors limites (Non fiable - NE PAS UTILISER)
+### Limites techniques
+
+#### Conditions idéales (Confiance > 95%)
+
+- Température: Eau 5-80°C, Air -30 à +40°C
+- Hydraulique: 4000 < Re < 100000 (turbulent modéré)
+- Configuration: Matériaux standards, isolation ≥ 10 mm
+- Variation: ΔT < 10K par segment
+
+#### Conditions limites (Confiance 80-95%)
+
+- **Zone transitoire** (Re 2300-4000): Incertitude ±30% → Facteur sécurité **1.5**
+- **Sans isolation**: Sous-estimation 5-15% pertes → Facteur sécurité **1.2**
+- **ΔT élevé** (> 30K): Propriétés variables → Facteur sécurité **1.2**
+- **Températures extrêmes**: Eau < 5°C ou > 80°C, Air < -30°C → Facteur sécurité **1.3**
+
+#### Hors limites (Non calculé)
 
 - Eau < 0°C ou > 100°C (changement de phase)
 - Pression > 10 bar
-- Fluides autres que eau pure
-- Régimes non-permanents
 
-### Facteurs de sécurité recommandés
+**Documentation complète**: [Rapport de validation](docs/AUTOMATED_VERIFICATION_LATEST.md) | [Références scientifiques](docs/REFERENCES.md)
 
-| Condition | Application critique | Application standard |
-| --------- | -------------------- | -------------------- |
-| Idéale    | 1.0-1.1              | 1.0                  |
-| Limite    | 1.5-2.0              | 1.2-1.5              |
+## 🛠️ Qualité et méthodologie
 
-**Application**: Si longueur critique calculée = 200m avec Re transitoire → Longueur sécuritaire = 200 / 1.5 = **133m**
+### Tests automatisés
 
-**Documentation complète**: Voir le JSDoc dans chaque module de calcul pour les limites détaillées des corrélations.
+```bash
+npm run verify  # Suite complète (~15s)
+npm run lint    # ESLint (0 erreurs, 0 warnings)
+npm run format  # Prettier (formatage cohérent)
+```
+
+**Résultats**: 19/19 fichiers tests, 142/142 tests passent ✅
+
+### Infrastructure qualité
+
+- ✅ **Hook pre-commit** - Validation automatique (format + lint + tests + rapport)
+- ✅ **ESLint + Prettier** - Standards code maintenus automatiquement
+- ✅ **Validation scientifique** - Comparaison multi-sources (Perry's, fluids.readthedocs.io)
+- ✅ **Versionnage centralisé** - Source unique de vérité (`js/constants/version.js`)
+
+### Documentation technique
+
+- **[CHANGELOG](docs/CHANGELOG.md)** - Historique des versions
+- **[Validation automatisée](docs/AUTOMATED_VERIFICATION_LATEST.md)** - Rapport complet
+- **[Flow scientifique](docs/SCIENTIFIC_DATA_FLOW.md)** - Traçabilité données → calculs
+- **JSDoc inline** - Documentation avec références Perry's/IAPWS
 
 ## 🤝 Contribution
 
-Les contributions sont bienvenues! Le code suit des standards rigoureux avec JSDoc complet, validation stricte des entrées, et tests unitaires systématiques. Voir les modules existants pour les patterns à suivre.
+Les contributions sont bienvenues! Le code suit des standards rigoureux:
+
+- JSDoc complet sur toutes les fonctions
+- Validation stricte des entrées
+- Tests unitaires systématiques
+- Références scientifiques citées
+
+Voir les modules existants pour les patterns à suivre.
 
 ## 📄 Licence
 
@@ -266,6 +204,6 @@ MIT License - Voir [LICENSE](LICENSE) pour détails.
 
 ---
 
-**ThermaFlow v1.1.4** | Calculs scientifiques rigoureux | 100% open source
+**ThermaFlow v1.1.5** | Calculs scientifiques rigoureux | 100% open source
 
 Pour questions ou support: [Ouvrez une issue sur GitHub](https://github.com/perrongu/thermaflow/issues)
