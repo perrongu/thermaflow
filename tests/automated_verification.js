@@ -884,8 +884,7 @@ function generateReport(references, constantsReport, conversionsReport, testResu
     timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19);
   }
 
-  const formatRate = (pass, total) =>
-    total > 0 ? `${((pass / total) * 100).toFixed(1)}%` : 'N/A';
+  const formatRate = (pass, total) => (total > 0 ? `${((pass / total) * 100).toFixed(1)}%` : 'N/A');
 
   // Calculer statut global
   const testsAllPass = results.tests.fail === 0;

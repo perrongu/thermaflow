@@ -2,7 +2,7 @@
 
 **Analyse du risque de gel dans les conduites d'eau**
 
-[![Version](https://img.shields.io/badge/version-1.1.3-blue.svg)](https://github.com/perrongu/thermaflow)
+[![Version](https://img.shields.io/badge/version-1.1.4-blue.svg)](https://github.com/perrongu/thermaflow)
 [![Licence](https://img.shields.io/badge/licence-MIT-green.svg)](LICENSE)
 
 > **Déterminez en quelques secondes si votre conduite d'eau risque de geler**
@@ -172,18 +172,31 @@ js/
 
 ### Pour développeurs/ingénieurs
 
-- **JSDoc dans le code** - Documentation technique inline avec références scientifiques
-- **[docs/SCIENTIFIC_DATA_FLOW.md](docs/SCIENTIFIC_DATA_FLOW.md)** - Flow complet des données et références scientifiques
-- **[memory-bank/systemPatterns.md](memory-bank/systemPatterns.md)** - Organisation du code par niveaux
-- **[docs/REFERENCES.md](docs/REFERENCES.md)** - Liste compilée des sources scientifiques
-- **[docs/references/](docs/references/)** - Informations sur les sources et validations
-- **Tests unitaires** - Validation par l'exemple (voir tests/)
+**📖 Point d'entrée: [Memory Bank](memory-bank/)** - Documentation stratégique complète
+
+- **[activeContext.md](memory-bank/activeContext.md)** - État actuel projet, dernière session, prochaines étapes
+- **[progress.md](memory-bank/progress.md)** - Ce qui fonctionne, ce qui reste à faire
+- **[systemPatterns.md](memory-bank/systemPatterns.md)** - Architecture et organisation du code
+- **[techContext.md](memory-bank/techContext.md)** - Choix techniques et contraintes
+- **[projectbrief.md](memory-bank/projectbrief.md)** - Vision et objectifs du projet
+
+**Références scientifiques:**
+
+- **[docs/SCIENTIFIC_DATA_FLOW.md](docs/SCIENTIFIC_DATA_FLOW.md)** - Traçabilité tables → calculs
+- **[docs/REFERENCES.md](docs/REFERENCES.md)** - Sources scientifiques compilées
+- **[docs/references/](docs/references/)** - Validations détaillées
+- **JSDoc dans le code** - Documentation inline avec références Perry's/IAPWS
+
+**Validation:**
+
+- **[docs/AUTOMATED_VERIFICATION_LATEST.md](docs/AUTOMATED_VERIFICATION_LATEST.md)** - Rapport validation complet
+- **Tests unitaires** - 19 fichiers, validation par l'exemple (voir tests/)
 
 ### Outils qualité
 
-- **Hook pre-commit** - Validation automatique (format + lint + tests) avant chaque commit
-- **ESLint + Prettier** - Standards de code maintenus automatiquement
-- **Suite de tests** - 14 fichiers tests, validation complète en ~15s
+- **Hook pre-commit** - Validation automatique (format + lint + tests + rapport)
+- **ESLint + Prettier** - Standards code maintenus automatiquement
+- **`npm run verify`** - Suite complète en ~15s (19/19 tests)
 
 ## ⚠️ Conditions d'utilisation
 
@@ -253,6 +266,6 @@ MIT License - Voir [LICENSE](LICENSE) pour détails.
 
 ---
 
-**ThermaFlow v1.1.3** | Calculs scientifiques rigoureux | 100% open source
+**ThermaFlow v1.1.4** | Calculs scientifiques rigoureux | 100% open source
 
 Pour questions ou support: [Ouvrez une issue sur GitHub](https://github.com/perrongu/thermaflow/issues)

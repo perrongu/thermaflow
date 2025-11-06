@@ -141,7 +141,7 @@ Voir: `docs/AUTOMATED_VERIFICATION_*.md` section 4
 
 ```
 ╔═══════════════════════════════════════════════════════╗
-║    THERMAFLOW v1.1.3                                 ║
+║    THERMAFLOW v1.1.4                                 ║
 ╚═══════════════════════════════════════════════════════╝
 
 Constantes : 14/14 ✓  (100%)
@@ -180,5 +180,5 @@ Qualité    : 10/10    (Impeccable)
 
 ---
 
-_ThermaFlow v1.1.3 - Système de Vérification Automatique_  
+_ThermaFlow v1.1.4 - Système de Vérification Automatique_  
 _Dernière mise à jour: 2025-10-30_

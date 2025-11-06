@@ -10,7 +10,6 @@ const fs = require('fs');
 const {
   ensureReportGenerated,
   REPORT_FILENAME,
-  REPORT_PATH,
   listReportFiles,
 } = require('./helpers/automated_verification_test_utils.js');
 

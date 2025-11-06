@@ -1,5 +1,20 @@
 # Historique des versions - ThermaFlow
 
+## Version 1.1.4 (5 novembre 2025)
+
+### Infrastructure tests
+
+- Refactorisation système vérification automatisée
+- Extraction utilitaires tests dans helpers/automated_verification_test_utils.js
+- Rapport AUTOMATED_VERIFICATION_LATEST.md toujours à jour
+- Ajout 4 tests validation système rapport
+
+### Notes
+
+Aucun changement fonctionnel. Amélioration qualité infrastructure tests.
+
+---
+
 ## Version 1.1.3 (5 novembre 2025)
 
 ### Corrections
