@@ -1,5 +1,21 @@
 # Historique des versions - ThermaFlow
 
+## Version 1.1.5 (Date à compléter)
+
+### Documentation
+
+- Restructuration complète README.md (inspirée ImPlot3D)
+- Ajout screenshots (schéma 3D, graphique, verdict, sensibilité)
+- Amélioration section installation (ajout option ZIP)
+- Correction cas d'utilisation (scénarios réalistes)
+- Réorganisation sections (suppression architecture, condensation contenu)
+
+### Notes
+
+Aucun changement fonctionnel. Amélioration présentation et accessibilité documentation.
+
+---
+
 ## Version 1.1.4 (5 novembre 2025)
 
 ### Infrastructure tests
