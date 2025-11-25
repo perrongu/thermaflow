@@ -3,20 +3,25 @@
  *
  * Analyse de sensibilité 1D (paramétrique) pour ThermaFlow
  *
- * Génère un tableau récapitulatif et des graphiques tornado en barres horizontales
- * montrant l'impact de chaque paramètre sur la température finale.
- * Style inspiré des graphiques tornado classiques avec valeur de base et points critiques.
+ * STRATÉGIE: Interpolation par échantillonnage dense
+ * - Identifier la borne SAFE (température finale la plus élevée)
+ * - Échantillonner 250 points entre SAFE et l'opposé
+ * - Interpoler linéairement pour trouver les points critiques (5°C et 0.01°C)
+ *
+ * Génère un tableau récapitulatif uniquement (graphiques tornado supprimés).
  */
 
 (function () {
   'use strict';
 
   // ========== CONSTANTES ==========
-  // const RESOLUTION_1D = 15; // Points par paramètre (non utilisé, utilise config dynamique)
-  const FREEZE_TEMP = 0; // °C - Température de gel de l'eau pure
+  const FREEZE_TEMP_TARGET = 0.01; // °C - Cible pour point critique gel
   const SAFETY_THRESHOLD = 5; // °C - Marge de sécurité opérationnelle standard industrielle
+  const CURVE_SAMPLING_POINTS = 250; // Augmenté de 75 à 250 pour haute précision
+  const SAFE_BOUND_MAX_ITERATIONS = 15; // Pour dichotomie de recherche de borne valide
+  const FALLBACK_RANGE_PERCENT = 0.2; // ±20% autour de baseValue si tout échoue
 
-  // Définition des paramètres analysables (même que sensitivity-analysis.js)
+  // Définition des paramètres analysables
   function getParameterLabel(key) {
     if (!window.I18n) {
       return key;
@@ -97,238 +102,253 @@
     },
   };
 
-  // ========== DÉTECTION PLAGE EFFECTIVE ==========
+  // ========== GESTION D'ERREURS ==========
   /**
-   * Détecte la plage effective d'un paramètre où les calculs convergent
-   * Échantillonne 10 points et trouve les limites valides
+   * Détermine si une erreur est critique ou acceptable
+   * Stratégie hybride: accepter warnings, rejeter erreurs bloquantes
+   *
+   * @param {Error} error - L'erreur à évaluer
+   * @returns {boolean} true si critique, false si acceptable
+   */
+  function isCriticalError(error) {
+    if (!error || !error.message) {
+      return false;
+    }
+
+    const msg = error.message.toLowerCase();
+
+    // Erreurs critiques (bloquantes)
+    const criticalPatterns = [
+      'perte de charge excessive',
+      'pression.*négative',
+      'propriétés.*invalide',
+      'température.*hors.*plage',
+      'débit.*invalide',
+      'nan',
+      'infinity',
+    ];
+
+    for (const pattern of criticalPatterns) {
+      if (msg.match(pattern)) {
+        return true;
+      }
+    }
+
+    // Warnings acceptables (non-bloquants)
+    const warningPatterns = ['convergence lente', 'précision réduite', 'approximation'];
+
+    for (const pattern of warningPatterns) {
+      if (msg.match(pattern)) {
+        return false;
+      }
+    }
+
+    // Par défaut, considérer comme critique si incertain
+    return true;
+  }
+
+  /**
+   * Trouve une valeur valide proche d'une borne cible par dichotomie
+   *
    * @param {Object} baseConfig - Configuration de base
    * @param {string} paramKey - Clé du paramètre
-   * @param {Object} paramDef - Définition du paramètre
-   * @returns {Object} { min, max, samplesValid }
+   * @param {number} targetValue - Valeur cible (min ou max)
+   * @param {number} referenceValue - Valeur de référence connue valide
+   * @param {number} maxIterations - Nombre max d'itérations
+   * @returns {Object|null} { value, T_final } ou null si échec
    */
-  function detectEffectiveRange(baseConfig, paramKey, paramDef) {
-    const SAMPLES = 15; // Augmenté pour meilleure résolution
-    const samples = [];
-
-    // Échantillonner uniformément sur la plage théorique
-    for (let i = 0; i < SAMPLES; i++) {
-      const fraction = i / (SAMPLES - 1);
-      const value = paramDef.min + fraction * (paramDef.max - paramDef.min);
-
-      try {
-        const testConfig = JSON.parse(JSON.stringify(baseConfig));
-        applyParameterValue(testConfig, paramKey, value);
-        const result = calculatePipeNetwork(testConfig);
-
-        samples.push({
-          value: value,
-          valid: true,
-          T_final: result.T_final,
-        });
-      } catch (error) {
-        samples.push({
-          value: value,
-          valid: false,
-          error: error.message,
-        });
+  function findValidBound(
+    baseConfig,
+    paramKey,
+    targetValue,
+    referenceValue,
+    maxIterations = SAFE_BOUND_MAX_ITERATIONS
+  ) {
+    // Essayer la valeur cible directement
+    try {
+      const config = rebuildConfig(baseConfig, paramKey, targetValue);
+      const result = calculatePipeNetwork(config);
+      return { value: targetValue, T_final: result.T_final };
+    } catch (e) {
+      // Si non-critique, continuer avec dichotomie (pas de retour immédiat)
+      if (!isCriticalError(e)) {
+        console.warn(
+          `findValidBound: Warning non-critique à targetValue=${targetValue}, recherche par dichotomie`
+        );
       }
     }
 
-    // Trouver la plage continue valide la plus large
-    const validSamples = samples.filter((s) => s.valid);
+    // Dichotomie entre referenceValue (valide) et targetValue (invalide/warning)
+    let low = referenceValue;
+    let high = targetValue;
 
-    if (validSamples.length === 0) {
-      // Aucun point valide - retourner plage théorique (affichera erreur)
-      return {
-        min: paramDef.min,
-        max: paramDef.max,
-        samplesValid: 0,
-      };
+    // S'assurer que low < high
+    if (low > high) {
+      [low, high] = [high, low];
     }
 
-    if (validSamples.length === SAMPLES) {
-      // Tous les points valides - retourner plage théorique complète
-      return {
-        min: paramDef.min,
-        max: paramDef.max,
-        samplesValid: SAMPLES,
-      };
-    }
+    let bestValid = null;
 
-    // Trouver la plage continue la plus large
-    // Stratégie: chercher la séquence continue de points valides la plus longue
-    let bestStart = 0;
-    let bestLength = 0;
-    let currentStart = -1;
-    let currentLength = 0;
+    for (let iter = 0; iter < maxIterations; iter++) {
+      const mid = (low + high) / 2;
 
-    for (let i = 0; i < samples.length; i++) {
-      if (samples[i].valid) {
-        if (currentStart === -1) {
-          currentStart = i;
-          currentLength = 1;
+      try {
+        const config = rebuildConfig(baseConfig, paramKey, mid);
+        const result = calculatePipeNetwork(config);
+
+        bestValid = { value: mid, T_final: result.T_final };
+
+        // Chercher plus loin vers la cible
+        if (targetValue > referenceValue) {
+          low = mid;
         } else {
-          currentLength++;
+          high = mid;
         }
-      } else {
-        if (currentLength > bestLength) {
-          bestStart = currentStart;
-          bestLength = currentLength;
+      } catch (e) {
+        // Erreur: chercher vers la référence (zone sûre)
+        if (targetValue > referenceValue) {
+          high = mid;
+        } else {
+          low = mid;
         }
-        currentStart = -1;
-        currentLength = 0;
+      }
+
+      // Convergence avec epsilon absolu et relatif
+      const epsilon = 0.001;
+      const relativeEpsilon = Math.abs(high + low) * 1e-6;
+      if (Math.abs(high - low) < Math.max(epsilon, relativeEpsilon)) {
+        break;
       }
     }
 
-    // Vérifier la dernière séquence
-    if (currentLength > bestLength) {
-      bestStart = currentStart;
-      bestLength = currentLength;
+    return bestValid;
+  }
+
+  // ========== RECONSTRUCTION CONFIG ==========
+  /**
+   * Reconstruit une configuration complète à partir d'une config de base
+   * en modifiant un seul paramètre.
+   *
+   * GARANTIT: Config identique à celle générée par getFormData() du formulaire
+   *
+   * Cette fonction assure que TOUS les champs dérivés sont recalculés correctement:
+   * - numSegments basé sur totalLength (formule: Math.min(Math.max(Math.ceil(L/5), 10), 100))
+   * - fluid.m_dot basé sur flowM3PerHr avec densité eau à T_in et P
+   * - Conversions d'unités (km/h → m/s, mm → m)
+   *
+   * Cela garantit que calculatePipeNetwork() reçoit une config 100% cohérente,
+   * identique à celle du formulaire principal.
+   *
+   * @param {Object} baseConfig - Configuration de base valide
+   * @param {string} paramKey - Paramètre à modifier ('L', 'm_dot', 'T_in', 'T_amb', 'V_wind', 't_insul')
+   * @param {number} newValue - Nouvelle valeur dans unité d'affichage
+   * @returns {Object} Configuration complète et cohérente
+   */
+  function rebuildConfig(baseConfig, paramKey, newValue) {
+    // 1. Extraire valeurs de base (shallow copy pour éviter mutations)
+    const geometry = { ...baseConfig.geometry };
+    const insulation = baseConfig.insulation ? { ...baseConfig.insulation } : null;
+    const meta = { ...baseConfig.meta };
+
+    // 2. Valeurs par défaut (extraites de baseConfig)
+    let totalLength = baseConfig.totalLength;
+    let T_in = baseConfig.fluid.T_in;
+    const P_bar = baseConfig.fluid.P;
+    let flowM3PerHr = baseConfig.meta.flowM3PerHr;
+    let T_amb = baseConfig.ambient.T_amb;
+    let V_wind_kmh = baseConfig.ambient.V_wind * 3.6; // m/s → km/h pour cohérence
+
+    // 3. Appliquer la modification selon le paramètre
+    switch (paramKey) {
+      case 'L':
+        totalLength = newValue;
+        break;
+
+      case 'm_dot':
+        // newValue est déjà en m³/h (unité d'affichage)
+        flowM3PerHr = newValue;
+        break;
+
+      case 'T_in':
+        T_in = newValue;
+        break;
+
+      case 'T_amb':
+        T_amb = newValue;
+        break;
+
+      case 'V_wind':
+        // newValue est en km/h (unité d'affichage)
+        V_wind_kmh = newValue;
+        break;
+
+      case 't_insul':
+        // newValue est en mm (unité d'affichage)
+        if (insulation) {
+          insulation.thickness = newValue / 1000.0; // mm → m
+        }
+        break;
+
+      default:
+        console.warn(`rebuildConfig: Paramètre inconnu: ${paramKey}`);
     }
 
-    if (bestLength === 0) {
-      // Cas pathologique: pas de séquence continue (points valides isolés)
-      // Utiliser min et max des points valides avec marge
-      const validValues = validSamples.map((s) => s.value);
-      const minVal = Math.min(...validValues);
-      const maxVal = Math.max(...validValues);
-      const sampleInterval = (paramDef.max - paramDef.min) / (SAMPLES - 1);
-      const safetyMargin = sampleInterval * 0.1;
+    // 4. RECALCUL COMPLET des champs dérivés (comme dans getFormData())
 
-      return {
-        min: Math.max(minVal + safetyMargin, paramDef.min),
-        max: Math.min(maxVal - safetyMargin, maxVal), // Ne pas réduire maxVal en dessous de lui-même
-        samplesValid: validSamples.length,
-      };
-    }
-
-    // Utiliser la séquence continue trouvée avec marges de sécurité LARGES
-    // Stratégie ultra-conservatrice: ignorer les 2-3 premiers et derniers points
-    let minEffective, maxEffective;
-
-    if (bestLength >= 8) {
-      // Si ≥8 points valides: utiliser 3ème et 3ème avant la fin (ignore 2 points de chaque côté)
-      minEffective = samples[bestStart + 2].value;
-      maxEffective = samples[bestStart + bestLength - 3].value;
-    } else if (bestLength >= 5) {
-      // Si 5-7 points: utiliser 2ème et 2ème avant la fin
-      minEffective = samples[bestStart + 1].value;
-      maxEffective = samples[bestStart + bestLength - 2].value;
-    } else if (bestLength >= 3) {
-      // Si 3-4 points: utiliser 1er et avant-dernier avec marge additionnelle
-      minEffective = samples[bestStart].value;
-      maxEffective = samples[bestStart + bestLength - 2].value;
-      const sampleInterval = (paramDef.max - paramDef.min) / (SAMPLES - 1);
-      const safetyMargin = sampleInterval * 0.2;
-      minEffective = Math.min(minEffective + safetyMargin, maxEffective - safetyMargin);
-      maxEffective = Math.max(maxEffective - safetyMargin, minEffective + safetyMargin);
-    } else if (bestLength === 2) {
-      // 2 points: utiliser seulement le premier avec marge réduite
-      minEffective = samples[bestStart].value;
-      maxEffective = samples[bestStart].value;
-      const sampleInterval = (paramDef.max - paramDef.min) / (SAMPLES - 1);
-      minEffective = Math.max(minEffective, paramDef.min);
-      maxEffective = Math.min(minEffective + sampleInterval * 0.5, paramDef.max);
-    } else {
-      // 1 seul point: créer mini-plage autour
-      minEffective = samples[bestStart].value;
-      maxEffective = samples[bestStart].value;
-      const sampleInterval = (paramDef.max - paramDef.min) / (SAMPLES - 1);
-      const margin = sampleInterval * 0.25;
-      minEffective = Math.max(minEffective - margin, paramDef.min);
-      maxEffective = Math.min(maxEffective + margin, paramDef.max);
-    }
-
-    // S'assurer que min < max
-    if (minEffective >= maxEffective) {
-      const mid = (minEffective + maxEffective) / 2;
-      const delta = (paramDef.max - paramDef.min) * 0.01;
-      minEffective = Math.max(mid - delta, paramDef.min);
-      maxEffective = Math.min(mid + delta, paramDef.max);
-    }
-
-    // VALIDATION FINALE RENFORCÉE: Vérifier que les bornes fonctionnent vraiment
-    // Réduction agressive si échec
-    let finalMin = minEffective;
-    let finalMax = maxEffective;
-
-    // Test du max (le plus critique pour les débits)
-    let maxValid = false;
-    let consecutiveSuccesses = 0;
-    const REQUIRED_SUCCESSES = 2; // Doit réussir 2 fois consécutivement
-
-    for (let attempt = 0; attempt < 10 && consecutiveSuccesses < REQUIRED_SUCCESSES; attempt++) {
+    // 4a. Conversion débit: m³/h → kg/s
+    //     IMPORTANT: Densité calculée à T_in et P (comme formulaire)
+    let rho_water = 1000; // Défaut sécuritaire
+    if (typeof window.WaterProperties !== 'undefined') {
       try {
-        const testConfig = JSON.parse(JSON.stringify(baseConfig));
-        applyParameterValue(testConfig, paramKey, finalMax);
-        const result = calculatePipeNetwork(testConfig);
-
-        // Vérifier aussi que le résultat est raisonnable (pas de Re extrême)
-        // Pour débit: vérifier que ça ne génère pas des conditions impossibles
-        if (result && result.T_final !== null && result.T_final !== undefined) {
-          consecutiveSuccesses++;
-          if (consecutiveSuccesses >= REQUIRED_SUCCESSES) {
-            maxValid = true;
-            break;
-          }
-          // Tester légèrement au-dessus pour confirmer stabilité
-          finalMax = finalMax * 0.98; // Réduction préventive de 2%
-        }
-      } catch (error) {
-        consecutiveSuccesses = 0; // Reset si échec
-        // Réduction très agressive de 40% vers le centre
-        const reduction = (finalMax - finalMin) * 0.4;
-        finalMax = Math.max(finalMax - reduction, finalMin + (finalMax - finalMin) * 0.05);
+        const waterProps = window.WaterProperties.getWaterProperties(T_in, P_bar);
+        rho_water = waterProps.rho;
+      } catch (e) {
+        console.warn(`rebuildConfig: Densité eau fallback à 1000 kg/m³`);
       }
     }
+    const flowM3PerS = flowM3PerHr / 3600; // m³/h → m³/s
+    const flowKgPerS = flowM3PerS * rho_water; // m³/s → kg/s
 
-    // Test du min
-    let minValid = false;
-    consecutiveSuccesses = 0;
+    // 4b. Calcul numSegments (MÊME FORMULE que formulaire - critique!)
+    //     Formule: Math.min(Math.max(Math.ceil(L/5), 10), 100)
+    const numSegments = Math.min(Math.max(Math.ceil(totalLength / 5), 10), 100);
 
-    for (let attempt = 0; attempt < 10 && consecutiveSuccesses < REQUIRED_SUCCESSES; attempt++) {
-      try {
-        const testConfig = JSON.parse(JSON.stringify(baseConfig));
-        applyParameterValue(testConfig, paramKey, finalMin);
-        const result = calculatePipeNetwork(testConfig);
+    // 4c. Conversion vent: km/h → m/s
+    const V_wind_ms = V_wind_kmh / 3.6;
 
-        if (result && result.T_final !== null && result.T_final !== undefined) {
-          consecutiveSuccesses++;
-          if (consecutiveSuccesses >= REQUIRED_SUCCESSES) {
-            minValid = true;
-            break;
-          }
-          // Tester légèrement au-dessus pour confirmer stabilité
-          finalMin = finalMin * 1.02; // Augmentation préventive de 2%
-        }
-      } catch (error) {
-        consecutiveSuccesses = 0; // Reset si échec
-        // Augmentation très agressive de 40% vers le centre
-        const increase = (finalMax - finalMin) * 0.4;
-        finalMin = Math.min(finalMin + increase, finalMax - (finalMax - finalMin) * 0.05);
-      }
-    }
-
-    // Si toujours invalide après tentatives, retourner plage théorique (affichera erreur)
-    if (!minValid || !maxValid || finalMin >= finalMax) {
-      return {
-        min: paramDef.min,
-        max: paramDef.max,
-        samplesValid: 0,
-      };
-    }
-
+    // 5. Construire et retourner configuration complète
     return {
-      min: finalMin,
-      max: finalMax,
-      samplesValid: bestLength,
+      geometry: geometry,
+      totalLength: totalLength,
+      numSegments: numSegments, // ← CRUCIAL: recalculé correctement
+      fluid: {
+        T_in: T_in,
+        P: P_bar,
+        m_dot: flowKgPerS, // ← CRUCIAL: recalculé avec bonne densité
+      },
+      ambient: {
+        T_amb: T_amb,
+        V_wind: V_wind_ms,
+      },
+      insulation: insulation,
+      meta: {
+        ...meta,
+        flowM3PerHr: flowM3PerHr,
+      },
     };
   }
 
-  // ========== ANALYSE 1D ==========
+  // ========== ANALYSE 1D PAR INTERPOLATION ==========
   /**
    * Analyse la sensibilité 1D pour tous les paramètres
-   * @param {Object} baseConfig - Configuration de base
+   *
+   * STRATÉGIE:
+   * 1. Calculer T_final aux bornes (min et max) de chaque paramètre
+   * 2. Identifier la borne SAFE (T la plus élevée)
+   * 3. Si SAFE >= seuil, échantillonner 250 points et interpoler le point critique
+   * 4. Sinon, marquer le point critique comme "Hors plage"
+   *
+   * @param {Object} baseConfig - Configuration de base utilisateur
    * @returns {Array} Résultats pour chaque paramètre
    */
   function analyzeSensitivity1D(baseConfig) {
@@ -339,7 +359,6 @@
     try {
       const baseResult = calculatePipeNetwork(baseConfig);
       T_base = baseResult.T_final;
-      // console.log(`📊 T_base = ${T_base.toFixed(2)}°C`);
     } catch (error) {
       console.error('Erreur calcul cas de base:', error);
       return results;
@@ -354,942 +373,390 @@
         }
       }
 
-      // console.log(`📊 Analyse 1D pour ${paramDef.label}...`);
-
       const baseValue = getDisplayValue(baseConfig, paramKey);
+      const paramResult = evaluateParameter(baseConfig, paramKey, paramDef, baseValue, T_base);
 
-      // Détecter la plage effective valide (où les calculs convergent)
-      const effectiveRange = detectEffectiveRange(baseConfig, paramKey, paramDef);
-
-      // Utiliser la plage effective au lieu de min/max théoriques
-      let minToUse = effectiveRange.min;
-      let maxToUse = effectiveRange.max;
-
-      // Calculer T_final au MIN effectif avec augmentation progressive si échec
-      let T_atMin = null;
-      let errorAtMin = null;
-      let effectiveMin = minToUse;
-
-      for (let attempt = 0; attempt < 5; attempt++) {
-        try {
-          const testConfig = JSON.parse(JSON.stringify(baseConfig));
-          applyParameterValue(testConfig, paramKey, effectiveMin);
-          const result = calculatePipeNetwork(testConfig);
-          T_atMin = result.T_final;
-          if (effectiveMin !== minToUse) {
-            minToUse = effectiveMin; // Mettre à jour pour le reste
-          }
-          break; // Succès!
-        } catch (error) {
-          if (attempt === 4) {
-            console.warn(`❌ MIN échoue même après 5 tentatives pour ${paramKey}`);
-            errorAtMin = error.message;
-          } else {
-            // Augmenter de 10% et réessayer
-            effectiveMin = effectiveMin * 1.1;
-          }
-        }
-      }
-
-      // Calculer T_final au MAX effectif avec réduction progressive si échec
-      let T_atMax = null;
-      let errorAtMax = null;
-      let effectiveMax = maxToUse;
-
-      for (let attempt = 0; attempt < 5; attempt++) {
-        try {
-          const testConfig = JSON.parse(JSON.stringify(baseConfig));
-          applyParameterValue(testConfig, paramKey, effectiveMax);
-          const result = calculatePipeNetwork(testConfig);
-          T_atMax = result.T_final;
-          if (effectiveMax !== maxToUse) {
-            maxToUse = effectiveMax; // Mettre à jour pour le reste
-          }
-          break; // Succès!
-        } catch (error) {
-          if (attempt === 4) {
-            console.warn(`❌ MAX échoue même après 5 tentatives pour ${paramKey}`);
-            errorAtMax = error.message;
-          } else {
-            // Réduire de 10% et réessayer
-            effectiveMax = effectiveMax * 0.9;
-          }
-        }
-      }
-
-      // Créer une définition modifiée avec plage effective
-      const effectiveParamDef = {
-        ...paramDef,
-        min: minToUse,
-        max: maxToUse,
-        originalMin: paramDef.min,
-        originalMax: paramDef.max,
-        isEffectiveRange: minToUse !== paramDef.min || maxToUse !== paramDef.max,
-      };
-
-      // Trouver les valeurs critiques du paramètre (qui donnent T=0°C et T=5°C)
-      const criticalValues = findCriticalParameterValues(
-        baseConfig,
-        paramKey,
-        effectiveParamDef,
-        T_base,
-        baseValue,
-        T_atMin,
-        T_atMax
-      );
-
-      // Calculer l'amplitude
-      const amplitude = Math.abs((T_atMax || 0) - (T_atMin || 0));
-
-      results.push({
-        paramKey: paramKey,
-        paramDef: effectiveParamDef,
-        baseValue: baseValue,
-        T_atMin: T_atMin,
-        T_atMax: T_atMax,
-        errorAtMin: errorAtMin,
-        errorAtMax: errorAtMax,
-        criticalValueFreeze: criticalValues.freeze,
-        criticalValueSafety: criticalValues.safety,
-        amplitude: amplitude,
-      });
+      results.push(paramResult);
     }
 
     return results;
   }
 
   /**
-   * Trouve les valeurs critiques d'un paramètre qui donnent T_final = 0°C et T_final = 5°C
-   *
-   * LOGIQUE IMPORTANTE:
-   * - Si le système gèle déjà (T_base ≤ 0°C), on cherche la valeur qui permet de SORTIR du gel
-   * - Si le système ne gèle pas (T_base > 0°C), on cherche la valeur qui PROVOQUE le gel
-   * - La recherche se fait toujours dans la direction pertinente (amélioration vs détérioration)
-   *
-   * Cherche dans la direction pertinente selon l'état actuel
-   * @param {Object} baseConfig - Configuration de base
-   * @param {string} paramKey - Clé du paramètre
-   * @param {Object} paramDef - Définition du paramètre
-   * @param {number} T_base - Température au cas de base
-   * @param {number} baseValue - Valeur actuelle du paramètre
-   * @param {number} T_atMin - Température à la valeur min du paramètre
-   * @param {number} T_atMax - Température à la valeur max du paramètre
-   * @returns {Object} { freeze: valeur pour 0°C, safety: valeur pour 5°C }
+   * Évalue un paramètre : calcule T aux bornes, identifie SAFE,
+   * échantillonne et interpole les points critiques
    */
-  function findCriticalParameterValues(
-    baseConfig,
-    paramKey,
-    paramDef,
-    T_base,
-    baseValue,
-    T_atMin,
-    T_atMax
-  ) {
-    const result = { freeze: null, safety: null };
+  function evaluateParameter(baseConfig, paramKey, paramDef, baseValue, _T_base) {
+    // 1. Calculer T_final aux bornes min et max
+    const bounds = calculateAtBounds(baseConfig, paramKey, paramDef);
 
-    // Vérifier si les données sont valides
-    if (T_atMin === null || T_atMax === null || T_base === null) {
-      return result;
+    if (!bounds.minValid || !bounds.maxValid) {
+      // Échec aux bornes
+      return createErrorResult(paramKey, paramDef, baseValue);
     }
 
-    // Déterminer la direction: augmenter le paramètre augmente-t-il T_final?
-    const increasingParamIncreasesTemp = T_atMax > T_atMin;
+    // 2. Identifier la borne SAFE (température la plus élevée)
+    const safeBound = identifySafeBound(bounds, paramDef);
 
-    // ========== VALEUR CRITIQUE DE GEL (0°C) ==========
-    if (T_base <= FREEZE_TEMP) {
-      // Cas de base gèle déjà: chercher la valeur qui permet de SORTIR du gel (atteindre 0°C)
-      if (increasingParamIncreasesTemp) {
-        // Augmenter le paramètre améliore → chercher entre base et max
-        result.freeze = findParameterValueInRange(
-          baseConfig,
-          paramKey,
-          paramDef,
-          FREEZE_TEMP,
-          baseValue,
-          paramDef.max
-        );
-      } else {
-        // Diminuer le paramètre améliore → chercher entre min et base
-        result.freeze = findParameterValueInRange(
-          baseConfig,
-          paramKey,
-          paramDef,
-          FREEZE_TEMP,
-          paramDef.min,
-          baseValue
-        );
-      }
+    // 3. Déterminer si les points critiques sont atteignables
+    const criticalValues = { freeze: null, safety: null };
+
+    if (safeBound.T_final < FREEZE_TEMP_TARGET) {
+      // SAFE déjà gelé → gel et sécurité hors plage
+      return createResult(
+        paramKey,
+        paramDef,
+        baseValue,
+        bounds.T_atMin,
+        bounds.T_atMax,
+        null,
+        null, // erreurs
+        null,
+        null, // points critiques
+        Math.abs(bounds.T_atMax - bounds.T_atMin)
+      );
+    }
+
+    if (safeBound.T_final < SAFETY_THRESHOLD) {
+      // SAFE < 5°C → sécurité hors plage, mais gel peut-être atteignable
+      criticalValues.safety = null;
     } else {
-      // Cas de base ne gèle pas: chercher la valeur qui PROVOQUE le gel (descendre à 0°C)
-      if (increasingParamIncreasesTemp) {
-        // Augmenter améliore → diminuer détériore → chercher entre min et base
-        result.freeze = findParameterValueInRange(
-          baseConfig,
-          paramKey,
-          paramDef,
-          FREEZE_TEMP,
-          paramDef.min,
-          baseValue
-        );
-      } else {
-        // Diminuer améliore → augmenter détériore → chercher entre base et max
-        result.freeze = findParameterValueInRange(
-          baseConfig,
-          paramKey,
-          paramDef,
-          FREEZE_TEMP,
-          baseValue,
-          paramDef.max
-        );
-      }
+      // Échantillonner courbe et interpoler pour 5°C
+      criticalValues.safety = findCriticalByInterpolation(
+        baseConfig,
+        paramKey,
+        paramDef,
+        safeBound,
+        safeBound.oppositeBound,
+        SAFETY_THRESHOLD
+      );
     }
 
-    // ========== VALEUR CRITIQUE DE SÉCURITÉ (5°C) ==========
-    if (T_base <= SAFETY_THRESHOLD) {
-      // En dessous du seuil: chercher la valeur qui permet d'ATTEINDRE la sécurité (monter à 5°C)
-      if (increasingParamIncreasesTemp) {
-        // Augmenter améliore → chercher entre base et max
-        result.safety = findParameterValueInRange(
-          baseConfig,
-          paramKey,
-          paramDef,
-          SAFETY_THRESHOLD,
-          baseValue,
-          paramDef.max
-        );
-      } else {
-        // Diminuer améliore → chercher entre min et base
-        result.safety = findParameterValueInRange(
-          baseConfig,
-          paramKey,
-          paramDef,
-          SAFETY_THRESHOLD,
-          paramDef.min,
-          baseValue
-        );
-      }
-    } else {
-      // Au-dessus du seuil: chercher la valeur qui QUITTE la sécurité (descendre à 5°C)
-      if (increasingParamIncreasesTemp) {
-        // Augmenter améliore → diminuer détériore → chercher entre min et base
-        result.safety = findParameterValueInRange(
-          baseConfig,
-          paramKey,
-          paramDef,
-          SAFETY_THRESHOLD,
-          paramDef.min,
-          baseValue
-        );
-      } else {
-        // Diminuer améliore → augmenter détériore → chercher entre base et max
-        result.safety = findParameterValueInRange(
-          baseConfig,
-          paramKey,
-          paramDef,
-          SAFETY_THRESHOLD,
-          baseValue,
-          paramDef.max
-        );
-      }
-    }
+    // Toujours chercher le gel si SAFE >= 0.01°C
+    criticalValues.freeze = findCriticalByInterpolation(
+      baseConfig,
+      paramKey,
+      paramDef,
+      safeBound,
+      safeBound.oppositeBound,
+      FREEZE_TEMP_TARGET
+    );
 
-    return result;
+    return createResult(
+      paramKey,
+      paramDef,
+      baseValue,
+      bounds.T_atMin,
+      bounds.T_atMax,
+      null,
+      null, // pas d'erreurs
+      criticalValues.freeze,
+      criticalValues.safety,
+      Math.abs(bounds.T_atMax - bounds.T_atMin)
+    );
   }
 
   /**
-   * Trouve la valeur d'un paramètre dans une plage donnée qui donne une température cible
-   * @param {Object} baseConfig - Configuration de base
-   * @param {string} paramKey - Clé du paramètre
-   * @param {Object} paramDef - Définition du paramètre
-   * @param {number} targetTemp - Température cible (0°C ou 5°C)
-   * @param {number} searchMin - Borne inférieure de recherche
-   * @param {number} searchMax - Borne supérieure de recherche
-   * @returns {number|null} Valeur du paramètre ou null si non trouvée
+   * Calcule T_final aux bornes min et max du paramètre
+   * Utilise dichotomie pour trouver des bornes valides si les extrêmes échouent
+   * Fallback sur ±20% de baseValue si tout échoue
    */
-  function findParameterValueInRange(
+  function calculateAtBounds(baseConfig, paramKey, paramDef) {
+    const baseValue = getDisplayValue(baseConfig, paramKey);
+
+    let T_atMin = null,
+      T_atMax = null;
+    let effectiveMin = paramDef.min;
+    let effectiveMax = paramDef.max;
+    let minValid = false,
+      maxValid = false;
+
+    // Étape 1: Essayer de calculer au BASE (référence valide)
+    try {
+      calculatePipeNetwork(baseConfig);
+    } catch (e) {
+      console.error(`Erreur calcul base pour ${paramKey}:`, e.message);
+      return {
+        T_atMin: null,
+        T_atMax: null,
+        minValid: false,
+        maxValid: false,
+        effectiveMin,
+        effectiveMax,
+      };
+    }
+
+    // Étape 2: Essayer MIN
+    try {
+      const configMin = rebuildConfig(baseConfig, paramKey, paramDef.min);
+      const resultMin = calculatePipeNetwork(configMin);
+      T_atMin = resultMin.T_final;
+      effectiveMin = paramDef.min;
+      minValid = true;
+    } catch (e) {
+      if (isCriticalError(e)) {
+        console.warn(`MIN échoue pour ${paramKey}, recherche par dichotomie...`);
+        // Chercher une borne MIN valide entre baseValue et paramDef.min
+        const validBound = findValidBound(baseConfig, paramKey, paramDef.min, baseValue);
+        if (validBound) {
+          T_atMin = validBound.T_final;
+          effectiveMin = validBound.value;
+          minValid = true;
+        }
+      }
+      // Si warning non-critique, on ignore (valeur reste invalide)
+    }
+
+    // Étape 3: Essayer MAX
+    try {
+      const configMax = rebuildConfig(baseConfig, paramKey, paramDef.max);
+      const resultMax = calculatePipeNetwork(configMax);
+      T_atMax = resultMax.T_final;
+      effectiveMax = paramDef.max;
+      maxValid = true;
+    } catch (e) {
+      if (isCriticalError(e)) {
+        console.warn(`MAX échoue pour ${paramKey}, recherche par dichotomie...`);
+        // Chercher une borne MAX valide entre baseValue et paramDef.max
+        const validBound = findValidBound(baseConfig, paramKey, paramDef.max, baseValue);
+        if (validBound) {
+          T_atMax = validBound.T_final;
+          effectiveMax = validBound.value;
+          maxValid = true;
+        }
+      }
+      // Si warning non-critique, on ignore (valeur reste invalide)
+    }
+
+    // Étape 4: Fallback si MIN et MAX échouent tous les deux
+    if (!minValid && !maxValid) {
+      console.warn(`MIN et MAX échouent pour ${paramKey}, fallback sur ±20% de baseValue`);
+
+      const fallbackMin = baseValue * (1 - FALLBACK_RANGE_PERCENT);
+      const fallbackMax = baseValue * (1 + FALLBACK_RANGE_PERCENT);
+
+      // Clamp dans les bornes théoriques
+      const clampedMin = Math.max(fallbackMin, paramDef.min);
+      const clampedMax = Math.min(fallbackMax, paramDef.max);
+
+      // Essayer fallback MIN
+      try {
+        const configMin = rebuildConfig(baseConfig, paramKey, clampedMin);
+        const resultMin = calculatePipeNetwork(configMin);
+        T_atMin = resultMin.T_final;
+        effectiveMin = clampedMin;
+        minValid = true;
+      } catch (e) {
+        console.warn(`Fallback MIN échoue pour ${paramKey}`);
+      }
+
+      // Essayer fallback MAX
+      try {
+        const configMax = rebuildConfig(baseConfig, paramKey, clampedMax);
+        const resultMax = calculatePipeNetwork(configMax);
+        T_atMax = resultMax.T_final;
+        effectiveMax = clampedMax;
+        maxValid = true;
+      } catch (e) {
+        console.warn(`Fallback MAX échoue pour ${paramKey}`);
+      }
+    }
+
+    return {
+      T_atMin,
+      T_atMax,
+      minValid,
+      maxValid,
+      effectiveMin,
+      effectiveMax,
+    };
+  }
+
+  /**
+   * Identifie quelle borne (min ou max) est "SAFE" (T la plus élevée)
+   * Utilise les bornes effectives retournées par calculateAtBounds
+   */
+  function identifySafeBound(bounds, paramDef) {
+    const isSafeMax = bounds.T_atMax >= bounds.T_atMin;
+
+    // Utiliser les bornes effectives si disponibles, sinon les théoriques
+    const effectiveMin = bounds.effectiveMin !== undefined ? bounds.effectiveMin : paramDef.min;
+    const effectiveMax = bounds.effectiveMax !== undefined ? bounds.effectiveMax : paramDef.max;
+
+    return {
+      bound: isSafeMax ? 'max' : 'min',
+      value: isSafeMax ? effectiveMax : effectiveMin,
+      T_final: isSafeMax ? bounds.T_atMax : bounds.T_atMin,
+      oppositeBound: {
+        bound: isSafeMax ? 'min' : 'max',
+        value: isSafeMax ? effectiveMin : effectiveMax,
+        T_final: isSafeMax ? bounds.T_atMin : bounds.T_atMax,
+      },
+    };
+  }
+
+  /**
+   * Échantillonne une courbe de 250 points et interpole la valeur critique
+   * @param {Object} safeBound - { value, T_final }
+   * @param {Object} oppositeBound - { value, T_final }
+   * @param {number} targetTemp - Température cible (5°C ou 0.01°C)
+   */
+  function findCriticalByInterpolation(
     baseConfig,
     paramKey,
     paramDef,
-    targetTemp,
-    searchMin,
-    searchMax
+    safeBound,
+    oppositeBound,
+    targetTemp
   ) {
-    let min = searchMin;
-    let max = searchMax;
-    const maxIterations = 15;
-    const tolerance = 0.05; // °C
+    // Vérifier que targetTemp est dans la plage [oppositeBound.T, safeBound.T]
+    const minT = Math.min(safeBound.T_final, oppositeBound.T_final);
+    const maxT = Math.max(safeBound.T_final, oppositeBound.T_final);
 
-    // Vérifier si la cible est atteignable dans cette plage
-    let T_min, T_max;
-    try {
-      const configMin = JSON.parse(JSON.stringify(baseConfig));
-      applyParameterValue(configMin, paramKey, min);
-      T_min = calculatePipeNetwork(configMin).T_final;
-
-      const configMax = JSON.parse(JSON.stringify(baseConfig));
-      applyParameterValue(configMax, paramKey, max);
-      T_max = calculatePipeNetwork(configMax).T_final;
-
-      // Si la cible n'est pas dans la plage de températures, retourner null
-      if (
-        (T_min < targetTemp && T_max < targetTemp) ||
-        (T_min > targetTemp && T_max > targetTemp)
-      ) {
-        return null;
-      }
-    } catch (e) {
-      console.warn(`Erreur lors de la vérification de plage pour ${paramKey}:`, e);
-      return null;
+    if (targetTemp < minT || targetTemp > maxT) {
+      return null; // Hors plage
     }
 
-    // Dichotomie pour trouver la valeur exacte
-    for (let i = 0; i < maxIterations; i++) {
-      const mid = (min + max) / 2;
+    // Échantillonner CURVE_SAMPLING_POINTS entre SAFE et opposé
+    const samples = [];
+    const valueStart = safeBound.value;
+    const valueEnd = oppositeBound.value;
+
+    for (let i = 0; i <= CURVE_SAMPLING_POINTS; i++) {
+      const fraction = i / CURVE_SAMPLING_POINTS;
+      const paramValue = valueStart + fraction * (valueEnd - valueStart);
 
       try {
-        const testConfig = JSON.parse(JSON.stringify(baseConfig));
-        applyParameterValue(testConfig, paramKey, mid);
-        const T_mid = calculatePipeNetwork(testConfig).T_final;
+        const testConfig = rebuildConfig(baseConfig, paramKey, paramValue);
+        const result = calculatePipeNetwork(testConfig);
 
-        // Convergence atteinte
-        if (Math.abs(T_mid - targetTemp) < tolerance) {
-          return mid;
-        }
-
-        // Déterminer dans quelle moitié chercher
-        // Si T_mid et T_min sont du même côté de targetTemp, déplacer min
-        if (
-          (T_mid < targetTemp && T_min < targetTemp) ||
-          (T_mid > targetTemp && T_min > targetTemp)
-        ) {
-          min = mid;
-          T_min = T_mid;
-        } else {
-          max = mid;
-          T_max = T_mid;
-        }
+        samples.push({
+          paramValue: paramValue,
+          T_final: result.T_final,
+        });
       } catch (e) {
-        console.warn(`Erreur dichotomie ${paramKey} itération ${i}:`, e);
-        // En cas d'erreur, réduire la plage progressivement
-        if (i < maxIterations / 2) {
-          max = mid;
-        } else {
-          min = mid;
+        // Ignorer les points qui échouent
+        continue;
+      }
+    }
+
+    if (samples.length < 2) {
+      return null; // Pas assez de points
+    }
+
+    // Interpolation linéaire par morceaux
+    return interpolateLinear(samples, targetTemp);
+  }
+
+  /**
+   * Interpolation linéaire par morceaux pour trouver paramValue → targetTemp
+   */
+  function interpolateLinear(samples, targetTemp) {
+    // Trouver les deux points encadrant targetTemp
+    for (let i = 0; i < samples.length - 1; i++) {
+      const p1 = samples[i];
+      const p2 = samples[i + 1];
+
+      const minT = Math.min(p1.T_final, p2.T_final);
+      const maxT = Math.max(p1.T_final, p2.T_final);
+
+      if (targetTemp >= minT && targetTemp <= maxT) {
+        // Segment plat (température constante) - éviter division par zéro
+        const deltaT = p2.T_final - p1.T_final;
+        if (Math.abs(deltaT) < 1e-6) {
+          // Retourner valeur moyenne du segment plat
+          return (p1.paramValue + p2.paramValue) / 2;
         }
+
+        // Interpoler entre p1 et p2
+        const fraction = (targetTemp - p1.T_final) / deltaT;
+        return p1.paramValue + fraction * (p2.paramValue - p1.paramValue);
       }
     }
 
-    // Retourner la valeur moyenne si convergence partielle
-    const finalValue = (min + max) / 2;
+    return null;
+  }
 
-    // Vérifier que le résultat est raisonnablement proche
-    try {
-      const testConfig = JSON.parse(JSON.stringify(baseConfig));
-      applyParameterValue(testConfig, paramKey, finalValue);
-      const T_final = calculatePipeNetwork(testConfig).T_final;
+  /**
+   * Crée un objet résultat standard
+   */
+  function createResult(
+    paramKey,
+    paramDef,
+    baseValue,
+    T_atMin,
+    T_atMax,
+    errorAtMin,
+    errorAtMax,
+    freezeValue,
+    safetyValue,
+    amplitude
+  ) {
+    return {
+      paramKey,
+      paramDef,
+      baseValue,
+      T_atMin,
+      T_atMax,
+      errorAtMin,
+      errorAtMax,
+      criticalValueFreeze: freezeValue,
+      criticalValueSafety: safetyValue,
+      amplitude,
+    };
+  }
 
-      // Si on est à moins de 1°C de la cible, on accepte
-      if (Math.abs(T_final - targetTemp) < 1.0) {
-        return finalValue;
-      }
-    } catch (e) {
-      // Ignorer
-    }
-
-    return null; // Pas de convergence acceptable
+  function createErrorResult(paramKey, paramDef, baseValue) {
+    return createResult(
+      paramKey,
+      paramDef,
+      baseValue,
+      null,
+      null,
+      'Calcul échoué',
+      'Calcul échoué',
+      null,
+      null,
+      0
+    );
   }
 
   // ========== UTILITAIRES POUR PARAMÈTRES ==========
+  /**
+   * Extrait la valeur d'affichage d'un paramètre depuis la config
+   *
+   * Version simplifiée: extraction directe sans chemins dynamiques
+   * La config étant maintenant toujours cohérente (via rebuildConfig),
+   * on peut extraire directement les valeurs.
+   *
+   * @param {Object} config - Configuration complète
+   * @param {string} paramKey - Clé du paramètre
+   * @returns {number|null} Valeur dans unité d'affichage
+   */
   function getDisplayValue(config, paramKey) {
-    const paramDef = PARAMETER_DEFINITIONS[paramKey];
-    if (!paramDef) {
-      return null;
-    }
+    switch (paramKey) {
+      case 'L':
+        return config.totalLength;
 
-    if (paramKey === 'm_dot') {
-      // Valeur en m³/h (SI) dans config → convertir vers unité d'affichage
-      const flowM3H = getValueFromPath(config, paramDef.path);
-      return paramDef.convertFromSI ? paramDef.convertFromSI(flowM3H) : flowM3H;
-    } else if (paramKey === 'V_wind') {
-      const windMS = getValueFromPath(config, ['ambient', 'V_wind']);
-      return windMS !== null ? windMS * 3.6 : null;
-    } else if (paramKey === 't_insul') {
-      const thicknessM = getValueFromPath(config, paramDef.path);
-      return thicknessM !== null ? thicknessM * 1000.0 : null;
-    } else {
-      return getValueFromPath(config, paramDef.path);
-    }
-  }
+      case 'm_dot':
+        return config.meta.flowM3PerHr; // Déjà en m³/h (unité d'affichage)
 
-  function getValueFromPath(obj, path) {
-    let current = obj;
-    for (const key of path) {
-      if (current === undefined || current === null) {
+      case 'T_in':
+        return config.fluid.T_in;
+
+      case 'T_amb':
+        return config.ambient.T_amb;
+
+      case 'V_wind':
+        return config.ambient.V_wind * 3.6; // m/s → km/h
+
+      case 't_insul':
+        return config.insulation ? config.insulation.thickness * 1000 : null; // m → mm
+
+      default:
+        console.warn(`getDisplayValue: Paramètre inconnu: ${paramKey}`);
         return null;
-      }
-      current = current[key];
     }
-    return current;
-  }
-
-  function setValueByPath(obj, path, value) {
-    let current = obj;
-    for (let i = 0; i < path.length - 1; i++) {
-      if (current[path[i]] === undefined || current[path[i]] === null) {
-        current[path[i]] = {};
-      }
-      current = current[path[i]];
-    }
-    current[path[path.length - 1]] = value;
-  }
-
-  function applyParameterValue(config, paramKey, displayValue) {
-    const paramDef = PARAMETER_DEFINITIONS[paramKey];
-    if (!paramDef) {
-      return;
-    }
-
-    if (paramKey === 'm_dot') {
-      // displayValue est dans l'unité d'affichage → convertir vers m³/h (SI)
-      const flowM3H = paramDef.convertToSI ? paramDef.convertToSI(displayValue) : displayValue;
-
-      const T_water = config.fluid.T_in;
-      const P_water = config.fluid.P;
-
-      let rho_water = 1000;
-      if (typeof window.WaterProperties !== 'undefined') {
-        try {
-          const waterProps = window.WaterProperties.getWaterProperties(T_water, P_water);
-          rho_water = waterProps.rho;
-        } catch (e) {
-          // Utiliser valeur par défaut
-        }
-      }
-
-      const flowKgPerS = (flowM3H / 3600) * rho_water;
-      setValueByPath(config, ['meta', 'flowM3PerHr'], flowM3H);
-      setValueByPath(config, ['fluid', 'm_dot'], flowKgPerS);
-    } else if (paramKey === 'V_wind') {
-      const windMS = displayValue / 3.6;
-      setValueByPath(config, paramDef.path, windMS);
-    } else if (paramKey === 't_insul') {
-      const thicknessM = displayValue / 1000.0;
-      setValueByPath(config, paramDef.path, thicknessM);
-    } else {
-      setValueByPath(config, paramDef.path, displayValue);
-    }
-  }
-
-  // ========== TRONCATURE ADAPTATIVE POUR LISIBILITÉ ==========
-  /**
-   * Détermine si la plage d'un paramètre doit être tronquée pour améliorer la lisibilité
-   * Centre la vue sur les valeurs importantes (base + critiques freeze/safety) avec marge de 7.5%
-   * Ne tronque que si gain significatif (>20% réduction) et applicable uniquement au débit d'eau
-   *
-   * Cas particuliers:
-   * - Si tous points identiques (range = 0), utilise marge minimale de 5% de la plage totale
-   * - Si un seul point (base sans critiques), même comportement que range = 0
-   * - Si critiques hors plage effective, ils sont ignorés dans le calcul
-   *
-   * @param {Object} result - Résultat de l'analyse pour un paramètre
-   * @param {Object} baseConfig - Configuration de base (non utilisé dans nouvelle logique)
-   * @returns {Object} { shouldTruncate: boolean, newMin: number, newMax: number, reason: string }
-   */
-  function analyzeTruncationNeed(result, _baseConfig) {
-    const defaultResult = {
-      shouldTruncate: false,
-      newMin: result.paramDef.min,
-      newMax: result.paramDef.max,
-      reason: null,
-    };
-
-    // Troncature uniquement pour le débit d'eau
-    if (result.paramKey !== 'm_dot') {
-      return defaultResult;
-    }
-
-    // Si données invalides, pas de troncature
-    if (result.T_atMin === null || result.T_atMax === null) {
-      return defaultResult;
-    }
-
-    // 1. Identifier les points importants
-    const importantPoints = [];
-
-    // Valeur de base (toujours présente)
-    if (result.baseValue !== null && result.baseValue !== undefined) {
-      importantPoints.push(result.baseValue);
-    }
-
-    // Valeurs critiques (seulement si dans plage effective)
-    if (
-      result.criticalValueFreeze !== null &&
-      result.criticalValueFreeze >= result.paramDef.min &&
-      result.criticalValueFreeze <= result.paramDef.max
-    ) {
-      importantPoints.push(result.criticalValueFreeze);
-    }
-
-    if (
-      result.criticalValueSafety !== null &&
-      result.criticalValueSafety >= result.paramDef.min &&
-      result.criticalValueSafety <= result.paramDef.max
-    ) {
-      importantPoints.push(result.criticalValueSafety);
-    }
-
-    // Si pas assez de points, ne pas tronquer
-    if (importantPoints.length === 0) {
-      return defaultResult;
-    }
-
-    // 2. Calculer plage englobante
-    const minPoint = Math.min(...importantPoints);
-    const maxPoint = Math.max(...importantPoints);
-    const range = maxPoint - minPoint;
-
-    // 3. Ajouter marge de 7.5% de la plage englobante (minimum 5% de la plage totale)
-    // Si range = 0 (tous points identiques), utiliser marge minimale pour éviter division par zéro
-    const totalRange = result.paramDef.max - result.paramDef.min;
-    const minMargin = totalRange * 0.05; // Marge minimale: 5% de la plage totale
-    const margin = range > 0 ? Math.max(range * 0.075, minMargin) : minMargin;
-    const newMin = Math.max(minPoint - margin, result.paramDef.min);
-    const newMax = Math.min(maxPoint + margin, result.paramDef.max);
-
-    // 4. Vérifier si troncature utile (plage englobante < 80% de plage totale)
-    const truncatedRange = newMax - newMin;
-    const coverageRatio = truncatedRange / totalRange;
-
-    if (coverageRatio > 0.8) {
-      // Troncature ne simplifie pas assez, garder plage complète
-      return defaultResult;
-    }
-
-    // 5. Tronquer
-    return {
-      shouldTruncate: true,
-      newMin: newMin,
-      newMax: newMax,
-      reason: `Centrée sur valeurs importantes (${importantPoints.length} points)`,
-    };
-  }
-
-  // ========== DESSIN DES GRAPHIQUES TORNADO ==========
-  /**
-   * Dessine un graphique tornado en barre horizontale
-   * @param {string} canvasId - ID du canvas
-   * @param {Object} result - Résultat de l'analyse pour un paramètre
-   * @param {Object} baseConfig - Configuration de base (pour troncature adaptative)
-   */
-  function drawTornadoChart(canvasId, result, baseConfig) {
-    const canvas = document.getElementById(canvasId);
-    if (!canvas) {
-      console.error(`Canvas ${canvasId} non trouvé`);
-      return;
-    }
-
-    // Analyser si troncature nécessaire
-    const truncation = analyzeTruncationNeed(result, baseConfig);
-
-    const ctx = canvas.getContext('2d');
-    const dpr = window.devicePixelRatio || 1;
-
-    // Taille du canvas - VERSION COMPACTE
-    // Utiliser clientWidth au lieu de offsetWidth pour respecter les contraintes CSS
-    const container = canvas.parentElement;
-    const containerWidth = container.clientWidth;
-    const canvasWidth = Math.floor(containerWidth);
-    const canvasHeight = 88; // Hauteur ajustée pour éviter débordement des labels
-
-    canvas.width = canvasWidth * dpr;
-    canvas.height = canvasHeight * dpr;
-    canvas.style.width = canvasWidth + 'px';
-    canvas.style.height = canvasHeight + 'px';
-
-    ctx.scale(dpr, dpr);
-
-    // Configuration compacte avec padding supérieur augmenté pour les labels
-    const padding = { top: 18, right: 40, bottom: 22, left: 40 };
-    const plotWidth = canvasWidth - padding.left - padding.right;
-    const plotHeight = 32; // Hauteur de la barre réduite
-    const barY = padding.top + 2;
-
-    // Échelle pour le paramètre (utiliser plage tronquée si applicable)
-    const xMin = truncation.shouldTruncate ? truncation.newMin : result.paramDef.min;
-    const xMax = truncation.shouldTruncate ? truncation.newMax : result.paramDef.max;
-    const xScale = (x) => padding.left + ((x - xMin) / (xMax - xMin)) * plotWidth;
-
-    // Ajouter badge si plage modifiée (troncature ou plage effective)
-    const needsBadge = truncation.shouldTruncate || result.paramDef.isEffectiveRange;
-
-    if (needsBadge) {
-      // Créer ou mettre à jour le badge sous le canvas
-      let badge = container.querySelector('.truncation-notice');
-      if (!badge) {
-        badge = document.createElement('div');
-        badge.className = 'truncation-notice';
-        badge.style.cssText =
-          'font-size: 10px; color: #6b7280; margin-top: 4px; text-align: center; font-style: italic;';
-        container.appendChild(badge);
-      }
-
-      const unit = result.paramDef.unit;
-
-      if (truncation.shouldTruncate) {
-        // Badge troncature pour lisibilité - utiliser le reason de l'analyse
-        const truncLabel = window.I18n
-          ? I18n.t('sensitivity.truncatedRange')
-          : 'Plage tronquée pour lisibilité';
-        const truncDetail =
-          truncation.reason ||
-          (window.I18n ? I18n.t('sensitivity.truncatedDetail') : 'Centrée sur valeurs importantes');
-        badge.textContent = `ℹ️ ${truncLabel} (${xMin.toFixed(1)}-${xMax.toFixed(1)} ${unit}) - ${truncDetail}`;
-      } else if (result.paramDef.isEffectiveRange) {
-        // Badge plage effective (calculs convergent)
-        const origMin = result.paramDef.originalMin;
-        const origMax = result.paramDef.originalMax;
-        const effectiveLabel = window.I18n
-          ? I18n.t('sensitivity.effectiveRange')
-          : 'Plage effective';
-        const theoreticalLabel = window.I18n
-          ? I18n.t('sensitivity.theoreticalRange')
-          : 'Plage théorique';
-        const exceedsLabel = window.I18n
-          ? I18n.t('sensitivity.exceedsLimits')
-          : 'dépasse limites physiques';
-        badge.textContent = `ℹ️ ${effectiveLabel} (${xMin.toFixed(1)}-${xMax.toFixed(1)} ${unit}) - ${theoreticalLabel} ${origMin.toFixed(1)}-${origMax.toFixed(1)} ${unit} ${exceedsLabel}`;
-      }
-    }
-
-    // Dessiner la barre principale colorée (passer baseConfig pour recalcul si troncature)
-    drawColoredBar(ctx, padding.left, barY, plotWidth, plotHeight, result, xMin, xMax, baseConfig);
-
-    // Dessiner les lignes de référence (Base, 0°C, 5°C)
-    drawReferenceLines(ctx, barY, plotHeight, result, xScale);
-
-    // Dessiner les labels des valeurs
-    drawValueLabels(ctx, barY, plotHeight, result, xScale, padding.bottom);
-
-    // Dessiner les limites (barres épaisses aux extrémités)
-    drawLimits(ctx, padding.left, barY, plotWidth, plotHeight);
-  }
-
-  /**
-   * Dessine la barre principale avec zones colorées franches selon T_final
-   * @param {number} displayMin - Limite min pour affichage (peut être tronquée)
-   * @param {number} displayMax - Limite max pour affichage (peut être tronquée)
-   * @param {Object} baseConfig - Configuration de base (pour recalcul si troncature)
-   */
-  function drawColoredBar(
-    ctx,
-    startX,
-    barY,
-    barWidth,
-    barHeight,
-    result,
-    displayMin,
-    displayMax,
-    baseConfig
-  ) {
-    // Couleurs des zones (mêmes que profil température)
-    const COLOR_SAFE = '#DFFFD6'; // Vert: T ≥ 5°C
-    const COLOR_WARNING = '#FFF4CC'; // Jaune: 0°C < T < 5°C
-    const COLOR_FREEZE = '#FFD6D6'; // Rouge: T ≤ 0°C
-    const COLOR_UNKNOWN = '#e5e7eb'; // Gris: données manquantes
-
-    // Si displayMin/Max diffèrent des bornes originales dans result (troncature),
-    // il faut recalculer T aux nouvelles bornes
-    let T_atDisplayMin = result.T_atMin;
-    let T_atDisplayMax = result.T_atMax;
-
-    const originalMin = result.paramDef.min;
-    const originalMax = result.paramDef.max;
-
-    if (displayMin !== originalMin || displayMax !== originalMax) {
-      // Recalculer T aux bornes tronquées
-      const paramKey = result.paramKey;
-
-      try {
-        // Calculer T à displayMin
-        const configMin = JSON.parse(JSON.stringify(baseConfig));
-        applyParameterValue(configMin, paramKey, displayMin);
-        const resultMin = calculatePipeNetwork(configMin);
-        T_atDisplayMin = resultMin.T_final;
-      } catch (e) {
-        console.warn(`Échec calcul T@displayMin (${displayMin}) pour ${paramKey}`);
-        T_atDisplayMin = null;
-      }
-
-      try {
-        // Calculer T à displayMax
-        const configMax = JSON.parse(JSON.stringify(baseConfig));
-        applyParameterValue(configMax, paramKey, displayMax);
-        const resultMax = calculatePipeNetwork(configMax);
-        T_atDisplayMax = resultMax.T_final;
-      } catch (e) {
-        console.warn(`Échec calcul T@displayMax (${displayMax}) pour ${paramKey}`);
-        T_atDisplayMax = null;
-      }
-    }
-
-    // Vérifier si données valides
-    if (T_atDisplayMin === null || T_atDisplayMax === null) {
-      ctx.fillStyle = COLOR_UNKNOWN;
-      ctx.fillRect(startX, barY, barWidth, barHeight);
-      ctx.strokeStyle = '#9ca3af';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(startX, barY, barWidth, barHeight);
-
-      // Ajouter texte explicatif
-      ctx.fillStyle = '#6b7280';
-      ctx.font = 'italic 10px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      const invalidText = window.I18n ? I18n.t('detailedCalcs.outOfRange') : 'Hors plage';
-      const detailText =
-        T_atDisplayMin === null && T_atDisplayMax === null
-          ? ' (min et max)'
-          : T_atDisplayMin === null
-            ? ' (min)'
-            : ' (max)';
-      ctx.fillText(invalidText + detailText, startX + barWidth / 2, barY + barHeight / 2);
-
-      return;
-    }
-
-    // Fonction pour convertir valeur paramètre → position X (utilise displayMin/Max pour troncature)
-    const xScale = (paramValue) => {
-      const fraction = (paramValue - displayMin) / (displayMax - displayMin);
-      return startX + fraction * barWidth;
-    };
-
-    // Fonction pour déterminer la couleur selon la température
-    const getColor = (T) => {
-      if (T <= FREEZE_TEMP) {
-        return COLOR_FREEZE;
-      }
-      if (T < SAFETY_THRESHOLD) {
-        return COLOR_WARNING;
-      }
-      return COLOR_SAFE;
-    };
-
-    // Construire la liste des segments à dessiner
-    // Format: [{ paramStart, paramEnd, color }]
-    const segments = [];
-
-    // Points de transition (valeurs du paramètre qui donnent T=5°C et T=0°C)
-    const safetyParamValue = result.criticalValueSafety; // Valeur pour T=5°C
-    const freezeParamValue = result.criticalValueFreeze; // Valeur pour T=0°C
-
-    // Créer une liste ordonnée des points de transition
-    const transitions = [
-      { param: displayMin, T: T_atDisplayMin },
-      { param: displayMax, T: T_atDisplayMax },
-    ];
-
-    if (
-      safetyParamValue !== null &&
-      safetyParamValue > displayMin &&
-      safetyParamValue < displayMax
-    ) {
-      transitions.push({ param: safetyParamValue, T: SAFETY_THRESHOLD });
-    }
-
-    if (
-      freezeParamValue !== null &&
-      freezeParamValue > displayMin &&
-      freezeParamValue < displayMax
-    ) {
-      transitions.push({ param: freezeParamValue, T: FREEZE_TEMP });
-    }
-
-    // Trier par valeur du paramètre
-    transitions.sort((a, b) => a.param - b.param);
-
-    // Créer les segments entre chaque transition
-    for (let i = 0; i < transitions.length - 1; i++) {
-      const start = transitions[i];
-      const end = transitions[i + 1];
-
-      // La température au milieu du segment (pour déterminer la couleur)
-      const midTemp = (start.T + end.T) / 2;
-      const color = getColor(midTemp);
-
-      segments.push({
-        paramStart: start.param,
-        paramEnd: end.param,
-        color: color,
-      });
-    }
-
-    // Dessiner chaque segment
-    segments.forEach((seg) => {
-      const x = xScale(seg.paramStart);
-      const width = xScale(seg.paramEnd) - x;
-
-      ctx.fillStyle = seg.color;
-      ctx.fillRect(x, barY, width, barHeight);
-    });
-
-    // Bordure globale
-    ctx.strokeStyle = '#9ca3af';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(startX, barY, barWidth, barHeight);
-
-    // Bordures entre segments (transitions franches)
-    segments.forEach((seg, idx) => {
-      if (idx > 0) {
-        const x = xScale(seg.paramStart);
-        ctx.strokeStyle = '#6b7280';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.moveTo(x, barY);
-        ctx.lineTo(x, barY + barHeight);
-        ctx.stroke();
-      }
-    });
-  }
-
-  /**
-   * Dessine les lignes de référence verticales (Base, 0°C, 5°C) - VERSION COMPACTE
-   */
-  function drawReferenceLines(ctx, barY, barHeight, result, xScale) {
-    const lineBottom = barY + barHeight + 3;
-    const lineTop = barY - 3;
-    const labelY = lineTop - 4;
-
-    // Collecter toutes les positions pour éviter les chevauchements
-    const labels = [];
-    const MIN_LABEL_DISTANCE = 20; // pixels minimum entre labels
-
-    // Ligne de base (valeur actuelle) - NOIRE
-    const baseX = xScale(result.baseValue);
-    ctx.strokeStyle = '#000000';
-    ctx.lineWidth = 2.5;
-    ctx.beginPath();
-    ctx.moveTo(baseX, lineTop);
-    ctx.lineTo(baseX, lineBottom);
-    ctx.stroke();
-
-    labels.push({
-      x: baseX,
-      text: 'Base',
-      color: '#000000',
-      font: 'bold 9px sans-serif',
-      priority: 1,
-    });
-
-    // Ligne 0°C (point de gel) - ROUGE
-    if (result.criticalValueFreeze !== null) {
-      const freezeX = xScale(result.criticalValueFreeze);
-      ctx.strokeStyle = '#dc2626';
-      ctx.lineWidth = 1.5;
-      ctx.setLineDash([4, 2]);
-      ctx.beginPath();
-      ctx.moveTo(freezeX, lineTop);
-      ctx.lineTo(freezeX, lineBottom);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      labels.push({
-        x: freezeX,
-        text: '0°C',
-        color: '#dc2626',
-        font: '8px sans-serif',
-        priority: 2,
-      });
-    }
-
-    // Ligne 5°C (seuil sécurité) - ORANGE
-    if (result.criticalValueSafety !== null) {
-      const safetyX = xScale(result.criticalValueSafety);
-      ctx.strokeStyle = '#f59e0b';
-      ctx.lineWidth = 1.5;
-      ctx.setLineDash([4, 2]);
-      ctx.beginPath();
-      ctx.moveTo(safetyX, lineTop);
-      ctx.lineTo(safetyX, lineBottom);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      labels.push({
-        x: safetyX,
-        text: '5°C',
-        color: '#f59e0b',
-        font: '8px sans-serif',
-        priority: 3,
-      });
-    }
-
-    // Trier par position X
-    labels.sort((a, b) => a.x - b.x);
-
-    // Ajuster positions pour éviter chevauchements
-    for (let i = 1; i < labels.length; i++) {
-      const prev = labels[i - 1];
-      const curr = labels[i];
-
-      // Si trop proche, décaler verticalement le label de priorité plus basse
-      if (curr.x - prev.x < MIN_LABEL_DISTANCE) {
-        if (curr.priority > prev.priority) {
-          curr.yOffset = 10; // Décaler vers le bas
-        } else {
-          prev.yOffset = 10;
-        }
-      }
-    }
-
-    // Dessiner les labels avec positions ajustées
-    labels.forEach((label) => {
-      ctx.fillStyle = label.color;
-      ctx.font = label.font;
-      ctx.textAlign = 'center';
-      const y = labelY + (label.yOffset || 0);
-      ctx.fillText(label.text, label.x, y);
-    });
-  }
-
-  /**
-   * Dessine les labels des valeurs min/max - VERSION COMPACTE
-   */
-  function drawValueLabels(ctx, barY, barHeight, result, xScale, _paddingBottom) {
-    const labelY = barY + barHeight + 14;
-
-    ctx.font = '9px sans-serif';
-    ctx.fillStyle = '#4b5563';
-
-    // Valeur MIN à gauche
-    ctx.textAlign = 'left';
-    const minText = `${result.paramDef.min.toFixed(0)} ${result.paramDef.unit}`;
-    ctx.fillText(minText, xScale(result.paramDef.min) - 2, labelY);
-
-    // Valeur MAX à droite
-    ctx.textAlign = 'right';
-    const maxText = `${result.paramDef.max.toFixed(0)} ${result.paramDef.unit}`;
-    ctx.fillText(maxText, xScale(result.paramDef.max) + 2, labelY);
-
-    // Pas de flèche dans la version compacte (gain d'espace)
-  }
-
-  /**
-   * Dessine les limites épaisses aux extrémités - VERSION COMPACTE
-   */
-  function drawLimits(ctx, startX, barY, barWidth, barHeight) {
-    ctx.strokeStyle = '#1f2937';
-    ctx.lineWidth = 3;
-
-    // Limite gauche
-    ctx.beginPath();
-    ctx.moveTo(startX, barY - 3);
-    ctx.lineTo(startX, barY + barHeight + 3);
-    ctx.stroke();
-
-    // Limite droite
-    ctx.beginPath();
-    ctx.moveTo(startX + barWidth, barY - 3);
-    ctx.lineTo(startX + barWidth, barY + barHeight + 3);
-    ctx.stroke();
   }
 
   // ========== GÉNÉRATION DU TABLEAU RÉCAPITULATIF ==========
@@ -1318,7 +785,25 @@
     // Ne PAS filtrer - afficher tous les paramètres même si invalides
     // Cela permet de voir quels paramètres ont des problèmes de plage
     results.forEach((result) => {
-      const baseValueFormatted = result.baseValue.toFixed(2);
+      // Convertir les valeurs selon le type de paramètre
+      let baseValueDisplay = result.baseValue;
+      let freezeValueDisplay = result.criticalValueFreeze;
+      let safetyValueDisplay = result.criticalValueSafety;
+      let decimals = 2;
+
+      // Si c'est le débit et que UnitConverter existe, convertir de m³/h vers l'unité d'affichage
+      if (result.paramKey === 'm_dot' && window.UnitConverter) {
+        baseValueDisplay = UnitConverter.fromSI('flowRate', result.baseValue);
+        if (result.criticalValueFreeze !== null) {
+          freezeValueDisplay = UnitConverter.fromSI('flowRate', result.criticalValueFreeze);
+        }
+        if (result.criticalValueSafety !== null) {
+          safetyValueDisplay = UnitConverter.fromSI('flowRate', result.criticalValueSafety);
+        }
+        decimals = UnitConverter.getUnitInfo('flowRate').decimals;
+      }
+
+      const baseValueFormatted = baseValueDisplay.toFixed(decimals);
       const T_minFormatted =
         result.T_atMin !== null
           ? (result.T_atMin >= 0 ? '+' : '') + result.T_atMin.toFixed(1) + '°C'
@@ -1331,13 +816,13 @@
       const outOfRangeText = window.I18n ? I18n.t('detailedCalcs.outOfRange') : 'Hors plage';
 
       const freezeFormatted =
-        result.criticalValueFreeze !== null
-          ? result.criticalValueFreeze.toFixed(2) + ' ' + result.paramDef.unit
+        freezeValueDisplay !== null
+          ? freezeValueDisplay.toFixed(decimals) + ' ' + result.paramDef.unit
           : outOfRangeText;
 
       const safetyFormatted =
-        result.criticalValueSafety !== null
-          ? result.criticalValueSafety.toFixed(2) + ' ' + result.paramDef.unit
+        safetyValueDisplay !== null
+          ? safetyValueDisplay.toFixed(decimals) + ' ' + result.paramDef.unit
           : outOfRangeText;
 
       const amplitudeFormatted = result.amplitude.toFixed(1) + '°C';
@@ -1374,7 +859,6 @@
   // ========== EXPORT ==========
   window.SensitivityAnalysis1D = {
     analyze: analyzeSensitivity1D,
-    drawChart: drawTornadoChart, // Signature: (canvasId, result, baseConfig)
     generateSummaryTable: generateSummaryTable,
   };
 })();

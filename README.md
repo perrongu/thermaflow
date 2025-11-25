@@ -12,7 +12,7 @@
 
 <div align="center">
 
-[![Version](https://img.shields.io/badge/version-1.1.5-blue.svg)](https://github.com/perrongu/thermaflow)
+[![Version](https://img.shields.io/badge/version-1.1.6-blue.svg)](https://github.com/perrongu/thermaflow)
 [![Licence](https://img.shields.io/badge/licence-MIT-green.svg)](LICENSE)
 
 </div>
@@ -30,7 +30,7 @@ Application web gratuite pour **ingénieurs**, **techniciens**, **gestionnaires*
 - 🎨 **Schéma 3D interactif** - Vue isométrique de la tuyauterie
 - 📊 **Graphique T(x)** - Profil de température avec zones de risque
 - 🔴 **Verdict immédiat** - Résultat clair et sans ambiguïté
-- 📈 **Analyse de sensibilité** - Tornado charts (1D) + Heatmap (2D)
+- 📈 **Analyse de sensibilité** - Tableau points critiques (1D) + Heatmap (2D)
 - 📄 **Export rapport** - Sauvegarde des résultats
 
 ### Capacités
@@ -204,6 +204,6 @@ MIT License - Voir [LICENSE](LICENSE) pour détails.
 
 ---
 
-**ThermaFlow v1.1.5** | Calculs scientifiques rigoureux | 100% open source
+**ThermaFlow v1.1.6** | Calculs scientifiques rigoureux | 100% open source
 
 Pour questions ou support: [Ouvrez une issue sur GitHub](https://github.com/perrongu/thermaflow/issues)

@@ -1,7 +1,7 @@
 # RAPPORT DE VÉRIFICATION AUTOMATIQUE - THERMAFLOW
 
-**Date**: 2025-11-06 10:41:23  
-**Version**: 1.1.5  
+**Date**: 2025-11-24 21:15:41  
+**Version**: 1.1.6  
 **Durée**: 0.0 minutes  
 **Statut global**: VALIDÉ ✓
 
@@ -13,7 +13,7 @@
 |-----------|-------|------|------|------|
   | **Constantes physiques** | 14 | 14 | 0 | 100.0% |
   | **Conversions d'unités** | 25 | 25 | 0 | 100.0% |
-  | **Tests unitaires** | 19 | 19 | 0 | 100.0% |
+  | **Tests unitaires** | 21 | 21 | 0 | 100.0% |
 
 
 ---
@@ -108,10 +108,12 @@
 | test_pipe_network.js | ✓ PASS |
 | test_pipe_segment.js | ✓ PASS |
 | test_precommit_adds_report.js | ✓ PASS |
+| test_rebuildConfig_consistency.js | ✓ PASS |
 | test_report_filename.js | ✓ PASS |
 | test_report_no_signature.js | ✓ PASS |
 | test_report_timezone.js | ✓ PASS |
 | test_richardson_convection.js | ✓ PASS |
+| test_sensitivity_1d_consistency.js | ✓ PASS |
 | test_storage_persistence.js | ✓ PASS |
 | test_temperature_iteration.js | ✓ PASS |
 | test_unit_conversions.js | ✓ PASS |
@@ -192,15 +194,15 @@
 ✓ **TOUS LES CRITÈRES SONT VALIDÉS**
 
 Ce rapport confirme que:
-- 100% des tests unitaires passent (19/19) ✓
+- 100% des tests unitaires passent (21/21) ✓
 - 100% des conversions d'unités sont correctes (25/25) ✓
 - 14/14 constantes extraites et validées automatiquement
 - 50 cas de validation externe comparés aux logiciels de référence
 
-**Je certifie l'exactitude scientifique et technique de ThermaFlow v1.1.5**
+**Je certifie l'exactitude scientifique et technique de ThermaFlow v1.1.6**
 
 ---
 
-*Rapport généré automatiquement le 2025-11-06 10:41:23*  
+*Rapport généré automatiquement le 2025-11-24 21:15:41*  
 *Durée d'exécution: 0.0 minutes*  
-*ThermaFlow v1.1.5 - Automated Verification System*
+*ThermaFlow v1.1.6 - Automated Verification System*

@@ -1,5 +1,27 @@
 # Historique des versions - ThermaFlow
 
+## Version 1.1.6 (25 novembre 2025)
+
+### Corrections
+
+- Division par zéro dans interpolation analyse 1D
+- Variable non définie dans recherche borne valide
+- Points critiques instables lors changement paramètres
+- Duplication code dans gestion erreurs
+
+### Améliorations
+
+- Stratégie interpolation analyse 1D (250 points au lieu de 75)
+- Fonction rebuildConfig pour cohérence configuration complète
+- Suppression graphiques tornado (affichage tableau uniquement)
+- Tests cohérence points critiques ajoutés
+
+### Notes
+
+Corrections bugs critiques analyse sensibilité 1D. Validation complète: 20/20 tests (100%).
+
+---
+
 ## Version 1.1.5 (Date à compléter)
 
 ### Documentation

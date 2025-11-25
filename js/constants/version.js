@@ -9,7 +9,7 @@
 (function versionModule() {
   'use strict';
 
-  const VERSION = '1.1.5';
+  const VERSION = '1.1.6';
 
   if (typeof window !== 'undefined') {
     window.ThermaFlowVersion = { VERSION };
