@@ -581,40 +581,9 @@
     // Générer le tableau récapitulatif
     summaryContainer.innerHTML = SensitivityAnalysis1D.generateSummaryTable(results);
 
-    // Créer un canvas pour chaque paramètre
+    // Graphiques tornado supprimés - affichage tableau uniquement
+    // La section HTML reste visible mais vide (pas de canvas générés)
     gridContainer.innerHTML = '';
-
-    results.forEach((result, index) => {
-      const container = document.createElement('div');
-      container.className = 'tornado-chart-container';
-
-      // Titre du paramètre
-      const title = document.createElement('h4');
-      title.style.margin = '0 0 10px 0';
-      title.style.fontSize = '14px';
-      title.style.fontWeight = '600';
-      title.style.color = '#374151';
-      title.textContent = result.paramDef.label;
-      container.appendChild(title);
-
-      const canvas = document.createElement('canvas');
-      canvas.id = `tornado-chart-${result.paramKey}`;
-      canvas.width = 800;
-      canvas.height = 150;
-      canvas.setAttribute('role', 'img');
-      canvas.setAttribute(
-        'aria-label',
-        `Graphique tornado pour ${result.paramDef.label}: varie de ${result.paramDef.min} à ${result.paramDef.max} ${result.paramDef.unit}, température finale de ${result.T_atMin?.toFixed(1) || 'N/A'}°C à ${result.T_atMax?.toFixed(1) || 'N/A'}°C`
-      );
-
-      container.appendChild(canvas);
-      gridContainer.appendChild(container);
-
-      // Dessiner le graphique (passer config pour troncature adaptative)
-      setTimeout(() => {
-        SensitivityAnalysis1D.drawChart(canvas.id, result, config);
-      }, 50 * index); // Décaler légèrement pour éviter de bloquer l'UI
-    });
   }
 
   // ========== DÉTECTION ERREURS LIMITES PHYSIQUES (non utilisé, commenté) ==========
