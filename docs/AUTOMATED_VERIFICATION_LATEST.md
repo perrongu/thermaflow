@@ -1,7 +1,7 @@
 # RAPPORT DE VÉRIFICATION AUTOMATIQUE - THERMAFLOW
 
-**Date**: 2025-11-25 18:22:46  
-**Version**: 1.1.6  
+**Date**: 2025-11-25 13:35:40  
+**Version**: 1.1.7  
 **Durée**: 0.0 minutes  
 **Statut global**: VALIDÉ ✓
 
@@ -199,10 +199,10 @@ Ce rapport confirme que:
 - 14/14 constantes extraites et validées automatiquement
 - 50 cas de validation externe comparés aux logiciels de référence
 
-**Je certifie l'exactitude scientifique et technique de ThermaFlow v1.1.6**
+**Je certifie l'exactitude scientifique et technique de ThermaFlow v1.1.7**
 
 ---
 
-*Rapport généré automatiquement le 2025-11-25 18:22:46*  
+*Rapport généré automatiquement le 2025-11-25 13:35:40*  
 *Durée d'exécution: 0.0 minutes*  
-*ThermaFlow v1.1.6 - Automated Verification System*
+*ThermaFlow v1.1.7 - Automated Verification System*

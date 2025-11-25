@@ -1,5 +1,19 @@
 # Historique des versions - ThermaFlow
 
+## Version 1.1.7 (25 novembre 2025)
+
+### Fixed
+
+- Conversion débit vers SI dans rebuildConfig analyse 1D
+- Conversion débit depuis SI dans getDisplayValue analyse 1D
+- Conversions redondantes supprimées dans generateSummaryTable
+
+### Notes
+
+Corrections conversion unités débit analyse sensibilité 1D. Validation complète: 20/20 tests (100%).
+
+---
+
 ## Version 1.1.6 (25 novembre 2025)
 
 ### Corrections
