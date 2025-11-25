@@ -265,8 +265,8 @@
         break;
 
       case 'm_dot':
-        // newValue est déjà en m³/h (unité d'affichage)
-        flowM3PerHr = newValue;
+        // Convertir la valeur affichée vers l'unité SI stockée (m³/h)
+        flowM3PerHr = window.UnitConverter ? UnitConverter.toSI('flowRate', newValue) : newValue;
         break;
 
       case 'T_in':
@@ -739,7 +739,9 @@
         return config.totalLength;
 
       case 'm_dot':
-        return config.meta.flowM3PerHr; // Déjà en m³/h (unité d'affichage)
+        return window.UnitConverter
+          ? UnitConverter.fromSI('flowRate', config.meta.flowM3PerHr)
+          : config.meta.flowM3PerHr;
 
       case 'T_in':
         return config.fluid.T_in;
@@ -786,22 +788,13 @@
     // Cela permet de voir quels paramètres ont des problèmes de plage
     results.forEach((result) => {
       // Convertir les valeurs selon le type de paramètre
-      let baseValueDisplay = result.baseValue;
-      let freezeValueDisplay = result.criticalValueFreeze;
-      let safetyValueDisplay = result.criticalValueSafety;
-      let decimals = 2;
-
-      // Si c'est le débit et que UnitConverter existe, convertir de m³/h vers l'unité d'affichage
-      if (result.paramKey === 'm_dot' && window.UnitConverter) {
-        baseValueDisplay = UnitConverter.fromSI('flowRate', result.baseValue);
-        if (result.criticalValueFreeze !== null) {
-          freezeValueDisplay = UnitConverter.fromSI('flowRate', result.criticalValueFreeze);
-        }
-        if (result.criticalValueSafety !== null) {
-          safetyValueDisplay = UnitConverter.fromSI('flowRate', result.criticalValueSafety);
-        }
-        decimals = UnitConverter.getUnitInfo('flowRate').decimals;
-      }
+      const baseValueDisplay = result.baseValue;
+      const freezeValueDisplay = result.criticalValueFreeze;
+      const safetyValueDisplay = result.criticalValueSafety;
+      const decimals =
+        result.paramKey === 'm_dot' && window.UnitConverter
+          ? UnitConverter.getUnitInfo('flowRate').decimals
+          : 2;
 
       const baseValueFormatted = baseValueDisplay.toFixed(decimals);
       const T_minFormatted =
