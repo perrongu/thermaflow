@@ -450,14 +450,10 @@
         correlationFormula =
           'Nu = 3.66 + (0.0668 × (D/L) × Re × Pr) / (1 + 0.04 × [(D/L) × Re × Pr]^(2/3))';
       } else {
-        if (result.Re > 10000) {
-          correlationName = t('calcDetails.step3.correlations.dittusBoelter');
-          correlationFormula = 'Nu = 0.023 × Re^0.8 × Pr^0.4';
-        } else {
-          correlationName = t('calcDetails.step3.correlations.gnielinski');
-          correlationFormula =
-            'Nu = ((f/8) × (Re-1000) × Pr) / (1 + 12.7 × (f/8)^0.5 × (Pr^(2/3) - 1))';
-        }
+        // Le moteur utilise Gnielinski pour tout le régime turbulent (Re > 2300)
+        correlationName = t('calcDetails.step3.correlations.gnielinski');
+        correlationFormula =
+          'Nu = ((f/8) × (Re-1000) × Pr) / (1 + 12.7 × (f/8)^0.5 × (Pr^(2/3) - 1))';
       }
 
       const Nu = (result.h_int * D) / water.k;
@@ -548,7 +544,7 @@
               <p><em>h<sub>conv</sub> ${t('calcDetails.step4.convection.calculated')}</em></p>
             </div>
             <div class="calc-block__result">
-              ${t('calcDetails.step4.convection.result')}<sub>conv</sub> ≈ ${(result.h_ext * 0.85).toFixed(1)} W/(m²·K)
+              ${t('calcDetails.step4.convection.result')}<sub>conv</sub> = ${(result.h_conv_ext !== null && result.h_conv_ext !== undefined ? result.h_conv_ext : result.h_ext * 0.85).toFixed(1)} W/(m²·K)
             </div>
             <div class="calc-block__reference">
               <strong>${t('calcDetails.step4.convection.source')}</strong>
@@ -567,7 +563,7 @@
               <p><em>${t('calcDetails.step4.radiation.surfaceTemp')}<sub>s</sub> ${t('calcDetails.step4.radiation.surfaceTempNote')}</em></p>
             </div>
             <div class="calc-block__result">
-              ${t('calcDetails.step4.radiation.result')}<sub>rad</sub> ≈ ${(result.h_ext * 0.15).toFixed(1)} W/(m²·K)
+              ${t('calcDetails.step4.radiation.result')}<sub>rad</sub> = ${(result.h_rad !== null && result.h_rad !== undefined ? result.h_rad : result.h_ext * 0.15).toFixed(1)} W/(m²·K)
             </div>
             <div class="calc-block__reference">
               <strong>${t('calcDetails.step4.radiation.source')}</strong>

@@ -19,6 +19,7 @@
 const nusseltInt = require('../js/correlations/nusselt-internal.js');
 const nusseltExt = require('../js/correlations/nusselt-external.js');
 const radiation = require('../js/correlations/radiation.js');
+const geometry = require('../js/formulas/geometry.js');
 const resistance = require('../js/calculations/thermal-resistance.js');
 const heatTransfer = require('../js/calculations/heat-transfer.js');
 
@@ -173,7 +174,7 @@ const T_C = radiation.kelvinToCelsius(293.15);
 assertClose(T_C, 20, 0.001, '293.15 K = 20°C');
 
 console.log('\nTest 16: Aire cylindre');
-const A_cyl = radiation.cylinderSurfaceArea(0.06, 10);
+const A_cyl = geometry.cylinderSurfaceArea(0.06, 10);
 // A = π × 0.06 × 10 = 1.885 m²
 assertClose(A_cyl, 1.885, 0.01, 'A ≈ 1.885 m²');
 

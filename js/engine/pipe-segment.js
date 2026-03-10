@@ -33,6 +33,8 @@
  * @property {number} Q_loss - Perte thermique [W]
  * @property {number} h_int - Coefficient convection interne [W/(m²·K)]
  * @property {number} h_ext - Coefficient transfert externe total [W/(m²·K)]
+ * @property {number} h_conv_ext - Coefficient convection externe [W/(m²·K)]
+ * @property {number} h_rad - Coefficient rayonnement [W/(m²·K)]
  * @property {number} U - Coefficient transfert global [W/(m²·K)]
  * @property {number} NTU - Nombre d'unités de transfert [-]
  * @property {number} Re - Nombre de Reynolds [-]
@@ -374,6 +376,8 @@ function calculatePipeSegment(geometry, fluid, ambient, insulation = null, itera
       // Coefficients thermiques
       h_int: h_int,
       h_ext: h_ext_total,
+      h_conv_ext: h_conv_ext,
+      h_rad: h_rad,
       U: U,
       NTU: NTU,
 

@@ -12,7 +12,7 @@
 
 <div align="center">
 
-[![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](https://github.com/perrongu/thermaflow)
+[![Version](https://img.shields.io/badge/version-1.2.1-blue.svg)](https://github.com/perrongu/thermaflow)
 [![Licence](https://img.shields.io/badge/licence-MIT-green.svg)](LICENSE)
 
 </div>
@@ -133,7 +133,7 @@ ThermaFlow est basé sur des standards industriels reconnus et validé scientifi
 
 ### Validation
 
-- **Suite complète de tests** - 22 fichiers tests, 142+ tests unitaires (100% passent)
+- **Suite complète de tests** - 24 fichiers tests, 1246+ assertions (100% passent)
 - **Validation croisée** - 50 cas comparés avec Aspen Hysys, AFT Fathom, DWSIM (±1.5°C)
 - **Conservation d'énergie** - Vérifiée sur tous les calculs
 - **JSDoc complet** - Toutes fonctions documentées avec références scientifiques
@@ -171,7 +171,7 @@ npm run lint    # ESLint (0 erreurs, 0 warnings)
 npm run format  # Prettier (formatage cohérent)
 ```
 
-**Résultats**: 22 fichiers tests, 142+ tests passent ✅
+**Résultats**: 24 fichiers tests, 1246+ assertions passent ✅
 
 ### Infrastructure qualité
 
@@ -204,6 +204,6 @@ MIT License - Voir [LICENSE](LICENSE) pour détails.
 
 ---
 
-**ThermaFlow v1.2.0** | Calculs scientifiques rigoureux | 100% open source
+**ThermaFlow v1.2.1** | Calculs scientifiques rigoureux | 100% open source
 
 Pour questions ou support: [Ouvrez une issue sur GitHub](https://github.com/perrongu/thermaflow/issues)

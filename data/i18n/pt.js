@@ -231,7 +231,7 @@
         },
         nusselt: {
           title: '3.2 Número de Nusselt (convecção interna)',
-          correlation: 'Correlação: Dittus-Boelter (turbulento)',
+          correlation: 'Correlação:',
           result: '→ Número de Nusselt interno: Nu =',
           source: "Fonte: Perry's Section 5-12 - js/correlations/nusselt-internal.js",
         },
