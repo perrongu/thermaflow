@@ -17,12 +17,8 @@
 (function () {
   'use strict';
 
-  // ========== RUGOSITÉ PAR MATÉRIAU ==========
-  const MATERIAL_ROUGHNESS = {
-    steel: 0.045e-3, // m (acier commercial)
-    copper: 0.0015e-3, // m (cuivre)
-    stainless_steel: 0.015e-3, // m (inox)
-  };
+  // ========== RUGOSITÉ PAR MATÉRIAU (module partagé) ==========
+  const MATERIAL_ROUGHNESS = window.MaterialRoughness.MATERIAL_ROUGHNESS;
 
   // ========== ÉLÉMENTS DOM ==========
   let elements = {};

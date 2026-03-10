@@ -1,5 +1,35 @@
 # Historique des versions - ThermaFlow
 
+## Version 1.2.0 (10 mars 2026)
+
+### Refactoring
+
+- Suppression code mort dans app.js (~128 lignes) et sensitivity-analysis.js (~47 lignes)
+- Suppression console.log de production dans loader.js
+- Suppression fichier orphelin data/pipes/roughness.js (non chargé, non référencé)
+- Extraction module partagé sensitivity-params.js (PARAMETER_DEFINITIONS et getParameterLabel)
+- Extraction module sensitivity-heatmap-renderer.js (rendu canvas heatmap 2D)
+- Centralisation constante MARGE_SURETE_GEL dans js/constants/thresholds.js
+- Centralisation constante MATERIAL_ROUGHNESS dans js/constants/roughness.js
+- Synchronisation version storage.js avec ThermaFlowVersion.VERSION
+
+### Sécurité
+
+- Ajout attributs SRI (integrity + crossorigin) sur les 3 ressources CDN KaTeX
+- Remplacement innerHTML par createElement/textContent pour les erreurs de validation (sensitivity-analysis.js)
+- Ajout validation de schéma après JSON.parse dans storage.js
+
+### Améliorations
+
+- Remplacement constante magique rho_water=983 par lookup WaterProperties.getWaterProperties()
+- Installation ECC (Everything Claude Code) au niveau projet
+
+### Notes
+
+Revue de code complète (refactor-clean, code-review, security-scan). Validation complète: 22 fichiers tests, tous passent. Zéro erreur console en navigateur.
+
+---
+
 ## Version 1.1.7 (25 novembre 2025)
 
 ### Fixed

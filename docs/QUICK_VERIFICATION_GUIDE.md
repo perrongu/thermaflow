@@ -19,7 +19,7 @@ node tests/automated_verification.js
 
 1. ✅ Validation de ~15 constantes physiques critiques
 2. ✅ Validation de 25 conversions d'unités
-3. ✅ Exécution de 14 tests unitaires
+3. ✅ Exécution de 22 fichiers de tests unitaires
 4. ✅ Validation externe (si données disponibles)
 5. ✅ Génération d'un rapport concis (`docs/AUTOMATED_VERIFICATION_YYYY-MM-DD.md`)
 
@@ -104,7 +104,7 @@ Validation automatique de:
 
 #### Section 4: Tests unitaires
 
-Liste des 12 tests avec status PASS/FAIL
+Liste des tests avec status PASS/FAIL
 
 #### Section 5: Certification (À SIGNER)
 
@@ -167,14 +167,14 @@ Calculs automatiques:
 
 **Méthode**: Calcul direct avec valeurs test, comparaison avec résultats attendus
 
-### 3. Tests unitaires (12 fichiers)
+### 3. Tests unitaires (22 fichiers)
 
 Exécution automatique de tous les tests:
 
 - test_phase1_hydraulics.js
 - test_phase1_heat_transfer.js
 - test_phase1_materials.js
-- ... (9 autres)
+- ... (19 autres)
 
 **Méthode**: `execSync()` pour chaque test, capture PASS/FAIL
 
@@ -320,4 +320,4 @@ Pour questions sur:
 ---
 
 _Guide créé le 2025-10-30_  
-_ThermaFlow v1.1.7 - Quick Verification System_
+_ThermaFlow v1.2.0 - Quick Verification System_

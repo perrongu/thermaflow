@@ -25,7 +25,7 @@
       const data = {
         config: config,
         timestamp: Date.now(),
-        version: '1.0.1',
+        version: (window.ThermaFlowVersion && window.ThermaFlowVersion.VERSION) || 'unknown',
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch (error) {
@@ -47,7 +47,11 @@
       }
 
       const data = JSON.parse(json);
-      return data; // Retourner l'objet complet, pas seulement data.config
+      if (!data || typeof data !== 'object' || typeof data.config !== 'object') {
+        console.warn('localStorage: données invalides, ignorées');
+        return null;
+      }
+      return data;
     } catch (error) {
       console.warn('Impossible de charger la configuration:', error);
       return null;

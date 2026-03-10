@@ -15,11 +15,23 @@
     <link rel="stylesheet" href="css/components.css" />
 
     <!-- KaTeX pour rendu mathématique (Section 3) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+      integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV"
+      crossorigin="anonymous"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
+      integrity="sha384-fP26ZkT1rR4JqLgaYJLhRbIb1D8oUj9p+iMK6kl7C0ZtlG8EIiSuZOSsex4/B+d"
+      crossorigin="anonymous"
+    ></script>
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+      integrity="sha384-Leidgm9AwLV1fBuiurIMDkagBc6D04uVseUniuNVf6bBtDL9U9k9UAhKo09TxqRx"
+      crossorigin="anonymous"
     ></script>
   </head>
   <body>
@@ -586,6 +598,8 @@
 
     <!-- Scripts - Constantes partagées -->
     <script src="js/constants/flow-regimes.js"></script>
+    <script src="js/constants/thresholds.js"></script>
+    <script src="js/constants/roughness.js"></script>
 
     <!-- Scripts - Formules de base -->
     <script src="js/formulas/reynolds.js"></script>
@@ -615,7 +629,9 @@
     <script src="js/ui/pipe-diagram.js"></script>
     <script src="js/ui/input-form.js"></script>
     <script src="js/ui/temperature-chart.js"></script>
+    <script src="js/ui/sensitivity-params.js"></script>
     <script src="js/ui/sensitivity-analysis-1d.js"></script>
+    <script src="js/ui/sensitivity-heatmap-renderer.js"></script>
     <script src="js/ui/sensitivity-analysis.js"></script>
     <script src="js/ui/calculation-details.js"></script>
     <script src="js/ui/storage.js"></script>

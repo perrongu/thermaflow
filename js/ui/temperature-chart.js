@@ -13,8 +13,8 @@
 (function () {
   'use strict';
 
-  // ========== CONSTANTES ==========
-  const MARGE_SURETE_GEL = 5; // °C
+  // ========== CONSTANTES (module partagé) ==========
+  const MARGE_SURETE_GEL = window.Thresholds.MARGE_SURETE_GEL;
 
   // ========== CONFIGURATION ==========
   const config = {

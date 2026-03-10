@@ -158,6 +158,4 @@
     getMaterialName,
     usesTypes,
   };
-
-  console.log('✅ PipeSpecsLoader chargé');
 })();
