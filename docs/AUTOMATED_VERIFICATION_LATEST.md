@@ -1,7 +1,7 @@
 # RAPPORT DE VÉRIFICATION AUTOMATIQUE - THERMAFLOW
 
-**Date**: 2026-03-10 10:32:14  
-**Version**: 1.2.0  
+**Date**: 2026-03-10 11:30:13  
+**Version**: 1.2.1  
 **Durée**: 0.0 minutes  
 **Statut global**: VALIDÉ ✓
 
@@ -13,7 +13,7 @@
 |-----------|-------|------|------|------|
   | **Constantes physiques** | 14 | 14 | 0 | 100.0% |
   | **Conversions d'unités** | 25 | 25 | 0 | 100.0% |
-  | **Tests unitaires** | 21 | 21 | 0 | 100.0% |
+  | **Tests unitaires** | 24 | 24 | 0 | 100.0% |
 
 
 ---
@@ -98,6 +98,9 @@
 | Test | Status |
 |------|--------|
 | test_boundary_conditions.js | ✓ PASS |
+| test_bug_hext_split.js | ✓ PASS |
+| test_bug_nusselt_display.js | ✓ PASS |
+| test_bug_validation_string.js | ✓ PASS |
 | test_fluid_properties.js | ✓ PASS |
 | test_freeze_detector.js | ✓ PASS |
 | test_gnielinski_roughness.js | ✓ PASS |
@@ -194,15 +197,15 @@
 ✓ **TOUS LES CRITÈRES SONT VALIDÉS**
 
 Ce rapport confirme que:
-- 100% des tests unitaires passent (21/21) ✓
+- 100% des tests unitaires passent (24/24) ✓
 - 100% des conversions d'unités sont correctes (25/25) ✓
 - 14/14 constantes extraites et validées automatiquement
 - 50 cas de validation externe comparés aux logiciels de référence
 
-**Je certifie l'exactitude scientifique et technique de ThermaFlow v1.2.0**
+**Je certifie l'exactitude scientifique et technique de ThermaFlow v1.2.1**
 
 ---
 
-*Rapport généré automatiquement le 2026-03-10 10:32:14*  
+*Rapport généré automatiquement le 2026-03-10 11:30:13*  
 *Durée d'exécution: 0.0 minutes*  
-*ThermaFlow v1.2.0 - Automated Verification System*
+*ThermaFlow v1.2.1 - Automated Verification System*

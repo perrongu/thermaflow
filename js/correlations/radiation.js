@@ -190,32 +190,6 @@ function kelvinToCelsius(T_K) {
 }
 
 /**
- * Calcule l'aire extérieure d'un cylindre (conduite).
- *
- * A = π × D × L
- *
- * @param {number} D - Diamètre extérieur [m]
- * @param {number} L - Longueur [m]
- * @returns {number} Aire extérieure [m²]
- * @throws {Error} Si les paramètres sont invalides
- *
- * @example
- * // Conduite DN50 (D_ext≈0.06m), L=10m
- * const A = cylinderSurfaceArea(0.06, 10);
- * // A ≈ 1.885 m²
- */
-function cylinderSurfaceArea(D, L) {
-  if (typeof D !== 'number' || !isFinite(D) || D <= 0) {
-    throw new Error(`Diamètre invalide: ${D}`);
-  }
-  if (typeof L !== 'number' || !isFinite(L) || L <= 0) {
-    throw new Error(`Longueur invalide: ${L}`);
-  }
-
-  return Math.PI * D * L;
-}
-
-/**
  * Calcule le coefficient de rayonnement pour une conduite cylindrique.
  *
  * Version simplifiée qui combine le calcul du coefficient radiatif
@@ -245,7 +219,6 @@ if (typeof window !== 'undefined') {
     totalHeatTransferCoefficient,
     celsiusToKelvin,
     kelvinToCelsius,
-    cylinderSurfaceArea,
     radiationCoefficientSimple,
   };
 }
@@ -259,7 +232,6 @@ if (typeof module !== 'undefined' && module.exports) {
     totalHeatTransferCoefficient,
     celsiusToKelvin,
     kelvinToCelsius,
-    cylinderSurfaceArea,
     radiationCoefficientSimple,
   };
 }

@@ -1,5 +1,25 @@
 # Historique des versions - ThermaFlow
 
+## Version 1.2.1 (10 mars 2026)
+
+### Corrections
+
+- Validation formulaire: ajout `parseFloat()+isNaN()` sur les 6 champs (longueur, températures, pression, débit, vent) — les entrées non-numériques passaient la validation
+- Affichage corrélation Nusselt: toujours Gnielinski pour régime turbulent (affichait Dittus-Boelter pour Re>10000)
+- Affichage h_conv/h_rad: valeurs réelles du moteur (était hardcodé 85/15% de h_ext)
+- Labels i18n: suppression "Dittus-Boelter" hardcodé dans les clés `correlation` des 4 langues (FR/EN/ES/PT)
+
+### Refactoring
+
+- Suppression fonction dupliquée `cylinderSurfaceArea` dans radiation.js (conservée dans geometry.js)
+
+### Tests
+
+- 3 nouveaux fichiers tests: validation string, corrélation Nusselt, split h_conv/h_rad
+- Suite complète: 24 fichiers tests, 1246+ assertions (100% passent)
+
+---
+
 ## Version 1.2.0 (10 mars 2026)
 
 ### Refactoring

@@ -610,8 +610,9 @@
       }
     }
 
-    // Validation des plages
-    if (elements.pipeLength.value < 1 || elements.pipeLength.value > 2500) {
+    // Validation des plages (parseFloat pour éviter les comparaisons string/number)
+    const pipeLengthValue = parseFloat(elements.pipeLength.value);
+    if (isNaN(pipeLengthValue) || pipeLengthValue < 1 || pipeLengthValue > 2500) {
       alert(
         window.I18n ? I18n.t('validation.lengthRange') : 'Longueur doit être entre 1 et 2500 m'
       );
@@ -619,7 +620,8 @@
       return false;
     }
 
-    if (elements.waterTemp.value < 1 || elements.waterTemp.value > 100) {
+    const waterTempValue = parseFloat(elements.waterTemp.value);
+    if (isNaN(waterTempValue) || waterTempValue < 1 || waterTempValue > 100) {
       alert(
         window.I18n
           ? I18n.t('validation.waterTempRange')
@@ -629,7 +631,8 @@
       return false;
     }
 
-    if (elements.airTemp.value < -50 || elements.airTemp.value > 30) {
+    const airTempValue = parseFloat(elements.airTemp.value);
+    if (isNaN(airTempValue) || airTempValue < -50 || airTempValue > 30) {
       alert(
         window.I18n
           ? I18n.t('validation.airTempRange')
@@ -642,7 +645,11 @@
     // Validation pression avec plages dynamiques selon l'unité
     const pressureRanges = UnitConverter.getRanges('pressure');
     const pressureValue = parseFloat(elements.waterPressure.value);
-    if (pressureValue < pressureRanges.min || pressureValue > pressureRanges.max) {
+    if (
+      isNaN(pressureValue) ||
+      pressureValue < pressureRanges.min ||
+      pressureValue > pressureRanges.max
+    ) {
       const pressureUnit = UnitConverter.getUnitInfo('pressure').label;
       const msg = window.I18n
         ? I18n.t('validation.waterPressureRange')
@@ -658,7 +665,7 @@
     // Validation débit avec plages dynamiques selon l'unité
     const flowRanges = UnitConverter.getRanges('flowRate');
     const flowValue = parseFloat(elements.waterFlow.value);
-    if (flowValue < flowRanges.min || flowValue > flowRanges.max) {
+    if (isNaN(flowValue) || flowValue < flowRanges.min || flowValue > flowRanges.max) {
       const flowUnit = UnitConverter.getUnitInfo('flowRate').label;
       const msg = window.I18n
         ? I18n.t('validation.waterFlowRange')
@@ -671,7 +678,8 @@
       return false;
     }
 
-    if (elements.windSpeed.value < 0 || elements.windSpeed.value > 108) {
+    const windSpeedValue = parseFloat(elements.windSpeed.value);
+    if (isNaN(windSpeedValue) || windSpeedValue < 0 || windSpeedValue > 108) {
       alert(
         window.I18n
           ? I18n.t('validation.windSpeedRange')
