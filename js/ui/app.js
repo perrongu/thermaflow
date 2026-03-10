@@ -401,8 +401,8 @@
   // Note: La fonction connectSensitivityOutdateEvents() a été retirée
   // car l'analyse de sensibilité se recalcule automatiquement maintenant
 
-  // ========== CONSTANTES ==========
-  const MARGE_SURETE_GEL = 5; // °C
+  // ========== CONSTANTES (module partagé) ==========
+  const MARGE_SURETE_GEL = window.Thresholds.MARGE_SURETE_GEL;
 
   // ========== GESTION ANALYSE ==========
   function handleAnalysis(event) {
@@ -585,135 +585,6 @@
     // La section HTML reste visible mais vide (pas de canvas générés)
     gridContainer.innerHTML = '';
   }
-
-  // ========== DÉTECTION ERREURS LIMITES PHYSIQUES (non utilisé, commenté) ==========
-  /*
-  function _detectPhysicalLimitsErrors(results) {
-    const errors = {
-      hasErrors: false,
-      pressureErrors: [],
-      temperatureErrors: [],
-      otherErrors: [],
-    };
-
-    results.forEach((result) => {
-      // Vérifier erreur MIN
-      if (result.errorAtMin) {
-        errors.hasErrors = true;
-        const errorInfo = {
-          param: result.paramDef.label,
-          direction: 'MIN',
-          value: result.paramDef.min,
-          unit: result.paramDef.unit,
-          message: result.errorAtMin,
-        };
-
-        if (result.errorAtMin.includes('Pression hors plage')) {
-          errors.pressureErrors.push(errorInfo);
-        } else if (result.errorAtMin.includes('Température hors plage')) {
-          errors.temperatureErrors.push(errorInfo);
-        } else {
-          errors.otherErrors.push(errorInfo);
-        }
-      }
-
-      // Vérifier erreur MAX (peut être différente de MIN)
-      if (result.errorAtMax) {
-        errors.hasErrors = true;
-        const errorInfo = {
-          param: result.paramDef.label,
-          direction: 'MAX',
-          value: result.paramDef.max,
-          unit: result.paramDef.unit,
-          message: result.errorAtMax,
-        };
-
-        if (result.errorAtMax.includes('Pression hors plage')) {
-          errors.pressureErrors.push(errorInfo);
-        } else if (result.errorAtMax.includes('Température hors plage')) {
-          errors.temperatureErrors.push(errorInfo);
-        } else {
-          errors.otherErrors.push(errorInfo);
-        }
-      }
-    });
-
-    return errors;
-  }
-  */
-
-  // ========== AFFICHAGE AVERTISSEMENT LIMITES (non utilisé, commenté) ==========
-  /*
-  function _displayPhysicalLimitsWarning(errors) {
-    const container = document.getElementById('physical-limits-warning');
-    const content = document.getElementById('physical-limits-warning-content');
-
-    if (!container || !content) {
-      console.warn("Container d'avertissement non trouvé");
-      return;
-    }
-
-    if (!errors.hasErrors) {
-      container.style.display = 'none';
-      return;
-    }
-
-    let html = '';
-    html += `<p><strong>Attention:</strong> IAPWS-97 / Perry's limits reached in sensitivity extremes.</p>`;
-    html += `<p style="font-size: 0.95rem; color: #6b7280; margin-bottom: 1rem;"><em>${window.I18n ? I18n.t('corrective.warningNote') : "Note: Votre configuration ACTUELLE a produit des résultats valides. Cet avertissement concerne les valeurs MIN/MAX testées dans l'analyse de sensibilité."}</em></p>`;
-
-    // Erreurs de pression (les plus critiques)
-    if (errors.pressureErrors.length > 0) {
-      html += `<p><strong>${window.I18n ? I18n.t('corrective.pressureCritical') : '🚨 Erreurs de pression critiques:'}</strong></p>`;
-      html += '<ul>';
-      errors.pressureErrors.forEach((err) => {
-        html += `<li><strong>${err.param}</strong> au ${err.direction} (${err.value} ${err.unit}): ${err.message}</li>`;
-      });
-      html += '</ul>';
-      html +=
-        '<p style="color: #d32f2f; font-weight: 600;">⚠️ Votre configuration est proche des limites. Toute variation pourrait produire des résultats invalides.</p>';
-    }
-
-    // Erreurs de température
-    if (errors.temperatureErrors.length > 0) {
-      html += `<p><strong>${window.I18n ? I18n.t('corrective.tempErrors') : '⚠️ Erreurs de température:'}</strong></p>`;
-      html += '<ul>';
-      errors.temperatureErrors.forEach((err) => {
-        html += `<li><strong>${err.param}</strong> au ${err.direction} (${err.value} ${err.unit}): ${err.message}</li>`;
-      });
-      html += '</ul>';
-    }
-
-    // Autres erreurs
-    if (errors.otherErrors.length > 0) {
-      html += `<p><strong>${window.I18n ? I18n.t('corrective.otherLimits') : 'Autres limitations:'}</strong></p>`;
-      html += '<ul>';
-      errors.otherErrors.forEach((err) => {
-        html += `<li><strong>${err.param}</strong> au ${err.direction}: ${err.message}</li>`;
-      });
-      html += '</ul>';
-    }
-
-    html += `<p><strong>${window.I18n ? I18n.t('corrective.recs') : 'Recommandations pour éloigner des limites:'}</strong></p>`;
-    html += '<ul>';
-    if (errors.pressureErrors.length > 0) {
-      html += `<li><strong>${window.I18n ? I18n.t('corrective.incPressure') : "Augmenter la pression d'entrée (actuellement proche de 1 bar minimum)"}</strong></li>`;
-      html += `<li>${window.I18n ? I18n.t('corrective.reduceLength') : 'Réduire la longueur de la conduite pour limiter la perte de charge'}</li>`;
-      html += `<li>${window.I18n ? I18n.t('corrective.incDiameter') : 'Augmenter le diamètre (NPS) pour réduire la vitesse et les pertes'}</li>`;
-      html += `<li>${window.I18n ? I18n.t('corrective.reduceFlow') : 'Réduire le débit si possible pour diminuer les pertes de charge'}</li>`;
-    } else if (errors.temperatureErrors.length > 0) {
-      html += `<li>${window.I18n ? I18n.t('corrective.adjustTemps') : 'Ajuster les températures pour rester dans les plages de validité'}</li>`;
-      html += `<li>${window.I18n ? I18n.t('corrective.verifyAmbient') : 'Vérifier que les conditions ambiantes sont réalistes'}</li>`;
-    } else {
-      html += `<li>${window.I18n ? I18n.t('corrective.reviewInputs') : "Réviser les paramètres d'entrée pour rester dans les plages de validité"}</li>`;
-      html += `<li>${window.I18n ? I18n.t('corrective.consultDocs') : 'Consulter la documentation technique pour les limites de chaque corrélation'}</li>`;
-    }
-    html += '</ul>';
-
-    content.innerHTML = html;
-    container.style.display = 'block';
-  }
-  */
 
   // ========== AFFICHAGE RÉSUMÉ CONFIGURATION ==========
   function displayConfigSummary(config) {
@@ -907,7 +778,12 @@
     const firstSegment = network.segmentResults[0];
 
     // Calculer vitesse à partir du débit et de la géométrie
-    const rho_water = 983; // kg/m³ approximatif à 60°C
+    const T_avg_display = (network.T_final + config.fluid.T_in) / 2;
+    const waterProps = window.WaterProperties.getWaterProperties(
+      Math.max(0, T_avg_display),
+      config.fluid.P
+    );
+    const rho_water = waterProps.rho; // kg/m³ à la température moyenne
     const Q_volumetric = config.fluid.m_dot / rho_water; // m³/s
     const A = Math.PI * Math.pow(config.geometry.D_inner / 2, 2); // m²
     const velocity = Q_volumetric / A; // m/s

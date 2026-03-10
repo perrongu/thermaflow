@@ -1,7 +1,7 @@
 # VÉRIFICATION AUTOMATIQUE - THERMAFLOW
 
 **Date**: 2025-10-30  
-**Version**: 1.0.1
+**Version**: 1.2.0
 
 ---
 
@@ -25,7 +25,7 @@ node tests/automated_verification.js
 
 - ✅ 14 constantes physiques critiques
 - ✅ 25 conversions d'unités
-- ✅ 14 fichiers de tests unitaires
+- ✅ 22 fichiers de tests unitaires
 - ✅ Validation externe (si données disponibles)
 - ✅ Génération rapport concis prêt à signer
 
@@ -55,7 +55,7 @@ docs/
 tests/
 ├── automated_verification.js            # Script automatique
 ├── verification_references.json         # Valeurs de référence
-└── test_*.js                            # 12 fichiers de tests (418 tests)
+└── test_*.js                            # 22 fichiers de tests
 ```
 
 ---
@@ -141,7 +141,7 @@ Voir: `docs/AUTOMATED_VERIFICATION_*.md` section 4
 
 ```
 ╔═══════════════════════════════════════════════════════╗
-║    THERMAFLOW v1.1.7                                 ║
+║    THERMAFLOW v1.2.0                                 ║
 ╚═══════════════════════════════════════════════════════╝
 
 Constantes : 14/14 ✓  (100%)
@@ -172,7 +172,7 @@ Qualité    : 10/10    (Impeccable)
 
 ## 🚀 QUALITÉ CODE
 
-✅ **418 tests unitaires** (100%)  
+✅ **22 fichiers de tests** (100%)  
 ✅ **Source unique de vérité** (constantes partagées)  
 ✅ **Cohérence totale** (hydrodynamique ↔ thermique)  
 ✅ **Architecture modulaire**  
@@ -180,5 +180,5 @@ Qualité    : 10/10    (Impeccable)
 
 ---
 
-_ThermaFlow v1.1.7 - Système de Vérification Automatique_  
+_ThermaFlow v1.2.0 - Système de Vérification Automatique_  
 _Dernière mise à jour: 2025-10-30_

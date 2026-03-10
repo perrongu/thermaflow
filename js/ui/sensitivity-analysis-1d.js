@@ -16,91 +16,14 @@
 
   // ========== CONSTANTES ==========
   const FREEZE_TEMP_TARGET = 0.01; // °C - Cible pour point critique gel
-  const SAFETY_THRESHOLD = 5; // °C - Marge de sécurité opérationnelle standard industrielle
+  const SAFETY_THRESHOLD = window.Thresholds.MARGE_SURETE_GEL; // Marge de sécurité opérationnelle
   const CURVE_SAMPLING_POINTS = 250; // Augmenté de 75 à 250 pour haute précision
   const SAFE_BOUND_MAX_ITERATIONS = 15; // Pour dichotomie de recherche de borne valide
   const FALLBACK_RANGE_PERCENT = 0.2; // ±20% autour de baseValue si tout échoue
 
-  // Définition des paramètres analysables
-  function getParameterLabel(key) {
-    if (!window.I18n) {
-      return key;
-    }
-    const labels = {
-      L: 'sensitivityTable.pipeLength',
-      m_dot: 'sensitivityTable.waterFlow',
-      T_in: 'sensitivityTable.waterTempIn',
-      T_amb: 'sensitivityTable.airTemp',
-      V_wind: 'sensitivityTable.windSpeed',
-    };
-    return I18n.t(labels[key] || key);
-  }
-
-  const PARAMETER_DEFINITIONS = {
-    L: {
-      get label() {
-        return getParameterLabel('L');
-      },
-      unit: 'm',
-      path: ['totalLength'],
-      min: 1,
-      max: 2500,
-    },
-    m_dot: {
-      get label() {
-        return getParameterLabel('m_dot');
-      },
-      get unit() {
-        return window.UnitConverter ? UnitConverter.getUnitInfo('flowRate').label : 'm³/h';
-      },
-      path: ['meta', 'flowM3PerHr'],
-      get min() {
-        return window.UnitConverter ? UnitConverter.getRanges('flowRate').min : 0.06;
-      },
-      get max() {
-        return window.UnitConverter ? UnitConverter.getRanges('flowRate').max : 30;
-      },
-      convertToSI: (value) =>
-        window.UnitConverter ? UnitConverter.toSI('flowRate', value) : value,
-      convertFromSI: (value) =>
-        window.UnitConverter ? UnitConverter.fromSI('flowRate', value) : value,
-    },
-    T_in: {
-      get label() {
-        return getParameterLabel('T_in');
-      },
-      unit: '°C',
-      path: ['fluid', 'T_in'],
-      min: 1,
-      max: 100,
-    },
-    T_amb: {
-      get label() {
-        return getParameterLabel('T_amb');
-      },
-      unit: '°C',
-      path: ['ambient', 'T_amb'],
-      min: -40,
-      max: 50,
-    },
-    V_wind: {
-      get label() {
-        return getParameterLabel('V_wind');
-      },
-      unit: 'km/h',
-      path: ['ambient', 'V_wind'],
-      min: 0,
-      max: 108,
-    },
-    t_insul: {
-      label: 'Épaisseur isolation',
-      unit: 'mm',
-      path: ['insulation', 'thickness'],
-      conditional: true,
-      min: 5,
-      max: 100,
-    },
-  };
+  // Définition des paramètres analysables (module partagé)
+  const PARAMETER_DEFINITIONS = window.SensitivityParams.PARAMETER_DEFINITIONS;
+  const getParameterLabel = window.SensitivityParams.getParameterLabel;
 
   // ========== GESTION D'ERREURS ==========
   /**

@@ -35,6 +35,11 @@ docs/references/
 .idea/
 .cursor/
 
+# Claude Code
+.claude/skills/
+.claude/rules/
+.claude/settings.local.json
+
 # Build artifacts (ne devrait pas exister, mais par sécurité)
 dist/
 build/
