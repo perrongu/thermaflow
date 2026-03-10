@@ -262,8 +262,8 @@ function calculatePipeSegment(geometry, fluid, ambient, insulation = null, itera
     // Nombre de Prandtl eau
     const Pr_water = (water.mu * water.cp) / water.k;
 
-    // Convection interne (eau → paroi)
-    const Nu_int = nusseltInt.nusseltInternal(Re, Pr_water, geometry.D_inner, geometry.length);
+    // Convection interne (eau → paroi) — passer f pour intégrer la rugosité
+    const Nu_int = nusseltInt.nusseltInternal(Re, Pr_water, geometry.D_inner, geometry.length, f);
     const h_int = nusseltInt.convectionCoefficient(Nu_int, water.k, geometry.D_inner);
 
     // Diamètre extérieur final (avec isolation si présente)
@@ -295,10 +295,11 @@ function calculatePipeSegment(geometry, fluid, ambient, insulation = null, itera
       h_conv_ext = nusseltInt.convectionCoefficient(Nu_ext, air.k, D_outer_final);
     }
 
-    // Rayonnement
+    // Rayonnement — utiliser T_surf estimé (pas T_in du fluide)
     const pipeMat = materials.getMaterialProperties(geometry.material);
+    const T_surf_for_rad = (fluid.T_in + ambient.T_amb) / 2;
     const h_rad = radiation.radiationCoefficientSimple(
-      fluid.T_in,
+      T_surf_for_rad,
       ambient.T_amb,
       pipeMat.emissivity
     );

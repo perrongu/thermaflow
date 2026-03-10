@@ -292,6 +292,7 @@ function nusseltGnielinski(Re, Pr, f = null) {
  * @param {number} Pr - Nombre de Prandtl [sans dimension]
  * @param {number} [D] - Diamètre hydraulique [m] (optionnel, pour Hausen)
  * @param {number} [L] - Longueur [m] (optionnel, pour Hausen)
+ * @param {number} [f=null] - Facteur de friction [sans dimension] (optionnel, transmis à Gnielinski pour rugosité)
  * @returns {number} Nombre de Nusselt [sans dimension]
  * @throws {Error} Si les paramètres sont invalides
  *
@@ -299,13 +300,14 @@ function nusseltGnielinski(Re, Pr, f = null) {
  * // Détection automatique du régime
  * const Nu1 = nusseltInternal(1500, 7.0);       // → Hausen ou constant
  * const Nu2 = nusseltInternal(50000, 7.0);      // → Gnielinski
+ * const Nu3 = nusseltInternal(50000, 7.0, D, L, f); // → Gnielinski avec rugosité
  */
-function nusseltInternal(Re, Pr, D = null, L = null) {
+function nusseltInternal(Re, Pr, D = null, L = null, f = null) {
   const RE_LAMINAR_MAX = getRELaminarMax();
   const RE_TURBULENT_MIN = getRETurbulentMin();
 
   if (Re < RE_LAMINAR_MAX) {
-    // Laminaire (Re < 2300)
+    // Laminaire (Re < 2300) — f n'affecte pas le régime laminaire
     if (D && L) {
       return nusseltHausen(Re, Pr, D, L);
     } else {
@@ -318,16 +320,15 @@ function nusseltInternal(Re, Pr, D = null, L = null) {
     // pour cohérence avec la définition standard de régime turbulent établi
     const Nu_lam =
       D && L ? nusseltHausen(RE_LAMINAR_MAX, Pr, D, L) : nusseltLaminarFullyDeveloped('constant_T');
-    const Nu_turb = nusseltGnielinski(RE_TURBULENT_MIN, Pr);
+    const Nu_turb = nusseltGnielinski(RE_TURBULENT_MIN, Pr, f);
     const weight = (Re - RE_LAMINAR_MAX) / (RE_TURBULENT_MIN - RE_LAMINAR_MAX);
     return Nu_lam + weight * (Nu_turb - Nu_lam);
   } else if (Re <= 10000) {
     // Turbulent modéré: Gnielinski recommandé
-    return nusseltGnielinski(Re, Pr);
+    return nusseltGnielinski(Re, Pr, f);
   } else {
-    // Turbulent élevé: Gnielinski ou Dittus-Boelter
-    // Gnielinski est plus précis
-    return nusseltGnielinski(Re, Pr);
+    // Turbulent élevé: Gnielinski (plus précis que Dittus-Boelter)
+    return nusseltGnielinski(Re, Pr, f);
   }
 }
 

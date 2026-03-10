@@ -1,5 +1,31 @@
 # Historique des versions - ThermaFlow
 
+## Version 1.2.2 (10 mars 2026)
+
+### Corrections
+
+- Analyse 2D: recalcul `numSegments` quand la longueur (L) varie dans la heatmap — les valeurs étaient incorrectes aux longueurs extrêmes (segments sous/sur-résolus)
+- Nusselt interne: propagation du facteur de friction `f` (Churchill, avec rugosité) à travers `nusseltInternal()` → `nusseltGnielinski()` — la rugosité du tuyau était ignorée, sous-estimant h_int de 10-30% pour les conduites rugueuses
+- Rayonnement: utilisation de la température de surface estimée `(T_in + T_amb) / 2` au lieu de `T_in` — h_rad était surestimé de 20-40% pour les conduites isolées
+
+### Nettoyage
+
+- Suppression code mort: `throttle()` et `cancelablePromise()` dans utils.js (jamais appelés)
+- Mise à jour JSDoc: header utils.js, paramètre `f` dans `nusseltInternal()`
+
+### Sécurité
+
+- Correction 3 vulnérabilités npm devDependencies (`minimatch` ReDoS, `ajv` ReDoS, `js-yaml` prototype pollution)
+- Pre-commit hook: `unset THERMAFLOW_SKIP_TESTS` empêche le bypass de la gate de tests
+- Nettoyage `.claude/settings.local.json`: suppression entrées malformées (`__NEW_LINE_*`, `Bash(do:*)`)
+
+### Tests
+
+- 3 nouveaux fichiers tests: numSegments 2D, passthrough rugosité Nusselt, température surface radiation
+- Suite complète: 27 fichiers tests, toutes assertions passent (100%)
+
+---
+
 ## Version 1.2.1 (10 mars 2026)
 
 ### Corrections
