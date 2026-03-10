@@ -1,7 +1,7 @@
 # RAPPORT DE VÉRIFICATION AUTOMATIQUE - THERMAFLOW
 
-**Date**: 2026-03-10 11:30:13  
-**Version**: 1.2.1  
+**Date**: 2026-03-10 12:31:58  
+**Version**: 1.2.2  
 **Durée**: 0.0 minutes  
 **Statut global**: VALIDÉ ✓
 
@@ -13,7 +13,7 @@
 |-----------|-------|------|------|------|
   | **Constantes physiques** | 14 | 14 | 0 | 100.0% |
   | **Conversions d'unités** | 25 | 25 | 0 | 100.0% |
-  | **Tests unitaires** | 24 | 24 | 0 | 100.0% |
+  | **Tests unitaires** | 27 | 27 | 0 | 100.0% |
 
 
 ---
@@ -99,7 +99,10 @@
 |------|--------|
 | test_boundary_conditions.js | ✓ PASS |
 | test_bug_hext_split.js | ✓ PASS |
+| test_bug_numSegments_2d.js | ✓ PASS |
 | test_bug_nusselt_display.js | ✓ PASS |
+| test_bug_nusselt_roughness_passthrough.js | ✓ PASS |
+| test_bug_radiation_surface_temp.js | ✓ PASS |
 | test_bug_validation_string.js | ✓ PASS |
 | test_fluid_properties.js | ✓ PASS |
 | test_freeze_detector.js | ✓ PASS |
@@ -136,9 +139,9 @@
 
 | Paramètre | Écart moyen | Écart-type | Min | Max | P50 | P95 |
 |-----------|-------------|------------|-----|-----|-----|-----|
-| **T_out (°C)** | 0.55 | 0.66 | 0.00 | 2.20 | 0.25 | 2.10 |
+| **T_out (°C)** | 0.57 | 0.69 | 0.00 | 2.60 | 0.25 | 2.20 |
 | **ΔP (kPa)** | 7.51 | 21.23 | 0.00 | 96.40 | 0.00 | 66.23 |
-| **Q (%)** | 26.2 | 27.8 | 0.7 | 100.0 | 10.9 | 72.6 |
+| **Q (%)** | 26.4 | 27.6 | 0.5 | 100.0 | 11.4 | 72.5 |
 
 ### Détails par logiciel
 
@@ -146,16 +149,16 @@
 
 - **T_out**: Écart moyen 1.10°C ± 0.00°C (max: 1.10°C)
 - **ΔP**: Écart moyen 0.00 kPa ± 0.00 kPa
-- **Q**: Écart moyen 6.1% ± 0.0%
+- **Q**: Écart moyen 5.8% ± 0.0%
 
 #### AFT Fathom (0 cas)
 
 
 #### DWSIM (49 cas)
 
-- **T_out**: Écart moyen 0.54°C ± 0.67°C (max: 2.20°C)
+- **T_out**: Écart moyen 0.56°C ± 0.69°C (max: 2.60°C)
 - **ΔP**: Écart moyen 7.67 kPa ± 21.42 kPa
-- **Q**: Écart moyen 26.7% ± 27.9%
+- **Q**: Écart moyen 26.8% ± 27.7%
 
 ### Cas avec écarts significatifs
 
@@ -167,7 +170,7 @@
 
 **Perte thermique (> 50%):**
 - Cas #1: 65% - SAFE-1 (modifié pour éviter gel)
-- Cas #7: 79% - SAFE-7 (modifié pour éviter gel)
+- Cas #7: 78% - SAFE-7 (modifié pour éviter gel)
 - Cas #8: 65% - SAFE-8 (modifié pour éviter gel)
 - Cas #10: 56% - Risque gel modéré avec isolation moyenne
 - Cas #12: 64% - SAFE-12 (modifié pour éviter gel)
@@ -178,15 +181,15 @@
 - Cas #39: 53% - Cas LHS 9: stainless_steel 10S 2.5"
 - Cas #42: 56% - Cas LHS 12: stainless_steel 10S 0.5"
 - Cas #47: 63% - Cas LHS 17: stainless_steel 80S 18"
-- Cas #54: 56% - Cas LHS 24: steel 80 1.25"
-- Cas #58: 55% - Cas LHS 28: steel 40 2.5"
+- Cas #54: 55% - Cas LHS 24: steel 80 1.25"
+- Cas #58: 54% - Cas LHS 28: steel 40 2.5"
 - Cas #60: 98% - Cas LHS 30: stainless_steel 10S 0.125"
 
 ### Interprétation
 
 ✓ **Température de sortie**: Excellent accord (écart moyen < 1.5°C)
 ✓ **Perte de charge**: Bon accord (écart moyen < 10 kPa)
-⚠️ **Perte thermique**: Écarts significatifs (écart moyen 26.2%) - Possibles différences dans les modèles de convection/radiation
+⚠️ **Perte thermique**: Écarts significatifs (écart moyen 26.4%) - Possibles différences dans les modèles de convection/radiation
 
 **Note**: Les écarts observés sont normaux et attendus lors de comparaisons multi-logiciels, car chaque logiciel utilise des corrélations et hypothèses différentes. L'important est la cohérence des tendances et l'ordre de grandeur des résultats.
 
@@ -197,15 +200,15 @@
 ✓ **TOUS LES CRITÈRES SONT VALIDÉS**
 
 Ce rapport confirme que:
-- 100% des tests unitaires passent (24/24) ✓
+- 100% des tests unitaires passent (27/27) ✓
 - 100% des conversions d'unités sont correctes (25/25) ✓
 - 14/14 constantes extraites et validées automatiquement
 - 50 cas de validation externe comparés aux logiciels de référence
 
-**Je certifie l'exactitude scientifique et technique de ThermaFlow v1.2.1**
+**Je certifie l'exactitude scientifique et technique de ThermaFlow v1.2.2**
 
 ---
 
-*Rapport généré automatiquement le 2026-03-10 11:30:13*  
+*Rapport généré automatiquement le 2026-03-10 12:31:58*  
 *Durée d'exécution: 0.0 minutes*  
-*ThermaFlow v1.2.1 - Automated Verification System*
+*ThermaFlow v1.2.2 - Automated Verification System*

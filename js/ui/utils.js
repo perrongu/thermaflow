@@ -5,8 +5,7 @@
  *
  * Fonctionnalités:
  * - Debouncing: Retarder l'exécution jusqu'à ce que les appels cessent
- * - Throttling: Limiter la fréquence d'exécution
- * - Promesses annulables pour gérer les calculs asynchrones
+ * - Utilitaires i18n: Conversion d'identifiants matériaux d'isolation
  */
 
 (function () {
@@ -61,99 +60,6 @@
   }
 
   /**
-   * Throttle: Limite l'exécution d'une fonction à une fois par intervalle
-   *
-   * @param {Function} func - Fonction à throttler
-   * @param {number} interval - Intervalle minimum entre exécutions (ms)
-   * @returns {Function} Fonction throttlée
-   *
-   * @example
-   * const handleScrollThrottled = throttle(() => {
-   *   updateScrollPosition();
-   * }, 100);
-   *
-   * window.addEventListener('scroll', handleScrollThrottled);
-   */
-  function throttle(func, interval) {
-    let lastExecution = 0;
-    let timeoutId = null;
-
-    return function (...args) {
-      const now = Date.now();
-      const timeSinceLastExecution = now - lastExecution;
-
-      // Annuler tout timeout en attente
-      if (timeoutId !== null) {
-        clearTimeout(timeoutId);
-        timeoutId = null;
-      }
-
-      if (timeSinceLastExecution >= interval) {
-        // Exécuter immédiatement si l'intervalle est écoulé
-        lastExecution = now;
-        func.apply(this, args);
-      } else {
-        // Planifier l'exécution à la fin de l'intervalle
-        const remainingTime = interval - timeSinceLastExecution;
-        timeoutId = setTimeout(() => {
-          lastExecution = Date.now();
-          timeoutId = null;
-          func.apply(this, args);
-        }, remainingTime);
-      }
-    };
-  }
-
-  /**
-   * Crée une promesse annulable
-   *
-   * @param {Promise} promise - Promesse à rendre annulable
-   * @returns {Object} Objet avec propriétés { promise, cancel }
-   *
-   * @example
-   * const { promise, cancel } = cancelablePromise(fetchData());
-   *
-   * promise
-   *   .then(data => console.log(data))
-   *   .catch(err => {
-   *     if (err.isCanceled) {
-   *       console.log('Calcul annulé');
-   *     }
-   *   });
-   *
-   * // Plus tard, si nécessaire
-   * cancel();
-   */
-  function cancelablePromise(promise) {
-    let isCanceled = false;
-
-    const wrappedPromise = new Promise((resolve, reject) => {
-      promise
-        .then((value) => {
-          if (isCanceled) {
-            reject({ isCanceled: true, message: 'Promise was canceled' });
-          } else {
-            resolve(value);
-          }
-        })
-        .catch((error) => {
-          if (isCanceled) {
-            reject({ isCanceled: true, message: 'Promise was canceled' });
-          } else {
-            reject(error);
-          }
-        });
-    });
-
-    return {
-      promise: wrappedPromise,
-      cancel: () => {
-        isCanceled = true;
-      },
-    };
-  }
-
-  /**
    * Convertit un identifiant technique de matériau d'isolation vers sa clé i18n courte
    *
    * @param {string} technicalId - ID technique (ex: 'polyurethane_foam')
@@ -177,8 +83,6 @@
   // ========== EXPORT ==========
   window.UIUtils = {
     debounce,
-    throttle,
-    cancelablePromise,
     getInsulationI18nKey,
   };
 })();

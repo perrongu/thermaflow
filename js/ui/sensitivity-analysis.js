@@ -454,6 +454,11 @@
     } else {
       // Pas de conversion nécessaire (L, T_in, T_amb)
       setValueByPath(config, paramDef.path, displayValue);
+
+      // Recalculer numSegments quand L change (même formule que rebuildConfig 1D)
+      if (paramKey === 'L') {
+        config.numSegments = Math.min(Math.max(Math.ceil(displayValue / 5), 10), 100);
+      }
     }
   }
 
