@@ -22,8 +22,9 @@
   const FALLBACK_RANGE_PERCENT = 0.2; // ±20% autour de baseValue si tout échoue
 
   // Définition des paramètres analysables (module partagé)
-  const PARAMETER_DEFINITIONS = window.SensitivityParams.PARAMETER_DEFINITIONS;
-  const getParameterLabel = window.SensitivityParams.getParameterLabel;
+  function getParamDefs() {
+    return window.SensitivityParams.PARAMETER_DEFINITIONS;
+  }
 
   // ========== GESTION D'ERREURS ==========
   /**
@@ -287,7 +288,7 @@
       return results;
     }
 
-    for (const [paramKey, paramDef] of Object.entries(PARAMETER_DEFINITIONS)) {
+    for (const [paramKey, paramDef] of Object.entries(getParamDefs())) {
       // Vérifier si le paramètre est applicable
       if (paramDef.conditional) {
         const hasInsulation = baseConfig.meta && baseConfig.meta.hasInsulation;
@@ -719,7 +720,8 @@
           ? UnitConverter.getUnitInfo('flowRate').decimals
           : 2;
 
-      const baseValueFormatted = baseValueDisplay.toFixed(decimals);
+      const baseValueFormatted =
+        baseValueDisplay !== null ? baseValueDisplay.toFixed(decimals) : 'N/A';
       const T_minFormatted =
         result.T_atMin !== null
           ? (result.T_atMin >= 0 ? '+' : '') + result.T_atMin.toFixed(1) + '°C'
@@ -751,15 +753,20 @@
         rowClass = 'warning-row'; // Seuil sécurité dans la plage
       }
 
+      const esc = window.UIUtils
+        ? window.UIUtils.escHtml
+        : function (s) {
+            return String(s);
+          };
       html += `
-        <tr class="${rowClass}">
-          <td class="param-name">${result.paramDef.label}</td>
-          <td class="base-value">${baseValueFormatted} ${result.paramDef.unit}</td>
-          <td class="t-min">${T_minFormatted}</td>
-          <td class="t-max">${T_maxFormatted}</td>
-          <td class="freeze-point">${freezeFormatted}</td>
-          <td class="safety-point">${safetyFormatted}</td>
-          <td class="amplitude">${amplitudeFormatted}</td>
+        <tr class="${esc(rowClass)}">
+          <td class="param-name">${esc(result.paramDef.label)}</td>
+          <td class="base-value">${esc(baseValueFormatted)} ${esc(result.paramDef.unit)}</td>
+          <td class="t-min">${esc(T_minFormatted)}</td>
+          <td class="t-max">${esc(T_maxFormatted)}</td>
+          <td class="freeze-point">${esc(freezeFormatted)}</td>
+          <td class="safety-point">${esc(safetyFormatted)}</td>
+          <td class="amplitude">${esc(amplitudeFormatted)}</td>
         </tr>
       `;
     });

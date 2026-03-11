@@ -63,7 +63,7 @@
         return null;
       }
     }
-    return typeof cur === 'string' ? cur : null;
+    return typeof cur === 'string' || Array.isArray(cur) ? cur : null;
   }
 
   function t(key, vars) {
@@ -73,7 +73,7 @@
       // fallback FR
       str = getKey(dicts.fr || {}, key) || key;
     }
-    return format(str, vars);
+    return Array.isArray(str) ? str : format(str, vars);
   }
 
   function applyTranslations(root) {

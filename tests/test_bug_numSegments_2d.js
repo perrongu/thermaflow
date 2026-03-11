@@ -63,17 +63,18 @@ console.log('\nTest 5: L=2500m → numSegments=100 (maximum clamp)');
 assertEqual(calcNumSegments(2500), 100, 'L=2500m → numSegments=100');
 
 // Test 6: Verify the fix exists in the source file by reading it
-console.log('\nTest 6: Verify fix exists in sensitivity-analysis.js');
+// numSegments recalc lives in sensitivity-matrix.js (applyParameterValue)
+console.log('\nTest 6: Verify fix exists in sensitivity-matrix.js');
 const fs = require('fs');
-const source = fs.readFileSync('js/ui/sensitivity-analysis.js', 'utf8');
+const source = fs.readFileSync('js/ui/sensitivity-matrix.js', 'utf8');
 
 // The fix should contain: recalculate numSegments when L changes
 const hasNumSegmentsRecalc =
   source.includes("paramKey === 'L'") &&
-  source.includes('config.numSegments') &&
+  source.includes('numSegments') &&
   source.includes('Math.ceil(displayValue / 5)');
 
-assert(hasNumSegmentsRecalc, 'sensitivity-analysis.js contains numSegments recalc for L parameter');
+assert(hasNumSegmentsRecalc, 'sensitivity-matrix.js contains numSegments recalc for L parameter');
 
 // Test 7: Verify formula matches 1D rebuildConfig
 console.log('\nTest 7: Verify formula matches 1D rebuildConfig');
@@ -81,7 +82,7 @@ const source1D = fs.readFileSync('js/ui/sensitivity-analysis-1d.js', 'utf8');
 const has1DFormula = source1D.includes('Math.min(Math.max(Math.ceil(totalLength / 5), 10), 100)');
 assert(has1DFormula, '1D rebuildConfig uses same numSegments formula');
 
-// Test 8: Verify 2D uses matching formula pattern
+// Test 8: Verify 2D uses matching formula pattern (in sensitivity-matrix.js)
 console.log('\nTest 8: Verify 2D uses matching formula clamp values (10, 100)');
 const match2D = source.match(
   /Math\.min\(Math\.max\(Math\.ceil\(displayValue\s*\/\s*5\),\s*(\d+)\),\s*(\d+)\)/
@@ -92,7 +93,7 @@ if (match2D) {
 } else {
   testsRun += 2;
   testsFailed += 2;
-  console.log('  ✗ Could not find numSegments formula in 2D sensitivity-analysis.js');
+  console.log('  ✗ Could not find numSegments formula in sensitivity-matrix.js');
 }
 
 // Test 9: Impact analysis — segment length consistency

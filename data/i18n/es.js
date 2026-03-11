@@ -99,16 +99,16 @@
     },
     sensitivity: {
       interpTitle: '📖 Interpretación',
-      interp1:
-        'Análisis individual: Cada gráfico muestra el impacto de un único parámetro en todo su rango, ',
+      interp1Label: 'Análisis individual:',
+      interp1Desc: 'Cada gráfico muestra el impacto de un único parámetro en todo su rango, ',
       interp2: 'con los demás parámetros fijos en sus valores actuales. ',
       interp3: 'Permite identificar los parámetros que más influyen en el riesgo de congelación.',
       legendBase: 'Valor base (actual)',
       legendFreeze: 'Punto crítico de congelación (0°C)',
       legendSafety: 'Umbral de seguridad (5°C)',
       legendLimit: 'Límites del rango del parámetro',
-      interp2d1:
-        'Análisis combinado: El mapa de calor muestra el rango completo de resultados posibles ',
+      interp2d1Label: 'Análisis combinado:',
+      interp2d1Desc: 'El mapa de calor muestra el rango completo de resultados posibles ',
       interp2d2: 'cuando dos parámetros varían simultáneamente en todo su espectro, ',
       interp2d3: 'con los demás fijos. Identifica combinaciones críticas y márgenes de seguridad.',
       paramX: 'Parámetro X',
@@ -337,6 +337,7 @@
       modifying: 'Modificación en curso...',
       recalculating: 'Recalculando...',
       uptodate: 'Resultados al día',
+      outdated: 'Desactualizado',
       error: 'Error de cálculo',
     },
     validation: {
@@ -408,6 +409,7 @@
       waterTempIn: 'Temperatura de Entrada del Agua',
       airTemp: 'Temperatura del Aire',
       windSpeed: 'Velocidad del Viento',
+      insulationThickness: 'Espesor de Aislamiento',
     },
     materials: {
       steel: 'Acero',
@@ -436,6 +438,7 @@
       waterTempIn: 'Temp. agua entrada',
       airTemp: 'Temp. aire',
       windSpeed: 'Velocidad viento',
+      insulationThickness: 'Espesor aislamiento',
       paramX: 'Parámetro X',
       paramY: 'Parámetro Y',
       min: 'Mín',
@@ -453,6 +456,11 @@
       outOfRange: 'Fuera de rango',
       tableTitle: '📊 Tabla resumen de todos los segmentos',
       tableNote: 'Cada segmento sigue la metodología detallada anterior.',
+      tableNoteExtra: 'La tabla muestra la evolución de los parámetros a lo largo de la tubería.',
+      table: {
+        segment: 'Segmento',
+        position: 'Posición',
+      },
       regime: 'Régimen',
       segment1Note: 'Segmento 1:',
       segment1Text: 'Cálculos detallados mostrados arriba',
@@ -462,7 +470,36 @@
     },
     disclaimer: {
       title: 'Advertencia y condiciones de uso',
-      text: 'Esta aplicación proporciona una estimación del riesgo de congelación en tuberías de agua basada en modelos térmicos e hidráulicos validados.<br><br>A pesar de las pruebas realizadas en condiciones variadas, los resultados obtenidos deben utilizarse únicamente con fines <strong>indicativos</strong> y de <strong>apoyo a la decisión</strong>. No reemplazan el análisis de un profesional calificado ni las validaciones necesarias antes de cualquier decisión operativa.<br><br>El usuario sigue siendo <strong>el único responsable</strong> de la verificación de los datos de entrada, la interpretación de los resultados y la implementación de medidas de protección y contingencia adecuadas.<br><br>El uso de esta aplicación implica la <strong>aceptación de estas condiciones</strong>.',
+      paragraphs: [
+        [
+          {
+            text: 'Esta aplicación proporciona una estimación del riesgo de congelación en tuberías de agua basada en modelos térmicos e hidráulicos validados.',
+          },
+        ],
+        [
+          {
+            text: 'A pesar de las pruebas realizadas en condiciones variadas, los resultados obtenidos deben utilizarse únicamente con fines ',
+          },
+          { text: 'indicativos', bold: true },
+          { text: ' y de ' },
+          { text: 'apoyo a la decisión', bold: true },
+          {
+            text: '. No reemplazan el análisis de un profesional calificado ni las validaciones necesarias antes de cualquier decisión operativa.',
+          },
+        ],
+        [
+          { text: 'El usuario sigue siendo ' },
+          { text: 'el único responsable', bold: true },
+          {
+            text: ' de la verificación de los datos de entrada, la interpretación de los resultados y la implementación de medidas de protección y contingencia adecuadas.',
+          },
+        ],
+        [
+          { text: 'El uso de esta aplicación implica la ' },
+          { text: 'aceptación de estas condiciones', bold: true },
+          { text: '.' },
+        ],
+      ],
       accept: 'Acepto',
     },
   });
