@@ -48,22 +48,28 @@ function detectFreeze(T_profile, x_profile, T_freeze = 0) {
   }
 
   if (T_profile.length !== x_profile.length) {
-    throw new Error(
-      `Tailles incompatibles: T_profile (${T_profile.length}) ≠ x_profile (${x_profile.length})`
-    );
+    const err = new Error('Tailles de profils incompatibles');
+    err.code = 'PROFILE_SIZE_MISMATCH';
+    throw err;
   }
 
   if (typeof T_freeze !== 'number' || !isFinite(T_freeze)) {
-    throw new Error(`Température de gel invalide: ${T_freeze}`);
+    const err = new Error('Température de gel invalide');
+    err.code = 'INVALID_T_FREEZE';
+    throw err;
   }
 
   // Valider que tous les éléments sont des nombres
   for (let i = 0; i < T_profile.length; i++) {
     if (typeof T_profile[i] !== 'number' || !isFinite(T_profile[i])) {
-      throw new Error(`T_profile[${i}] invalide: ${T_profile[i]}`);
+      const err = new Error('Valeur invalide dans T_profile');
+      err.code = 'INVALID_T_PROFILE_VALUE';
+      throw err;
     }
     if (typeof x_profile[i] !== 'number' || !isFinite(x_profile[i])) {
-      throw new Error(`x_profile[${i}] invalide: ${x_profile[i]}`);
+      const err = new Error('Valeur invalide dans x_profile');
+      err.code = 'INVALID_X_PROFILE_VALUE';
+      throw err;
     }
   }
 
@@ -228,7 +234,12 @@ function freezeMargin(T_profile, T_freeze = 0) {
     throw new Error('T_profile invalide ou vide');
   }
 
-  const minTemp = Math.min(...T_profile);
+  let minTemp = T_profile[0];
+  for (let i = 1; i < T_profile.length; i++) {
+    if (T_profile[i] < minTemp) {
+      minTemp = T_profile[i];
+    }
+  }
   return minTemp - T_freeze;
 }
 
@@ -271,7 +282,7 @@ function requiresInsulation(T_final, T_freeze = 0, safetyMargin = 5) {
  * const analysis = detectFreeze([60, 50, -1], [0, 50, 100]);
  * const message = generateFreezeMessage(analysis);
  * console.log(message);
- * // "⚠️ RISQUE DE GEL détecté à 66.7m. Température minimale: -1.0°C"
+ * // "RISQUE DE GEL détecté à 66.7m. Température minimale: -1.0°C"
  */
 function generateFreezeMessage(analysis) {
   if (!analysis || typeof analysis !== 'object') {
@@ -280,12 +291,12 @@ function generateFreezeMessage(analysis) {
 
   if (analysis.freezeDetected) {
     return (
-      `⚠️ RISQUE DE GEL détecté à ${analysis.freezePosition.toFixed(1)}m. ` +
+      `RISQUE DE GEL détecté à ${analysis.freezePosition.toFixed(1)}m. ` +
       `Température minimale: ${analysis.minTemp.toFixed(1)}°C`
     );
   } else {
     return (
-      `✅ PAS DE RISQUE DE GEL. ` +
+      `PAS DE RISQUE DE GEL. ` +
       `Température minimale: ${analysis.minTemp.toFixed(1)}°C ` +
       `(marge: ${analysis.marginToFreeze.toFixed(1)}°C)`
     );
@@ -299,6 +310,15 @@ if (typeof window !== 'undefined') {
   window.freezeMargin = freezeMargin;
   window.requiresInsulation = requiresInsulation;
   window.generateFreezeMessage = generateFreezeMessage;
+
+  // Namespace export for consistency with other modules
+  window.FreezeDetector = {
+    detectFreeze,
+    checkFreezeSimple,
+    freezeMargin,
+    requiresInsulation,
+    generateFreezeMessage,
+  };
 }
 
 // Export conditionnel pour tests Node.js

@@ -5,3 +5,5 @@ docs/AUTOMATED_VERIFICATION_LATEST.md
 validation/external_validation_sample_v1.0.1.json
 data/fluids/*.js
 *.min.js
+*.min.css
+vendor/

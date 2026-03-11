@@ -1,5 +1,43 @@
 # Historique des versions - ThermaFlow
 
+## Version 1.3.0 (11 mars 2026)
+
+### Refactoring architecture
+
+- **Éclatement app.js** : extraction de 3 modules autonomes
+  - `disclaimer.js` (232 LOC) — modal disclaimer avec construction DOM sécurisée
+  - `verdict-renderer.js` (443 LOC) — carte verdict + icônes CSS (remplace emoji)
+  - `calc-detail-templates.js` (687 LOC) — templates HTML des détails de calcul
+- **Éclatement sensitivity-analysis.js** : extraction `sensitivity-matrix.js` (387 LOC) — logique 2D heatmap
+- **Éclatement CSS** : `components.css` monolithique (2138 LOC) → 10 fichiers modulaires dans `css/components/`
+  - buttons, cards, forms, header, results, sensitivity, calc-details, config-summary, disclaimer, validation
+- **ESLint** : migration `.eslintrc.json` → `eslint.config.js` (flat config ESLint 9)
+
+### Sécurité
+
+- Remplacement emoji par icônes CSS (`.status-icon--safe/warning/danger/freeze`) — élimine les problèmes de rendu cross-platform
+- `escHtml()` appliqué à toutes les interpolations innerHTML dans verdict-renderer
+- Construction DOM sécurisée pour disclaimer (pas d'innerHTML avec contenu utilisateur)
+- Validation localStorage dans input-units.js (enum d'unités autorisées)
+- Suppression emoji des messages freeze-detector (sortie engine propre)
+- i18n: disclaimer restructuré en array de paragraphes typés (`text`/`bold`) pour construction DOM safe
+
+### Corrections
+
+- `I18n.getKey()` : supporte les valeurs array (nécessaire pour paragraphes structurés disclaimer)
+- `I18n.t()` : garde contre `format()` sur les arrays
+- Clés i18n interpretation sensibilité dédoublées (`interp1Label`/`interp1Desc`, `interp2d1Label`/`interp2d1Desc`) — élimine le texte dupliqué dans le DOM
+- Accesseur lazy `getParamDefs()` dans sensitivity-analysis, sensitivity-analysis-1d, sensitivity-matrix — résout les dépendances de chargement
+
+### Tests
+
+- Mise à jour assertions test_phase2_app_split.js (emoji → CSS icons)
+- Mise à jour chemin test_bug_numSegments_2d.js (sensitivity-analysis → sensitivity-matrix)
+- Mise à jour compteur CSS test_phase3_css.js (+6 règles status-icon)
+- Suite complète : 36 fichiers tests, 130 cas de vérification automatique, 100% passent
+
+---
+
 ## Version 1.2.2 (10 mars 2026)
 
 ### Corrections

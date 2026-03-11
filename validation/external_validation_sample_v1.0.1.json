@@ -102,7 +102,7 @@
           "status": "ok",
           "T_out_C": 54.8,
           "pressure_drop_kPa": 8.9,
-          "heat_loss_W": 1153,
+          "heat_loss_W": 1152,
           "notes": ""
         }
       }
@@ -154,7 +154,7 @@
           "status": "ok",
           "T_out_C": 4,
           "pressure_drop_kPa": 10.9,
-          "heat_loss_W": -17532,
+          "heat_loss_W": -17691,
           "notes": ""
         }
       }
@@ -204,9 +204,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 83.7,
+          "T_out_C": 84.3,
           "pressure_drop_kPa": 8.1,
-          "heat_loss_W": 91250,
+          "heat_loss_W": 87710,
           "notes": ""
         }
       }
@@ -256,9 +256,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 91.9,
+          "T_out_C": 92.1,
           "pressure_drop_kPa": 8.1,
-          "heat_loss_W": 45535,
+          "heat_loss_W": 44450,
           "notes": ""
         }
       }
@@ -308,9 +308,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 40.1,
+          "T_out_C": 40.3,
           "pressure_drop_kPa": 9.1,
-          "heat_loss_W": 56855,
+          "heat_loss_W": 55627,
           "notes": ""
         }
       }
@@ -362,7 +362,7 @@
           "status": "ok",
           "T_out_C": 47.8,
           "pressure_drop_kPa": 9,
-          "heat_loss_W": 12543,
+          "heat_loss_W": 12475,
           "notes": ""
         }
       }
@@ -417,7 +417,7 @@
           "status": "ok",
           "T_out_C": 54.7,
           "pressure_drop_kPa": 3.4,
-          "heat_loss_W": 1123,
+          "heat_loss_W": 1119,
           "notes": ""
         }
       }
@@ -527,7 +527,7 @@
           "status": "ok",
           "T_out_C": 54.7,
           "pressure_drop_kPa": 3.4,
-          "heat_loss_W": 1123,
+          "heat_loss_W": 1119,
           "notes": ""
         }
       }
@@ -632,9 +632,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 4.4,
+          "T_out_C": 4.5,
           "pressure_drop_kPa": 2.3,
-          "heat_loss_W": 5232,
+          "heat_loss_W": 5225,
           "notes": ""
         }
       }
@@ -689,7 +689,7 @@
           "status": "ok",
           "T_out_C": 46.5,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 1214,
+          "heat_loss_W": 1213,
           "notes": ""
         }
       }
@@ -741,7 +741,7 @@
           "status": "ok",
           "T_out_C": 50,
           "pressure_drop_kPa": 227.1,
-          "heat_loss_W": 21293,
+          "heat_loss_W": 20693,
           "notes": ""
         }
       }
@@ -793,7 +793,7 @@
           "status": "ok",
           "T_out_C": 50,
           "pressure_drop_kPa": 214.8,
-          "heat_loss_W": 13276,
+          "heat_loss_W": 12965,
           "notes": ""
         }
       }
@@ -845,7 +845,7 @@
           "status": "ok",
           "T_out_C": 50,
           "pressure_drop_kPa": 42.4,
-          "heat_loss_W": 178,
+          "heat_loss_W": 177,
           "notes": ""
         }
       }
@@ -900,7 +900,7 @@
           "status": "ok",
           "T_out_C": 38.7,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 65023,
+          "heat_loss_W": 64818,
           "notes": ""
         }
       }
@@ -952,7 +952,7 @@
           "status": "ok",
           "T_out_C": 49.5,
           "pressure_drop_kPa": 0.9,
-          "heat_loss_W": 3088,
+          "heat_loss_W": 3039,
           "notes": ""
         }
       }
@@ -1002,9 +1002,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 11.9,
+          "T_out_C": 12.1,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 218694,
+          "heat_loss_W": 217403,
           "notes": ""
         }
       }
@@ -1056,7 +1056,7 @@
           "status": "ok",
           "T_out_C": 49.7,
           "pressure_drop_kPa": 0.3,
-          "heat_loss_W": 1509,
+          "heat_loss_W": 1500,
           "notes": ""
         }
       }
@@ -1106,9 +1106,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 4.7,
+          "T_out_C": 4.8,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 260254,
+          "heat_loss_W": 259353,
           "notes": ""
         }
       }
@@ -1163,7 +1163,7 @@
           "status": "ok",
           "T_out_C": 49.2,
           "pressure_drop_kPa": 9,
-          "heat_loss_W": 4612,
+          "heat_loss_W": 4609,
           "notes": ""
         }
       }
@@ -1328,7 +1328,7 @@
           "status": "ok",
           "T_out_C": 49.5,
           "pressure_drop_kPa": 9,
-          "heat_loss_W": 2821,
+          "heat_loss_W": 2820,
           "notes": ""
         }
       }
@@ -1380,7 +1380,7 @@
           "status": "ok",
           "T_out_C": 47.2,
           "pressure_drop_kPa": 4.5,
-          "heat_loss_W": 16121,
+          "heat_loss_W": 15887,
           "notes": ""
         }
       }
@@ -1430,9 +1430,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 44.5,
+          "T_out_C": 44.6,
           "pressure_drop_kPa": 9,
-          "heat_loss_W": 31304,
+          "heat_loss_W": 30877,
           "notes": ""
         }
       }
@@ -1482,9 +1482,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 48.5,
+          "T_out_C": 48.6,
           "pressure_drop_kPa": 9,
-          "heat_loss_W": 8848,
+          "heat_loss_W": 8316,
           "notes": ""
         }
       }
@@ -1536,7 +1536,7 @@
           "status": "ok",
           "T_out_C": 35.2,
           "pressure_drop_kPa": 9.1,
-          "heat_loss_W": 84795,
+          "heat_loss_W": 84732,
           "notes": ""
         }
       }
@@ -1588,7 +1588,7 @@
           "status": "ok",
           "T_out_C": 42.4,
           "pressure_drop_kPa": 9,
-          "heat_loss_W": 43682,
+          "heat_loss_W": 43326,
           "notes": ""
         }
       }
@@ -1638,9 +1638,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 38.2,
+          "T_out_C": 38.3,
           "pressure_drop_kPa": 9.1,
-          "heat_loss_W": 67463,
+          "heat_loss_W": 67266,
           "notes": ""
         }
       }
@@ -1690,9 +1690,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 47.7,
+          "T_out_C": 47.8,
           "pressure_drop_kPa": 45.5,
-          "heat_loss_W": 33265,
+          "heat_loss_W": 32652,
           "notes": ""
         }
       }
@@ -1747,7 +1747,7 @@
           "status": "ok",
           "T_out_C": 24.6,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 32259,
+          "heat_loss_W": 32168,
           "notes": ""
         }
       }
@@ -1797,9 +1797,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 43.3,
+          "T_out_C": 43.4,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 4613,
+          "heat_loss_W": 4466,
           "notes": ""
         }
       }
@@ -1851,7 +1851,7 @@
           "status": "ok",
           "T_out_C": 25.3,
           "pressure_drop_kPa": 4,
-          "heat_loss_W": 59721,
+          "heat_loss_W": 59312,
           "notes": ""
         }
       }
@@ -1901,9 +1901,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 37.6,
+          "T_out_C": 38.1,
           "pressure_drop_kPa": 1.3,
-          "heat_loss_W": 25013,
+          "heat_loss_W": 24629,
           "notes": ""
         }
       }
@@ -2010,7 +2010,7 @@
           "status": "ok",
           "T_out_C": 11.9,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 939,
+          "heat_loss_W": 936,
           "notes": ""
         }
       }
@@ -2065,7 +2065,7 @@
           "status": "ok",
           "T_out_C": 36.2,
           "pressure_drop_kPa": 257.8,
-          "heat_loss_W": 2639,
+          "heat_loss_W": 2637,
           "notes": ""
         }
       }
@@ -2120,7 +2120,7 @@
           "status": "ok",
           "T_out_C": 79.9,
           "pressure_drop_kPa": 285.3,
-          "heat_loss_W": 4862,
+          "heat_loss_W": 4838,
           "notes": ""
         }
       }
@@ -2175,7 +2175,7 @@
           "status": "ok",
           "T_out_C": 23,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 2102,
+          "heat_loss_W": 2100,
           "notes": ""
         }
       }
@@ -2225,9 +2225,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 10.2,
+          "T_out_C": 10.3,
           "pressure_drop_kPa": 255,
-          "heat_loss_W": 13005,
+          "heat_loss_W": 12970,
           "notes": ""
         }
       }
@@ -2337,7 +2337,7 @@
           "status": "ok",
           "T_out_C": 82.1,
           "pressure_drop_kPa": 0.1,
-          "heat_loss_W": 1207,
+          "heat_loss_W": 1206,
           "notes": ""
         }
       }
@@ -2442,9 +2442,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 12.3,
+          "T_out_C": 12.4,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 4103,
+          "heat_loss_W": 4074,
           "notes": ""
         }
       }
@@ -2496,7 +2496,7 @@
           "status": "ok",
           "T_out_C": 45,
           "pressure_drop_kPa": 1.9,
-          "heat_loss_W": 6495,
+          "heat_loss_W": 6402,
           "notes": ""
         }
       }
@@ -2551,7 +2551,7 @@
           "status": "ok",
           "T_out_C": 37,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 990,
+          "heat_loss_W": 988,
           "notes": ""
         }
       }
@@ -2603,7 +2603,7 @@
           "status": "ok",
           "T_out_C": 70,
           "pressure_drop_kPa": 0.2,
-          "heat_loss_W": 5075,
+          "heat_loss_W": 4905,
           "notes": ""
         }
       }
@@ -2658,7 +2658,7 @@
           "status": "ok",
           "T_out_C": 65.8,
           "pressure_drop_kPa": 186.2,
-          "heat_loss_W": 641,
+          "heat_loss_W": 640,
           "notes": ""
         }
       }
@@ -2708,9 +2708,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 45,
+          "T_out_C": 45.3,
           "pressure_drop_kPa": 0.3,
-          "heat_loss_W": 35681,
+          "heat_loss_W": 35133,
           "notes": ""
         }
       }
@@ -2765,7 +2765,7 @@
           "status": "ok",
           "T_out_C": 28,
           "pressure_drop_kPa": 63.2,
-          "heat_loss_W": 3659,
+          "heat_loss_W": 3658,
           "notes": ""
         }
       }
@@ -2820,7 +2820,7 @@
           "status": "ok",
           "T_out_C": 55.9,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 22492,
+          "heat_loss_W": 22470,
           "notes": ""
         }
       }
@@ -2930,7 +2930,7 @@
           "status": "ok",
           "T_out_C": 88.6,
           "pressure_drop_kPa": 2.9,
-          "heat_loss_W": 1233,
+          "heat_loss_W": 1231,
           "notes": ""
         }
       }
@@ -2980,9 +2980,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 40,
+          "T_out_C": 40.1,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 70415,
+          "heat_loss_W": 68334,
           "notes": ""
         }
       }
@@ -3089,7 +3089,7 @@
           "status": "ok",
           "T_out_C": 70,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 6534,
+          "heat_loss_W": 6463,
           "notes": ""
         }
       }
@@ -3144,7 +3144,7 @@
           "status": "ok",
           "T_out_C": 83.2,
           "pressure_drop_kPa": 354.4,
-          "heat_loss_W": 2049,
+          "heat_loss_W": 2039,
           "notes": ""
         }
       }
@@ -3199,7 +3199,7 @@
           "status": "ok",
           "T_out_C": 57.9,
           "pressure_drop_kPa": 5.4,
-          "heat_loss_W": 5137,
+          "heat_loss_W": 5133,
           "notes": ""
         }
       }
@@ -3306,7 +3306,7 @@
           "status": "ok",
           "T_out_C": 76.7,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 1969,
+          "heat_loss_W": 1964,
           "notes": ""
         }
       }
@@ -3358,7 +3358,7 @@
           "status": "ok",
           "T_out_C": 5.3,
           "pressure_drop_kPa": 2.6,
-          "heat_loss_W": 8914,
+          "heat_loss_W": 8908,
           "notes": ""
         }
       }
@@ -3408,9 +3408,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 74.9,
+          "T_out_C": 75.3,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 377119,
+          "heat_loss_W": 363136,
           "notes": ""
         }
       }
@@ -3462,7 +3462,7 @@
           "status": "ok",
           "T_out_C": 50.2,
           "pressure_drop_kPa": 9.2,
-          "heat_loss_W": 4891,
+          "heat_loss_W": 4872,
           "notes": ""
         }
       }
@@ -3512,9 +3512,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 47.7,
+          "T_out_C": 47.9,
           "pressure_drop_kPa": 3.7,
-          "heat_loss_W": 127575,
+          "heat_loss_W": 124839,
           "notes": ""
         }
       }
@@ -3569,7 +3569,7 @@
           "status": "ok",
           "T_out_C": 76.9,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 1421,
+          "heat_loss_W": 1420,
           "notes": ""
         }
       }
@@ -3679,7 +3679,7 @@
           "status": "ok",
           "T_out_C": 39.5,
           "pressure_drop_kPa": 0.8,
-          "heat_loss_W": 1081,
+          "heat_loss_W": 1080,
           "notes": ""
         }
       }
@@ -3734,7 +3734,7 @@
           "status": "ok",
           "T_out_C": 33,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 30285,
+          "heat_loss_W": 30150,
           "notes": ""
         }
       }
@@ -3839,9 +3839,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 65.5,
+          "T_out_C": 65.8,
           "pressure_drop_kPa": 0.1,
-          "heat_loss_W": 15936,
+          "heat_loss_W": 15742,
           "notes": ""
         }
       }
@@ -3893,7 +3893,7 @@
           "status": "ok",
           "T_out_C": 43.4,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 31816,
+          "heat_loss_W": 29694,
           "notes": ""
         }
       }
@@ -3943,9 +3943,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 39.2,
+          "T_out_C": 39.3,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 55823,
+          "heat_loss_W": 54846,
           "notes": ""
         }
       }
@@ -3997,7 +3997,7 @@
           "status": "ok",
           "T_out_C": 21.3,
           "pressure_drop_kPa": 282,
-          "heat_loss_W": 1379,
+          "heat_loss_W": 1372,
           "notes": ""
         }
       }
@@ -4049,7 +4049,7 @@
           "status": "ok",
           "T_out_C": 11.4,
           "pressure_drop_kPa": 173.5,
-          "heat_loss_W": 21681,
+          "heat_loss_W": 21666,
           "notes": ""
         }
       }
@@ -4101,7 +4101,7 @@
           "status": "ok",
           "T_out_C": 49.6,
           "pressure_drop_kPa": 30.3,
-          "heat_loss_W": 9101,
+          "heat_loss_W": 8954,
           "notes": ""
         }
       }
@@ -4153,7 +4153,7 @@
           "status": "ok",
           "T_out_C": 15.4,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 10600,
+          "heat_loss_W": 10477,
           "notes": ""
         }
       }
@@ -4208,7 +4208,7 @@
           "status": "ok",
           "T_out_C": 28,
           "pressure_drop_kPa": 0.4,
-          "heat_loss_W": 754,
+          "heat_loss_W": 753,
           "notes": ""
         }
       }
@@ -4260,7 +4260,7 @@
           "status": "ok",
           "T_out_C": 24.7,
           "pressure_drop_kPa": 4.6,
-          "heat_loss_W": 1142,
+          "heat_loss_W": 1138,
           "notes": ""
         }
       }
@@ -4310,9 +4310,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 38.4,
+          "T_out_C": 38.5,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 77541,
+          "heat_loss_W": 76466,
           "notes": ""
         }
       }
@@ -4419,7 +4419,7 @@
           "status": "ok",
           "T_out_C": 81.2,
           "pressure_drop_kPa": 33.5,
-          "heat_loss_W": 4919,
+          "heat_loss_W": 4785,
           "notes": ""
         }
       }
@@ -4469,9 +4469,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 85.6,
+          "T_out_C": 85.7,
           "pressure_drop_kPa": 0.2,
-          "heat_loss_W": 50649,
+          "heat_loss_W": 48041,
           "notes": ""
         }
       }
@@ -4576,9 +4576,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 33.4,
+          "T_out_C": 33.5,
           "pressure_drop_kPa": 1.6,
-          "heat_loss_W": 15913,
+          "heat_loss_W": 15655,
           "notes": ""
         }
       }
@@ -4630,7 +4630,7 @@
           "status": "ok",
           "T_out_C": 57.8,
           "pressure_drop_kPa": 1.4,
-          "heat_loss_W": 28333,
+          "heat_loss_W": 28132,
           "notes": ""
         }
       }
@@ -4685,7 +4685,7 @@
           "status": "ok",
           "T_out_C": 74.8,
           "pressure_drop_kPa": 75.4,
-          "heat_loss_W": 7311,
+          "heat_loss_W": 7308,
           "notes": ""
         }
       }
@@ -4737,7 +4737,7 @@
           "status": "ok",
           "T_out_C": 71.1,
           "pressure_drop_kPa": 27.3,
-          "heat_loss_W": 10614,
+          "heat_loss_W": 10340,
           "notes": ""
         }
       }
@@ -4788,8 +4788,8 @@
         "thermaflow": {
           "status": "ok",
           "T_out_C": 8.3,
-          "pressure_drop_kPa": 147.8,
-          "heat_loss_W": 6930,
+          "pressure_drop_kPa": 147.7,
+          "heat_loss_W": 6894,
           "notes": ""
         }
       }
@@ -4839,9 +4839,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 49.1,
+          "T_out_C": 49.4,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 138261,
+          "heat_loss_W": 133241,
           "notes": ""
         }
       }
@@ -4893,7 +4893,7 @@
           "status": "ok",
           "T_out_C": 5.5,
           "pressure_drop_kPa": 4.1,
-          "heat_loss_W": 47702,
+          "heat_loss_W": 47616,
           "notes": ""
         }
       }
@@ -4948,7 +4948,7 @@
           "status": "ok",
           "T_out_C": 23.8,
           "pressure_drop_kPa": 67.6,
-          "heat_loss_W": 1355,
+          "heat_loss_W": 1354,
           "notes": ""
         }
       }
@@ -5003,7 +5003,7 @@
           "status": "ok",
           "T_out_C": 48.6,
           "pressure_drop_kPa": 14.3,
-          "heat_loss_W": 403,
+          "heat_loss_W": 397,
           "notes": ""
         }
       }
@@ -5055,7 +5055,7 @@
           "status": "ok",
           "T_out_C": 21.1,
           "pressure_drop_kPa": 41.4,
-          "heat_loss_W": 20307,
+          "heat_loss_W": 20275,
           "notes": ""
         }
       }
@@ -5160,9 +5160,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 26.4,
-          "pressure_drop_kPa": 37.1,
-          "heat_loss_W": 40886,
+          "T_out_C": 27.1,
+          "pressure_drop_kPa": 37,
+          "heat_loss_W": 39885,
           "notes": ""
         }
       }
@@ -5217,7 +5217,7 @@
           "status": "ok",
           "T_out_C": 77.2,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 1278,
+          "heat_loss_W": 1275,
           "notes": ""
         }
       }
@@ -5267,9 +5267,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 34.2,
+          "T_out_C": 34.3,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 16430,
+          "heat_loss_W": 15667,
           "notes": ""
         }
       }
@@ -5319,9 +5319,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 44.2,
+          "T_out_C": 44.3,
           "pressure_drop_kPa": 35.6,
-          "heat_loss_W": 25361,
+          "heat_loss_W": 25248,
           "notes": ""
         }
       }
@@ -5373,7 +5373,7 @@
           "status": "ok",
           "T_out_C": 16.3,
           "pressure_drop_kPa": 78.7,
-          "heat_loss_W": 6311,
+          "heat_loss_W": 6306,
           "notes": ""
         }
       }
@@ -5428,7 +5428,7 @@
           "status": "ok",
           "T_out_C": 52.2,
           "pressure_drop_kPa": 15.8,
-          "heat_loss_W": 936,
+          "heat_loss_W": 933,
           "notes": ""
         }
       }
@@ -5483,7 +5483,7 @@
           "status": "ok",
           "T_out_C": 35,
           "pressure_drop_kPa": 277,
-          "heat_loss_W": 157,
+          "heat_loss_W": 156,
           "notes": ""
         }
       }
@@ -5535,7 +5535,7 @@
           "status": "ok",
           "T_out_C": 53.1,
           "pressure_drop_kPa": 4.3,
-          "heat_loss_W": 24434,
+          "heat_loss_W": 24231,
           "notes": ""
         }
       }
@@ -5645,7 +5645,7 @@
           "status": "ok",
           "T_out_C": 12.3,
           "pressure_drop_kPa": 237.7,
-          "heat_loss_W": 5067,
+          "heat_loss_W": 5066,
           "notes": ""
         }
       }
@@ -5752,7 +5752,7 @@
           "status": "ok",
           "T_out_C": 39.3,
           "pressure_drop_kPa": 0.6,
-          "heat_loss_W": 54447,
+          "heat_loss_W": 53585,
           "notes": ""
         }
       }
@@ -5807,7 +5807,7 @@
           "status": "ok",
           "T_out_C": 29.5,
           "pressure_drop_kPa": 0.2,
-          "heat_loss_W": 334,
+          "heat_loss_W": 333,
           "notes": ""
         }
       }
@@ -5862,7 +5862,7 @@
           "status": "ok",
           "T_out_C": 23.4,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 11451,
+          "heat_loss_W": 11438,
           "notes": ""
         }
       }
@@ -5917,7 +5917,7 @@
           "status": "ok",
           "T_out_C": 16.7,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 9472,
+          "heat_loss_W": 9464,
           "notes": ""
         }
       }
@@ -5969,7 +5969,7 @@
           "status": "ok",
           "T_out_C": 64,
           "pressure_drop_kPa": 210.7,
-          "heat_loss_W": 1739,
+          "heat_loss_W": 1693,
           "notes": ""
         }
       }
@@ -6019,9 +6019,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 46.3,
+          "T_out_C": 46.5,
           "pressure_drop_kPa": 2.7,
-          "heat_loss_W": 195470,
+          "heat_loss_W": 194332,
           "notes": ""
         }
       }
@@ -6131,7 +6131,7 @@
           "status": "ok",
           "T_out_C": 22,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 190,
+          "heat_loss_W": 189,
           "notes": ""
         }
       }
@@ -6241,7 +6241,7 @@
           "status": "ok",
           "T_out_C": 78.3,
           "pressure_drop_kPa": 1.2,
-          "heat_loss_W": 1791,
+          "heat_loss_W": 1789,
           "notes": ""
         }
       }
@@ -6291,9 +6291,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 74.4,
+          "T_out_C": 74.5,
           "pressure_drop_kPa": 0.2,
-          "heat_loss_W": 191798,
+          "heat_loss_W": 181330,
           "notes": ""
         }
       }
@@ -6348,7 +6348,7 @@
           "status": "ok",
           "T_out_C": 62.5,
           "pressure_drop_kPa": 6.6,
-          "heat_loss_W": 787,
+          "heat_loss_W": 786,
           "notes": ""
         }
       }
@@ -6453,9 +6453,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 36,
+          "T_out_C": 36.5,
           "pressure_drop_kPa": 0.2,
-          "heat_loss_W": 53496,
+          "heat_loss_W": 52417,
           "notes": ""
         }
       }
@@ -6505,9 +6505,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 49.7,
+          "T_out_C": 49.9,
           "pressure_drop_kPa": 148,
-          "heat_loss_W": 14066,
+          "heat_loss_W": 13968,
           "notes": ""
         }
       }
@@ -6559,7 +6559,7 @@
           "status": "ok",
           "T_out_C": 61.3,
           "pressure_drop_kPa": 330.7,
-          "heat_loss_W": 2674,
+          "heat_loss_W": 2660,
           "notes": ""
         }
       }
@@ -6614,7 +6614,7 @@
           "status": "ok",
           "T_out_C": 14.1,
           "pressure_drop_kPa": 14.1,
-          "heat_loss_W": 1784,
+          "heat_loss_W": 1783,
           "notes": ""
         }
       }
@@ -6664,9 +6664,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 52.6,
+          "T_out_C": 52.7,
           "pressure_drop_kPa": 0.6,
-          "heat_loss_W": 7989,
+          "heat_loss_W": 7830,
           "notes": ""
         }
       }
@@ -6716,9 +6716,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 60.4,
+          "T_out_C": 60.5,
           "pressure_drop_kPa": 2,
-          "heat_loss_W": 178964,
+          "heat_loss_W": 174838,
           "notes": ""
         }
       }
@@ -6768,9 +6768,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 41,
+          "T_out_C": 41.1,
           "pressure_drop_kPa": 0.5,
-          "heat_loss_W": 179543,
+          "heat_loss_W": 176997,
           "notes": ""
         }
       }
@@ -6823,9 +6823,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 67.8,
+          "T_out_C": 67.9,
           "pressure_drop_kPa": 0,
-          "heat_loss_W": 3929,
+          "heat_loss_W": 3912,
           "notes": ""
         }
       }
@@ -6877,7 +6877,7 @@
           "status": "ok",
           "T_out_C": 84,
           "pressure_drop_kPa": 9.8,
-          "heat_loss_W": 7932,
+          "heat_loss_W": 7532,
           "notes": ""
         }
       }
@@ -6932,7 +6932,7 @@
           "status": "ok",
           "T_out_C": 73.8,
           "pressure_drop_kPa": 181.4,
-          "heat_loss_W": 12970,
+          "heat_loss_W": 12966,
           "notes": ""
         }
       }
@@ -6982,9 +6982,9 @@
         },
         "thermaflow": {
           "status": "ok",
-          "T_out_C": 79.3,
+          "T_out_C": 79.4,
           "pressure_drop_kPa": 0.1,
-          "heat_loss_W": 7710,
+          "heat_loss_W": 7540,
           "notes": ""
         }
       }

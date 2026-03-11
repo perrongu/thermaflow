@@ -99,15 +99,17 @@
     },
     sensitivity: {
       interpTitle: '📖 Interpretation',
-      interp1:
-        'Individual analysis: Each chart shows the impact of a single parameter varying over its full range, ',
+      interp1Label: 'Individual analysis:',
+      interp1Desc:
+        'Each chart shows the impact of a single parameter varying over its full range, ',
       interp2: 'all other parameters fixed at their current values. ',
       interp3: 'This identifies which parameters most influence freeze risk.',
       legendBase: 'Baseline (current) value',
       legendFreeze: 'Freeze critical point (0°C)',
       legendSafety: 'Safety threshold (5°C)',
       legendLimit: 'Parameter range limits',
-      interp2d1: 'Combined analysis: The heatmap shows the full range of possible results ',
+      interp2d1Label: 'Combined analysis:',
+      interp2d1Desc: 'The heatmap shows the full range of possible results ',
       interp2d2: 'when two parameters vary simultaneously across their spectra, ',
       interp2d3: 'others being fixed. It reveals critical combinations and safety margins.',
       paramX: 'Parameter X',
@@ -336,6 +338,7 @@
       modifying: 'Modifications pending...',
       recalculating: 'Recalculating...',
       uptodate: 'Results up to date',
+      outdated: 'Out of date',
       error: 'Calculation error',
     },
     validation: {
@@ -407,6 +410,7 @@
       waterTempIn: 'Water Inlet Temperature',
       airTemp: 'Air Temperature',
       windSpeed: 'Wind Speed',
+      insulationThickness: 'Insulation Thickness',
     },
     materials: {
       steel: 'Steel',
@@ -435,6 +439,7 @@
       waterTempIn: 'Water inlet temp.',
       airTemp: 'Air temp.',
       windSpeed: 'Wind speed',
+      insulationThickness: 'Insulation thickness',
       paramX: 'Parameter X',
       paramY: 'Parameter Y',
       min: 'Min',
@@ -452,6 +457,11 @@
       outOfRange: 'Out of range',
       tableTitle: '📊 Summary table of all segments',
       tableNote: 'Each segment follows the detailed methodology above.',
+      tableNoteExtra: 'The table shows the evolution of parameters along the pipe.',
+      table: {
+        segment: 'Segment',
+        position: 'Position',
+      },
       regime: 'Regime',
       segment1Note: 'Segment 1:',
       segment1Text: 'Detailed calculations shown above',
@@ -461,7 +471,36 @@
     },
     disclaimer: {
       title: 'Warning and Terms of Use',
-      text: 'This application provides an estimate of freeze risk in water pipelines based on validated thermal and hydraulic models.<br><br>Despite testing under various conditions, the obtained results should be used only for <strong>indicative</strong> and <strong>decision support</strong> purposes. They do not replace the analysis of a qualified professional nor the necessary validations before any operational decision.<br><br>The user remains <strong>solely responsible</strong> for verifying input data, interpreting results, and implementing appropriate protection and contingency measures.<br><br>Using this application implies <strong>acceptance of these terms</strong>.',
+      paragraphs: [
+        [
+          {
+            text: 'This application provides an estimate of freeze risk in water pipelines based on validated thermal and hydraulic models.',
+          },
+        ],
+        [
+          {
+            text: 'Despite testing under various conditions, the obtained results should be used only for ',
+          },
+          { text: 'indicative', bold: true },
+          { text: ' and ' },
+          { text: 'decision support', bold: true },
+          {
+            text: ' purposes. They do not replace the analysis of a qualified professional nor the necessary validations before any operational decision.',
+          },
+        ],
+        [
+          { text: 'The user remains ' },
+          { text: 'solely responsible', bold: true },
+          {
+            text: ' for verifying input data, interpreting results, and implementing appropriate protection and contingency measures.',
+          },
+        ],
+        [
+          { text: 'Using this application implies ' },
+          { text: 'acceptance of these terms', bold: true },
+          { text: '.' },
+        ],
+      ],
       accept: 'I accept',
     },
   });

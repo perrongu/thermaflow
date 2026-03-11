@@ -28,8 +28,9 @@
       T_in: 'sensitivityTable.waterTempIn',
       T_amb: 'sensitivityTable.airTemp',
       V_wind: 'sensitivityTable.windSpeed',
+      t_insul: 'sensitivityTable.insulationThickness',
     };
-    return I18n.t(labels[key] || key);
+    return window.I18n.t(labels[key] || key);
   }
 
   /**
@@ -100,7 +101,9 @@
       max: 108,
     },
     t_insul: {
-      label: 'Épaisseur isolation', // Pas traduit pour l'instant
+      get label() {
+        return getParameterLabel('t_insul');
+      },
       unit: 'mm',
       path: ['insulation', 'thickness'],
       conditional: true, // Seulement si isolation active

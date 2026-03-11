@@ -92,6 +92,13 @@
  *
  * console.log(`T_out = ${result.T_out}°C, Q_loss = ${result.Q_loss}W`);
  */
+function resolveModule(name, fallbackPath) {
+  if (typeof window !== 'undefined' && window[name]) {
+    return window[name];
+  }
+  return require(fallbackPath);
+}
+
 function calculatePipeSegment(geometry, fluid, ambient, insulation = null, iterations = 2) {
   // ========== VALIDATION DES ENTRÉES ==========
 
@@ -170,45 +177,18 @@ function calculatePipeSegment(geometry, fluid, ambient, insulation = null, itera
   // Note: En production browser, ces modules sont chargés via <script> tags
   // Pour les tests Node.js, ils sont chargés via require dans le wrapper
 
-  const waterProps =
-    typeof window !== 'undefined'
-      ? window.WaterProperties
-      : require('../properties/water-properties.js');
-  const airProps =
-    typeof window !== 'undefined'
-      ? window.AirProperties
-      : require('../properties/air-properties.js');
-  const materials =
-    typeof window !== 'undefined'
-      ? window.MaterialProperties
-      : require('../properties/material-properties.js');
-  const reynolds =
-    typeof window !== 'undefined' ? window.Reynolds : require('../formulas/reynolds.js');
-  const geom = typeof window !== 'undefined' ? window.Geometry : require('../formulas/geometry.js');
-  const pressureBasic =
-    typeof window !== 'undefined' ? window.PressureBasic : require('../formulas/pressure-basic.js');
-  const friction =
-    typeof window !== 'undefined'
-      ? window.FrictionFactor
-      : require('../correlations/friction-factor.js');
-  const nusseltInt =
-    typeof window !== 'undefined'
-      ? window.NusseltInternal
-      : require('../correlations/nusselt-internal.js');
-  const nusseltExt =
-    typeof window !== 'undefined'
-      ? window.NusseltExternal
-      : require('../correlations/nusselt-external.js');
-  const radiation =
-    typeof window !== 'undefined' ? window.Radiation : require('../correlations/radiation.js');
-  const resistance =
-    typeof window !== 'undefined'
-      ? window.ThermalResistance
-      : require('../calculations/thermal-resistance.js');
-  const heatTransfer =
-    typeof window !== 'undefined'
-      ? window.HeatTransfer
-      : require('../calculations/heat-transfer.js');
+  const waterProps = resolveModule('WaterProperties', '../properties/water-properties.js');
+  const airProps = resolveModule('AirProperties', '../properties/air-properties.js');
+  const materials = resolveModule('MaterialProperties', '../properties/material-properties.js');
+  const reynolds = resolveModule('Reynolds', '../formulas/reynolds.js');
+  const geom = resolveModule('Geometry', '../formulas/geometry.js');
+  const pressureBasic = resolveModule('PressureBasic', '../formulas/pressure-basic.js');
+  const friction = resolveModule('FrictionFactor', '../correlations/friction-factor.js');
+  const nusseltInt = resolveModule('NusseltInternal', '../correlations/nusselt-internal.js');
+  const nusseltExt = resolveModule('NusseltExternal', '../correlations/nusselt-external.js');
+  const radiation = resolveModule('Radiation', '../correlations/radiation.js');
+  const resistance = resolveModule('ThermalResistance', '../calculations/thermal-resistance.js');
+  const heatTransfer = resolveModule('HeatTransfer', '../calculations/heat-transfer.js');
 
   // ========== ITÉRATION T_moy (v1.2) ==========
   // Améliore précision en recalculant propriétés à température moyenne
@@ -405,6 +385,7 @@ function calculatePipeSegment(geometry, fluid, ambient, insulation = null, itera
 if (typeof window !== 'undefined') {
   window.PipeSegment = {
     calculatePipeSegment,
+    resolveModule,
   };
 }
 
@@ -412,5 +393,6 @@ if (typeof window !== 'undefined') {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     calculatePipeSegment,
+    resolveModule,
   };
 }

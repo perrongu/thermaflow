@@ -322,6 +322,13 @@ if (typeof window !== 'undefined') {
   window.calculatePipeNetwork = calculatePipeNetwork;
   window.findSegmentAtPosition = findSegmentAtPosition;
   window.interpolateTemperature = interpolateTemperature;
+
+  // Namespace export for consistency with other modules
+  window.PipeNetwork = {
+    calculatePipeNetwork,
+    findSegmentAtPosition,
+    interpolateTemperature,
+  };
 }
 
 // Export conditionnel pour tests Node.js
