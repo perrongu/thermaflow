@@ -101,8 +101,9 @@
     },
     sensitivity: {
       interpTitle: '📖 Interprétation',
-      interp1:
-        "Analyse individuelle : Chaque graphique montre l'impact d'un seul paramètre qui varie sur toute sa plage, ",
+      interp1Label: 'Analyse individuelle :',
+      interp1Desc:
+        "Chaque graphique montre l'impact d'un seul paramètre qui varie sur toute sa plage, ",
       interp2: 'tous les autres paramètres restant fixés à leur valeur actuelle. ',
       interp3:
         "Cela permet d'identifier quels paramètres ont le plus d'influence sur le risque de gel.",
@@ -110,8 +111,9 @@
       legendFreeze: 'Point critique gel (0°C)',
       legendSafety: 'Point critique sécurité (5°C)',
       legendLimit: 'Limites de la plage du paramètre',
-      interp2d1:
-        'Analyse combinée : La carte thermique (heatmap) montre la plage complète des résultats possibles ',
+      interp2d1Label: 'Analyse combinée :',
+      interp2d1Desc:
+        'La carte thermique (heatmap) montre la plage complète des résultats possibles ',
       interp2d2: "lorsque deux paramètres varient simultanément sur l'ensemble de leur spectre, ",
       interp2d3:
         "tous les autres paramètres restant fixés. Cela permet d'identifier les combinaisons critiques et les marges de sécurité disponibles.",
@@ -341,6 +343,7 @@
       modifying: 'Modification en cours...',
       recalculating: 'Recalcul en cours...',
       uptodate: 'Résultats à jour',
+      outdated: 'Pas à jour',
       error: 'Erreur de calcul',
     },
     validation: {
@@ -412,6 +415,7 @@
       waterTempIn: 'Température eau entrée',
       airTemp: 'Température air',
       windSpeed: 'Vitesse vent',
+      insulationThickness: 'Épaisseur isolation',
     },
     materials: {
       steel: 'Acier',
@@ -443,6 +447,7 @@
       waterTempIn: 'Température eau entrée',
       airTemp: 'Température air',
       windSpeed: 'Vitesse vent',
+      insulationThickness: 'Épaisseur isolation',
       paramX: 'Paramètre X',
       paramY: 'Paramètre Y',
       min: 'Min',
@@ -460,6 +465,11 @@
       outOfRange: 'Hors plage',
       tableTitle: '📊 Tableau récapitulatif de tous les segments',
       tableNote: 'Chaque segment suit la méthodologie détaillée ci-dessus.',
+      tableNoteExtra: "Le tableau montre l'évolution des paramètres le long de la conduite.",
+      table: {
+        segment: 'Segment',
+        position: 'Position',
+      },
       regime: 'Régime',
       segment1Note: 'Segment 1 :',
       segment1Text: 'Calculs détaillés affichés ci-dessus',
@@ -469,7 +479,36 @@
     },
     disclaimer: {
       title: "Avertissement et conditions d'utilisation",
-      text: "Cette application fournit une estimation du risque de gel dans des conduites d'eau à partir de modèles thermiques et hydrauliques validés.<br><br>Malgré des essais réalisés dans des conditions variées, les résultats obtenus ne doivent être utilisés qu'à titre <strong>indicatif</strong> et <strong>d'aide à la décision</strong>. Ils ne remplacent pas l'analyse d'un professionnel qualifié ni les validations nécessaires avant toute décision opérationnelle.<br><br>L'utilisateur demeure <strong>seul responsable</strong> de la vérification des données d'entrée, de l'interprétation des résultats et de la mise en œuvre de mesures de protection et de contingence appropriées.<br><br>L'utilisation de cette application implique l'<strong>acceptation de ces conditions</strong>.",
+      paragraphs: [
+        [
+          {
+            text: "Cette application fournit une estimation du risque de gel dans des conduites d'eau à partir de modèles thermiques et hydrauliques validés.",
+          },
+        ],
+        [
+          {
+            text: "Malgré des essais réalisés dans des conditions variées, les résultats obtenus ne doivent être utilisés qu'à titre ",
+          },
+          { text: 'indicatif', bold: true },
+          { text: ' et ' },
+          { text: "d'aide à la décision", bold: true },
+          {
+            text: ". Ils ne remplacent pas l'analyse d'un professionnel qualifié ni les validations nécessaires avant toute décision opérationnelle.",
+          },
+        ],
+        [
+          { text: "L'utilisateur demeure " },
+          { text: 'seul responsable', bold: true },
+          {
+            text: " de la vérification des données d'entrée, de l'interprétation des résultats et de la mise en œuvre de mesures de protection et de contingence appropriées.",
+          },
+        ],
+        [
+          { text: "L'utilisation de cette application implique l'" },
+          { text: 'acceptation de ces conditions', bold: true },
+          { text: '.' },
+        ],
+      ],
       accept: "J'accepte",
     },
   });

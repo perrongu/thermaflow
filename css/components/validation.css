@@ -1,0 +1,74 @@
+/* ========== VALIDATION INLINE ========== */
+.input--invalid,
+.param-input--invalid {
+  border-color: var(--color-danger) !important;
+  background-color: #fef2f2;
+}
+
+.input--invalid:focus,
+.param-input--invalid:focus {
+  outline: none;
+  border-color: var(--color-danger) !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.form__input--invalid {
+  border-color: var(--color-danger);
+  background-color: #fef2f2;
+}
+
+.form__input--invalid:focus {
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+/* ============================================================
+ * Validation inline errors (Item 1 — replaces alert())
+ * ============================================================ */
+
+.validation-error {
+  display: block;
+  margin-top: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  background-color: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 0.25rem;
+  color: #dc2626;
+  font-size: var(--font-size-sm, 0.875rem);
+  line-height: 1.4;
+}
+
+/* Banner error — dismissible, shown at top of page */
+.banner-error {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  background-color: #dc2626;
+  color: #ffffff;
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.banner-error__close {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.25rem;
+  opacity: 0.8;
+}
+
+.banner-error__close:hover {
+  opacity: 1;
+}

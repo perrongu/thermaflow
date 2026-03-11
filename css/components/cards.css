@@ -1,0 +1,141 @@
+/* ========== CARDS ========== */
+.card {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow);
+}
+
+.card__title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-900);
+  margin-bottom: var(--spacing-4);
+  padding-bottom: var(--spacing-3);
+  border-bottom: var(--border-width-2) solid var(--color-gray-200);
+}
+
+/* ========== VERDICT CARD ========== */
+.verdict-card {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-xl);
+  padding: var(--spacing-10);
+  margin-bottom: var(--spacing-8);
+  box-shadow: var(--shadow-xl);
+  text-align: center;
+  border: 3px solid;
+}
+
+.verdict-card--no-freeze {
+  border-color: var(--color-success);
+  background: linear-gradient(135deg, var(--color-success-bg) 0%, var(--color-white) 100%);
+}
+
+.verdict-card--freeze {
+  border-color: var(--color-danger);
+  background: linear-gradient(135deg, var(--color-danger-bg) 0%, var(--color-white) 100%);
+}
+
+.verdict-card--warning {
+  border-color: var(--color-warning);
+  background: linear-gradient(135deg, var(--color-warning-bg) 0%, var(--color-white) 100%);
+}
+
+.verdict-card--error {
+  border-color: #dc2626;
+  background: linear-gradient(135deg, #fef2f2 0%, var(--color-white) 100%);
+}
+
+.verdict-card__icon {
+  font-size: 4rem;
+  margin-bottom: var(--spacing-4);
+}
+
+.verdict-card__title {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-3);
+}
+
+.verdict-card--no-freeze .verdict-card__title {
+  color: var(--color-success);
+}
+
+.verdict-card--freeze .verdict-card__title {
+  color: var(--color-danger);
+}
+
+.verdict-card--warning .verdict-card__title {
+  color: var(--color-warning);
+}
+
+.verdict-card--error .verdict-card__title {
+  color: #dc2626;
+}
+
+.verdict-card__message {
+  font-size: var(--font-size-lg);
+  color: var(--color-gray-700);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+/* ========== STATUS ICONS (CSS-only, replaces emoji) ========== */
+.status-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.status-icon::before {
+  font-style: normal;
+}
+
+.status-icon--safe::before {
+  content: '✓';
+  color: var(--color-success, #16a34a);
+  font-weight: bold;
+}
+
+.status-icon--warning::before {
+  content: '!';
+  color: var(--color-warning, #f59e0b);
+  font-weight: bold;
+}
+
+.status-icon--danger::before {
+  content: '✕';
+  color: var(--color-danger, #dc2626);
+  font-weight: bold;
+}
+
+.status-icon--freeze::before {
+  content: '*';
+  color: #2563eb;
+  font-weight: bold;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 767px) {
+  .verdict-card {
+    padding: var(--spacing-6);
+  }
+
+  .verdict-card__icon {
+    font-size: 3rem;
+  }
+
+  .verdict-card__title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .verdict-card__message {
+    font-size: var(--font-size-base);
+  }
+
+  .card {
+    padding: var(--spacing-4);
+  }
+}

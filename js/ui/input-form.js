@@ -1,35 +1,13 @@
 /**
- * input-form.js
- *
- * Gestion du formulaire d'entrée pour ThermaFlow
- *
- * Fonctionnalités:
- * - Menus déroulants synchronisés (matériau → schedule/type → NPS)
- * - Mise à jour automatique des dimensions (OD, ID, WT)
- * - Mise à jour du schéma SVG
- * - Validation en temps réel
- * - Gestion isolation (afficher/cacher champs)
- * - Conversion unités (m³/hr → kg/s, km/h → m/s, mm → m)
- * - Récupération données formulaire
- * - Déclenchement calcul
+ * input-form.js — Form orchestrator for ThermaFlow
+ * Delegates validation to InputValidation, units to InputUnits.
  */
 
 (function () {
   'use strict';
 
-  // ========== RUGOSITÉ PAR MATÉRIAU (module partagé) ==========
   const MATERIAL_ROUGHNESS = window.MaterialRoughness.MATERIAL_ROUGHNESS;
-
-  // ========== ÉLÉMENTS DOM ==========
   let elements = {};
-
-  // ========== UNITÉS COURANTES ==========
-  let currentUnits = {
-    flowRate: 'm3_h',
-    pressure: 'kPag',
-  };
-
-  // ========== INITIALISATION ==========
   function init() {
     // Vérifier que PipeSpecsLoader et PipeDiagram sont disponibles
     if (typeof PipeSpecsLoader === 'undefined') {
@@ -46,7 +24,7 @@
     }
 
     // Charger les préférences d'unités depuis localStorage
-    loadUnitPreferences();
+    InputUnits.loadUnitPreferences();
 
     // Récupérer les éléments de contrôle (disponibles immédiatement)
     elements = {
@@ -71,15 +49,11 @@
     // Initialiser avec valeurs par défaut (crée le SVG avec les inputs)
     initializeDefaultValues();
 
-    // Attendre que le SVG soit complètement rendu avant de récupérer les inputs
-    requestAnimationFrame(() => {
-      // Récupérer les inputs créés dans le SVG via foreignObject
-      elements.pipeLength = document.getElementById('pipe-length');
-      elements.waterTemp = document.getElementById('water-temp');
-      elements.waterFlow = document.getElementById('water-flow');
-      elements.waterPressure = document.getElementById('water-pressure');
-      elements.airTemp = document.getElementById('air-temp');
-      elements.windSpeed = document.getElementById('wind-speed');
+    // Attendre que le SVG soit rendu avant de récupérer les inputs
+    requestAnimationFrame(function () {
+      SVG_INPUT_FIELDS.forEach(function (pair) {
+        elements[pair[0]] = document.getElementById(pair[1]);
+      });
     });
 
     // Attacher les événements
@@ -89,50 +63,24 @@
     toggleInsulationFields();
   }
 
-  // ========== VALEURS PAR DÉFAUT ==========
   function initializeDefaultValues() {
-    // Matériau par défaut: steel
     elements.pipeMaterial.value = 'steel';
-
-    // Remplir les schedules pour l'acier
     updateScheduleOptions('steel');
-
-    // Sélectionner schedule 40
     elements.pipeSchedule.value = '40';
-
-    // Remplir les NPS pour steel/40
     updateNPSOptions('steel', '40');
-
-    // Sélectionner NPS 4"
     elements.pipeNPS.value = '4';
-
-    // Mettre à jour les specs et le schéma
     updatePipeSpecs();
   }
 
-  // ========== ÉVÉNEMENTS ==========
   function attachEvents() {
-    // Checkbox isolation
     elements.hasInsulation.addEventListener('change', toggleInsulationFields);
-
-    // Changements de spécifications de tuyau
     elements.pipeMaterial.addEventListener('change', handleMaterialChange);
     elements.pipeSchedule.addEventListener('change', handleScheduleChange);
     elements.pipeNPS.addEventListener('change', handleNPSChange);
-
-    // Changements d'isolation
     elements.insulationMaterial.addEventListener('change', function () {
-      triggerAnalysis({
-        priority: 'high',
-        reason: 'insulation-material-change',
-      });
+      triggerAnalysis({ priority: 'high', reason: 'insulation-material-change' });
     });
-
-    // Attendre que les inputs dans le SVG soient créés avant d'attacher les événements
-    // Utiliser une approche plus fiable que setTimeout
     waitForSVGInputs();
-
-    // Réagir au changement de langue (mise à jour du label Schedule/Type)
     document.addEventListener('thermaflow:language-changed', function () {
       if (elements && elements.pipeMaterial) {
         updateScheduleLabel(elements.pipeMaterial.value);
@@ -140,11 +88,8 @@
     });
   }
 
-  // ========== FONCTION DEBOUNCÉE GLOBALE ==========
-  // Variable pour stocker la fonction debouncée (créée lors de l'initialisation)
   let debouncedAnalysis = null;
 
-  // Créer la fonction debouncée (appelée une fois dans attachEvents)
   function createDebouncedAnalysis() {
     if (!debouncedAnalysis && typeof UIUtils !== 'undefined') {
       debouncedAnalysis = UIUtils.debounce(function () {
@@ -154,7 +99,6 @@
     return debouncedAnalysis;
   }
 
-  // ========== ATTACHER ÉVÉNEMENTS À UN INPUT ==========
   function attachInputEvents(input) {
     if (!input) {
       return;
@@ -168,24 +112,24 @@
 
     // Validation visuelle inline sur input (immédiat)
     input.addEventListener('input', function () {
-      validateInputVisual(input);
+      InputValidation.validateInputVisual(input);
       // Déclencher recalcul debounced
       debounced();
     });
 
     // Intercepter virgules lors de la frappe
     input.addEventListener('keypress', function (e) {
-      handleCommaKeypress(e, input);
+      InputValidation.handleCommaKeypress(e, input);
     });
 
     // Normaliser virgules lors du collage (Ctrl+V)
     input.addEventListener('paste', function (e) {
-      handleCommaPaste(e, input);
+      InputValidation.handleCommaPaste(e, input);
     });
 
     // Déclencher recalcul immédiat au blur
     input.addEventListener('blur', function () {
-      clampInputValue(input);
+      InputValidation.clampInputValue(input);
       // Annuler le debounce en cours
       debounced.cancel();
       // Recalcul immédiat
@@ -196,7 +140,7 @@
     input.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') {
         e.preventDefault();
-        clampInputValue(input);
+        InputValidation.clampInputValue(input);
         // Annuler le debounce en cours
         debounced.cancel();
         // Recalcul immédiat
@@ -205,7 +149,6 @@
     });
   }
 
-  // ========== ATTENDRE CRÉATION INPUTS SVG ==========
   function waitForSVGInputs() {
     const inputIds = [
       'pipe-length',
@@ -218,24 +161,25 @@
       'pressure-unit',
     ];
 
-    // Vérifier si tous les inputs existent
+    let attempts = 0;
+    const maxAttempts = 120; // ~2 seconds at 60fps
     function checkAndAttach() {
-      const allExist = inputIds.every((id) => document.getElementById(id) !== null);
-
+      const allExist = inputIds.every(function (id) {
+        return document.getElementById(id) !== null;
+      });
       if (allExist) {
         attachBlurEvents();
-        attachUnitChangeEvents();
-        applyUnitPreferences();
-      } else {
-        // Réessayer au prochain frame
+        InputUnits.attachUnitChangeEvents(triggerAnalysis);
+        InputUnits.applyUnitPreferences();
+      } else if (++attempts < maxAttempts) {
         requestAnimationFrame(checkAndAttach);
+      } else {
+        console.warn('SVG inputs not found after', maxAttempts, 'frames');
       }
     }
-
     requestAnimationFrame(checkAndAttach);
   }
 
-  // ========== ATTACHER ÉVÉNEMENTS BLUR ==========
   function attachBlurEvents() {
     const inputIds = [
       'pipe-length',
@@ -258,156 +202,35 @@
   }
 
   // ========== RÉATTACHER ÉVÉNEMENTS APRÈS REDESSIN SVG ==========
+  const SVG_INPUT_FIELDS = [
+    ['pipeLength', 'pipe-length'],
+    ['waterTemp', 'water-temp'],
+    ['waterFlow', 'water-flow'],
+    ['waterPressure', 'water-pressure'],
+    ['airTemp', 'air-temp'],
+    ['windSpeed', 'wind-speed'],
+  ];
+
   function reattachInputEvents() {
-    // CRITIQUE: Sauvegarder les valeurs actuelles AVANT de récupérer les nouveaux inputs
-    const savedValues = {
-      pipeLength: elements.pipeLength ? elements.pipeLength.value : null,
-      waterTemp: elements.waterTemp ? elements.waterTemp.value : null,
-      waterFlow: elements.waterFlow ? elements.waterFlow.value : null,
-      waterPressure: elements.waterPressure ? elements.waterPressure.value : null,
-      airTemp: elements.airTemp ? elements.airTemp.value : null,
-      windSpeed: elements.windSpeed ? elements.windSpeed.value : null,
-    };
-
-    // Mettre à jour les références vers les nouveaux inputs
-    elements.pipeLength = document.getElementById('pipe-length');
-    elements.waterTemp = document.getElementById('water-temp');
-    elements.waterFlow = document.getElementById('water-flow');
-    elements.waterPressure = document.getElementById('water-pressure');
-    elements.airTemp = document.getElementById('air-temp');
-    elements.windSpeed = document.getElementById('wind-speed');
-
-    // CRITIQUE: Restaurer les valeurs sauvegardées dans les nouveaux inputs
-    if (savedValues.pipeLength && elements.pipeLength) {
-      elements.pipeLength.value = savedValues.pipeLength;
-    }
-    if (savedValues.waterTemp && elements.waterTemp) {
-      elements.waterTemp.value = savedValues.waterTemp;
-    }
-    if (savedValues.waterFlow && elements.waterFlow) {
-      elements.waterFlow.value = savedValues.waterFlow;
-    }
-    if (savedValues.waterPressure && elements.waterPressure) {
-      elements.waterPressure.value = savedValues.waterPressure;
-    }
-    if (savedValues.airTemp && elements.airTemp) {
-      elements.airTemp.value = savedValues.airTemp;
-    }
-    if (savedValues.windSpeed && elements.windSpeed) {
-      elements.windSpeed.value = savedValues.windSpeed;
-    }
-
-    // Réattacher les événements
-    const inputs = [
-      elements.pipeLength,
-      elements.waterTemp,
-      elements.waterFlow,
-      elements.waterPressure,
-      elements.airTemp,
-      elements.windSpeed,
-    ];
-
-    inputs.forEach((input) => {
-      attachInputEvents(input);
+    // Save current values, re-acquire DOM refs, restore values
+    const saved = {};
+    SVG_INPUT_FIELDS.forEach(function (pair) {
+      saved[pair[0]] = elements[pair[0]] ? elements[pair[0]].value : null;
     });
-
-    // Réattacher aussi les événements d'unités
-    attachUnitChangeEvents();
-    applyUnitPreferences();
-  }
-
-  // ========== VALIDATION VISUELLE INLINE ==========
-  function validateInputVisual(input) {
-    const value = parseFloat(input.value);
-    const min = parseFloat(input.min);
-    const max = parseFloat(input.max);
-
-    // Feedback visuel immédiat (sans recalcul)
-    if (isNaN(value) || value < min || value > max) {
-      input.classList.add('param-input--invalid');
-    } else {
-      input.classList.remove('param-input--invalid');
-    }
-  }
-
-  // ========== GESTION VIRGULE FRAPPE ==========
-  function handleCommaKeypress(event, input) {
-    // Si l'utilisateur tape une virgule, la remplacer par un point
-    if (event.key === ',' || event.key === 'Decimal') {
-      event.preventDefault();
-
-      // Vérifier qu'il n'y a pas déjà un point
-      if (!input.value.includes('.')) {
-        // Insérer un point à la position du curseur
-        const start = input.selectionStart;
-        const end = input.selectionEnd;
-        const value = input.value;
-        input.value = value.substring(0, start) + '.' + value.substring(end);
-
-        // Repositionner le curseur
-        input.setSelectionRange(start + 1, start + 1);
-
-        // Déclencher l'événement input pour que le navigateur valide
-        input.dispatchEvent(new Event('input', { bubbles: true }));
+    SVG_INPUT_FIELDS.forEach(function (pair) {
+      elements[pair[0]] = document.getElementById(pair[1]);
+      if (saved[pair[0]] && elements[pair[0]]) {
+        elements[pair[0]].value = saved[pair[0]];
       }
-    }
+      attachInputEvents(elements[pair[0]]);
+    });
+    InputUnits.attachUnitChangeEvents(triggerAnalysis);
+    InputUnits.applyUnitPreferences();
   }
 
-  // ========== GESTION VIRGULE COLLAGE ==========
-  function handleCommaPaste(event, input) {
-    // Récupérer le texte collé
-    const pastedText = event.clipboardData.getData('text');
-
-    // Si le texte contient une virgule, le corriger
-    if (pastedText.includes(',')) {
-      event.preventDefault();
-
-      // Remplacer toutes les virgules par des points
-      const correctedText = pastedText.replace(/,/g, '.');
-
-      // Insérer le texte corrigé à la position du curseur
-      const start = input.selectionStart;
-      const end = input.selectionEnd;
-      const value = input.value;
-      input.value = value.substring(0, start) + correctedText + value.substring(end);
-
-      // Repositionner le curseur après le texte collé
-      const newPos = start + correctedText.length;
-      input.setSelectionRange(newPos, newPos);
-
-      // Déclencher l'événement input pour que le navigateur valide
-      input.dispatchEvent(new Event('input', { bubbles: true }));
-    }
-  }
-
-  // ========== CLAMPING VALEUR INPUT ==========
-  function clampInputValue(input) {
-    const min = parseFloat(input.min);
-    const max = parseFloat(input.max);
-    let value = parseFloat(input.value);
-
-    // Gérer les valeurs invalides
-    if (isNaN(value)) {
-      // Utiliser la valeur par défaut ou le min
-      value = parseFloat(input.defaultValue) || min;
-    }
-
-    // Clamper
-    if (!isNaN(min) && value < min) {
-      value = min;
-    }
-    if (!isNaN(max) && value > max) {
-      value = max;
-    }
-
-    // Mettre à jour l'input
-    input.value = value;
-  }
-
-  // ========== DÉCLENCHER ANALYSE ==========
   function triggerAnalysis(options = {}) {
-    // Valider le formulaire
-    if (!validateForm()) {
+    // Valider le formulaire (delegate to InputValidation)
+    if (!InputValidation.validateForm(elements).valid) {
       console.warn('⚠️ Formulaire invalide, analyse non déclenchée');
       return;
     }
@@ -425,7 +248,6 @@
     document.dispatchEvent(event);
   }
 
-  // ========== GESTION CHANGEMENTS TUYAU ==========
   function handleMaterialChange() {
     const material = elements.pipeMaterial.value;
 
@@ -470,7 +292,6 @@
     triggerAnalysis({ priority: 'high', reason: 'nps-change' });
   }
 
-  // ========== MISE À JOUR LABEL ==========
   function updateScheduleLabel(material) {
     if (PipeSpecsLoader.usesTypes(material)) {
       elements.pipeScheduleLabel.textContent = window.I18n ? I18n.t('controls.type') : 'Type';
@@ -481,7 +302,6 @@
     }
   }
 
-  // ========== MISE À JOUR OPTIONS SCHEDULE/TYPE ==========
   function updateScheduleOptions(material) {
     const schedules = PipeSpecsLoader.getAvailableSchedules(material);
 
@@ -502,7 +322,6 @@
     }
   }
 
-  // ========== MISE À JOUR OPTIONS NPS ==========
   function updateNPSOptions(material, schedule) {
     const npsList = PipeSpecsLoader.getAvailableNPS(material, schedule);
 
@@ -525,7 +344,6 @@
     }
   }
 
-  // ========== MISE À JOUR SPECS ==========
   function updatePipeSpecs() {
     const material = elements.pipeMaterial.value;
     const schedule = elements.pipeSchedule.value;
@@ -575,124 +393,6 @@
     triggerAnalysis({ priority: 'high', reason: 'insulation-toggle' });
   }
 
-  // ========== VALIDATION ==========
-  function validateForm() {
-    // Vérifier que tous les champs requis sont remplis
-    const requiredFields = [
-      elements.pipeMaterial,
-      elements.pipeSchedule,
-      elements.pipeNPS,
-      elements.pipeLength,
-      elements.waterTemp,
-      elements.waterFlow,
-      elements.waterPressure,
-      elements.airTemp,
-      elements.windSpeed,
-    ];
-
-    // Vérifier que tous les éléments existent (peuvent être créés plus tard dans le SVG)
-    for (const field of requiredFields) {
-      if (!field) {
-        // Éléments pas encore créés, retourner false silencieusement
-        return false;
-      }
-    }
-
-    for (const field of requiredFields) {
-      if (!field.value || field.value === '') {
-        const label = field.previousElementSibling ? field.previousElementSibling.textContent : '';
-        const msg = window.I18n
-          ? I18n.t('validation.requiredMissing', { label })
-          : `Champ requis manquant: ${label}`;
-        alert(msg);
-        field.focus();
-        return false;
-      }
-    }
-
-    // Validation des plages (parseFloat pour éviter les comparaisons string/number)
-    const pipeLengthValue = parseFloat(elements.pipeLength.value);
-    if (isNaN(pipeLengthValue) || pipeLengthValue < 1 || pipeLengthValue > 2500) {
-      alert(
-        window.I18n ? I18n.t('validation.lengthRange') : 'Longueur doit être entre 1 et 2500 m'
-      );
-      elements.pipeLength.focus();
-      return false;
-    }
-
-    const waterTempValue = parseFloat(elements.waterTemp.value);
-    if (isNaN(waterTempValue) || waterTempValue < 1 || waterTempValue > 100) {
-      alert(
-        window.I18n
-          ? I18n.t('validation.waterTempRange')
-          : 'Température eau doit être entre 1 et 100°C'
-      );
-      elements.waterTemp.focus();
-      return false;
-    }
-
-    const airTempValue = parseFloat(elements.airTemp.value);
-    if (isNaN(airTempValue) || airTempValue < -50 || airTempValue > 30) {
-      alert(
-        window.I18n
-          ? I18n.t('validation.airTempRange')
-          : 'Température air doit être entre -50 et 30°C'
-      );
-      elements.airTemp.focus();
-      return false;
-    }
-
-    // Validation pression avec plages dynamiques selon l'unité
-    const pressureRanges = UnitConverter.getRanges('pressure');
-    const pressureValue = parseFloat(elements.waterPressure.value);
-    if (
-      isNaN(pressureValue) ||
-      pressureValue < pressureRanges.min ||
-      pressureValue > pressureRanges.max
-    ) {
-      const pressureUnit = UnitConverter.getUnitInfo('pressure').label;
-      const msg = window.I18n
-        ? I18n.t('validation.waterPressureRange')
-            .replace('100', pressureRanges.min.toFixed(0))
-            .replace('1000', pressureRanges.max.toFixed(0))
-            .replace('kPag', pressureUnit)
-        : `Pression eau doit être entre ${pressureRanges.min.toFixed(0)} et ${pressureRanges.max.toFixed(0)} ${pressureUnit}`;
-      alert(msg);
-      elements.waterPressure.focus();
-      return false;
-    }
-
-    // Validation débit avec plages dynamiques selon l'unité
-    const flowRanges = UnitConverter.getRanges('flowRate');
-    const flowValue = parseFloat(elements.waterFlow.value);
-    if (isNaN(flowValue) || flowValue < flowRanges.min || flowValue > flowRanges.max) {
-      const flowUnit = UnitConverter.getUnitInfo('flowRate').label;
-      const msg = window.I18n
-        ? I18n.t('validation.waterFlowRange')
-            .replace('0.06', flowRanges.min.toFixed(2))
-            .replace('30', flowRanges.max.toFixed(2))
-            .replace('m³/hr', flowUnit)
-        : `Débit eau doit être entre ${flowRanges.min.toFixed(2)} et ${flowRanges.max.toFixed(2)} ${flowUnit}`;
-      alert(msg);
-      elements.waterFlow.focus();
-      return false;
-    }
-
-    const windSpeedValue = parseFloat(elements.windSpeed.value);
-    if (isNaN(windSpeedValue) || windSpeedValue < 0 || windSpeedValue > 108) {
-      alert(
-        window.I18n
-          ? I18n.t('validation.windSpeedRange')
-          : 'Vitesse vent doit être entre 0 et 108 km/h'
-      );
-      elements.windSpeed.focus();
-      return false;
-    }
-
-    return true;
-  }
-
-  // ========== RÉCUPÉRATION DONNÉES ==========
   function getFormData() {
     // Récupérer les specs de tuyau
     const material = elements.pipeMaterial.value;
@@ -785,148 +485,13 @@
     };
   }
 
-  // ========== GESTION DES UNITÉS ==========
-
-  /**
-   * Charge les préférences d'unités depuis localStorage
-   */
-  function loadUnitPreferences() {
-    if (typeof Storage === 'undefined') {
-      return;
-    }
-
-    const savedData = Storage.load();
-    if (savedData && savedData.unitPreferences) {
-      currentUnits = { ...currentUnits, ...savedData.unitPreferences };
-      UnitConverter.loadPreferences(savedData.unitPreferences);
-    }
-  }
-
-  /**
-   * Applique les préférences d'unités aux dropdowns
-   */
-  function applyUnitPreferences() {
-    const flowUnitSelect = document.getElementById('flow-unit');
-    const pressureUnitSelect = document.getElementById('pressure-unit');
-
-    if (flowUnitSelect) {
-      flowUnitSelect.value = currentUnits.flowRate;
-    }
-    if (pressureUnitSelect) {
-      pressureUnitSelect.value = currentUnits.pressure;
-    }
-
-    // Ajuster les plages min/max selon l'unité
-    updateInputRanges();
-  }
-
-  /**
-   * Attache les événements de changement d'unité
-   */
-  function attachUnitChangeEvents() {
-    const flowUnitSelect = document.getElementById('flow-unit');
-    const pressureUnitSelect = document.getElementById('pressure-unit');
-
-    if (flowUnitSelect) {
-      flowUnitSelect.addEventListener('change', function () {
-        handleUnitChange('flowRate', this.value, 'water-flow');
-      });
-    }
-
-    if (pressureUnitSelect) {
-      pressureUnitSelect.addEventListener('change', function () {
-        handleUnitChange('pressure', this.value, 'water-pressure');
-      });
-    }
-  }
-
-  /**
-   * Gère le changement d'unité pour un paramètre
-   * @param {string} paramType - Type de paramètre ('flowRate' ou 'pressure')
-   * @param {string} newUnit - Nouvelle unité sélectionnée
-   * @param {string} inputId - ID de l'input associé
-   */
-  function handleUnitChange(paramType, newUnit, inputId) {
-    const input = document.getElementById(inputId);
-    if (!input) {
-      return;
-    }
-
-    const oldUnit = currentUnits[paramType];
-    const currentValue = parseFloat(input.value);
-
-    if (isNaN(currentValue)) {
-      // Pas de valeur à convertir, juste changer l'unité
-      currentUnits[paramType] = newUnit;
-      UnitConverter.setUnit(paramType, newUnit);
-      updateInputRanges();
-      saveUnitPreferences();
-      return;
-    }
-
-    // Convertir la valeur de l'ancienne unité vers la nouvelle
-    const convertedValue = UnitConverter.convert(paramType, currentValue, oldUnit, newUnit);
-
-    // Mettre à jour l'input avec la valeur convertie
-    input.value = convertedValue.toFixed(UnitConverter.getUnitInfo(paramType, newUnit).decimals);
-
-    // Mettre à jour l'unité courante
-    currentUnits[paramType] = newUnit;
-    UnitConverter.setUnit(paramType, newUnit);
-
-    // Ajuster les plages min/max
-    updateInputRanges();
-
-    // Sauvegarder la préférence
-    saveUnitPreferences();
-
-    // Déclencher recalcul
-    triggerAnalysis({ priority: 'high', reason: 'unit-change' });
-  }
-
-  /**
-   * Met à jour les plages min/max des inputs selon l'unité courante
-   */
-  function updateInputRanges() {
-    // Débit
-    const flowInput = document.getElementById('water-flow');
-    if (flowInput) {
-      const flowRanges = UnitConverter.getRanges('flowRate');
-      flowInput.min = flowRanges.min.toFixed(flowRanges.decimals);
-      flowInput.max = flowRanges.max.toFixed(flowRanges.decimals);
-      flowInput.step = (flowRanges.max - flowRanges.min) / 1000; // 1000 steps
-    }
-
-    // Pression
-    const pressureInput = document.getElementById('water-pressure');
-    if (pressureInput) {
-      const pressureRanges = UnitConverter.getRanges('pressure');
-      pressureInput.min = pressureRanges.min.toFixed(pressureRanges.decimals);
-      pressureInput.max = pressureRanges.max.toFixed(pressureRanges.decimals);
-      pressureInput.step = currentUnits.pressure === 'psig' ? '1' : '10';
-    }
-  }
-
-  /**
-   * Sauvegarde les préférences d'unités dans localStorage
-   */
-  function saveUnitPreferences() {
-    if (typeof Storage === 'undefined') {
-      return;
-    }
-
-    const savedData = Storage.load();
-    if (savedData) {
-      // Mettre à jour unitPreferences dans l'objet existant
-      savedData.unitPreferences = { ...currentUnits };
-      // Sauvegarder le config existant
-      Storage.save(savedData.config);
-    }
-  }
-
-  // ========== EXPORT ==========
   window.InputForm = {
     init,
     triggerAnalysis, // Export pour permettre le calcul initial
   };
+
+  // Node.js dual export for tests
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = window.InputForm;
+  }
 })();

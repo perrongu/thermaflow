@@ -4,8 +4,8 @@
  * Test de persistance localStorage pour le système de conversion d'unités
  *
  * Vérifie que:
- * 1. Storage.save() sauvegarde correctement config ET unitPreferences
- * 2. Storage.load() retourne l'objet complet
+ * 1. ThermaStorage.save() sauvegarde correctement config ET unitPreferences
+ * 2. ThermaStorage.load() retourne l'objet complet
  * 3. Les préférences d'unités survivent aux cycles save/load
  */
 
@@ -39,7 +39,7 @@ const context = {
 vm.createContext(context);
 vm.runInContext(storageCode, context);
 
-const Storage = context.window.Storage;
+const ThermaStorage = context.window.Storage;
 
 // ========== TESTS ==========
 
@@ -70,8 +70,8 @@ test('Test 1: Save/Load configuration de base', () => {
     meta: { schedule: '40', nps: 4, flowM3PerHr: 7.2 },
   };
 
-  Storage.save(config);
-  const loaded = Storage.load();
+  ThermaStorage.save(config);
+  const loaded = ThermaStorage.load();
 
   if (!loaded) {
     throw new Error('Load returned null');
@@ -101,15 +101,15 @@ test('Test 2: Save/Load avec unitPreferences', () => {
   };
 
   // Simuler ce que fait input-form.js
-  Storage.save(config);
+  ThermaStorage.save(config);
 
   // Ajouter unitPreferences
-  const savedData = Storage.load();
+  const savedData = ThermaStorage.load();
   savedData.unitPreferences = { flowRate: 'usgpm', pressure: 'psig' };
   localStorage.setItem('thermaflow_last_config', JSON.stringify(savedData));
 
   // Recharger et vérifier
-  const reloaded = Storage.load();
+  const reloaded = ThermaStorage.load();
 
   if (!reloaded.unitPreferences) {
     throw new Error('unitPreferences not persisted');
@@ -126,7 +126,7 @@ test('Test 2: Save/Load avec unitPreferences', () => {
 test('Test 3: Load avec localStorage vide', () => {
   localStorage.clear();
 
-  const loaded = Storage.load();
+  const loaded = ThermaStorage.load();
   if (loaded !== null) {
     throw new Error('Load should return null when localStorage is empty');
   }
@@ -141,8 +141,8 @@ test("Test 4: Structure complète de l'objet", () => {
     fluid: { T_in: 60, P: 3, m_dot: 2 },
   };
 
-  Storage.save(config);
-  const loaded = Storage.load();
+  ThermaStorage.save(config);
+  const loaded = ThermaStorage.load();
 
   // Vérifier toutes les propriétés attendues
   const requiredProps = ['config', 'timestamp', 'version'];
@@ -167,9 +167,9 @@ test('Test 5: Cycles multiples save/load', () => {
 
   for (let i = 0; i < 5; i++) {
     const config = { iteration: i, totalLength: 100 + i };
-    Storage.save(config);
+    ThermaStorage.save(config);
 
-    const loaded = Storage.load();
+    const loaded = ThermaStorage.load();
     if (loaded.config.iteration !== i) {
       throw new Error(`Cycle ${i} failed`);
     }
@@ -189,7 +189,7 @@ test('Test 6: Compatibilité ancien format', () => {
 
   localStorage.setItem('thermaflow_last_config', JSON.stringify(oldFormat));
 
-  const loaded = Storage.load();
+  const loaded = ThermaStorage.load();
   if (!loaded.config) {
     throw new Error('Old format not compatible');
   }

@@ -15,23 +15,27 @@
     <link rel="stylesheet" href="css/components.css" />
 
     <!-- KaTeX pour rendu mathématique (Section 3) -->
+    <!-- Primary: CDN with SRI. Fallback: local vendor copy for offline use. -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
       integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV"
       crossorigin="anonymous"
+      onerror="this.onerror=null;this.href='vendor/katex/katex.min.css'"
     />
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
-      integrity="sha384-fP26ZkT1rR4JqLgaYJLhRbIb1D8oUj9p+iMK6kl7C0ZtlG8EIiSuZOSsex4/B+d"
+      integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8"
       crossorigin="anonymous"
+      onerror="this.onerror=null;this.src='vendor/katex/katex.min.js'"
     ></script>
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-      integrity="sha384-Leidgm9AwLV1fBuiurIMDkagBc6D04uVseUniuNVf6bBtDL9U9k9UAhKo09TxqRx"
+      integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
       crossorigin="anonymous"
+      onerror="this.onerror=null;this.src='vendor/katex/contrib/auto-render.min.js'"
     ></script>
   </head>
   <body>
@@ -338,8 +342,8 @@
               <div class="interpretation-guide">
                 <h4 data-i18n="sensitivity.interpTitle">📖 Interprétation</h4>
                 <p style="margin: 0; font-size: 0.9rem; line-height: 1.5">
-                  <strong data-i18n="sensitivity.interp1">Analyse individuelle :</strong>
-                  <span data-i18n="sensitivity.interp1"
+                  <strong data-i18n="sensitivity.interp1Label">Analyse individuelle :</strong>
+                  <span data-i18n="sensitivity.interp1Desc"
                     >Chaque graphique montre l'impact d'un seul paramètre qui varie sur toute sa
                     plage,
                   </span>
@@ -393,8 +397,8 @@
               <div class="interpretation-guide">
                 <h4 data-i18n="sensitivity.interpTitle">📖 Interprétation</h4>
                 <p style="margin: 0; font-size: 0.9rem; line-height: 1.5">
-                  <strong data-i18n="sensitivity.interp2d1">Analyse combinée :</strong>
-                  <span data-i18n="sensitivity.interp2d1"
+                  <strong data-i18n="sensitivity.interp2d1Label">Analyse combinée :</strong>
+                  <span data-i18n="sensitivity.interp2d1Desc"
                     >La carte thermique (heatmap) montre la plage complète des résultats possibles
                   </span>
                   <span data-i18n="sensitivity.interp2d2"
@@ -627,15 +631,21 @@
     <script src="js/ui/utils.js"></script>
     <script src="js/ui/calculation-manager.js"></script>
     <script src="js/ui/pipe-diagram.js"></script>
+    <script src="js/ui/input-validation.js"></script>
+    <script src="js/ui/input-units.js"></script>
     <script src="js/ui/input-form.js"></script>
     <script src="js/ui/temperature-chart.js"></script>
     <script src="js/ui/sensitivity-params.js"></script>
     <script src="js/ui/sensitivity-analysis-1d.js"></script>
     <script src="js/ui/sensitivity-heatmap-renderer.js"></script>
+    <script src="js/ui/sensitivity-matrix.js"></script>
     <script src="js/ui/sensitivity-analysis.js"></script>
+    <script src="js/ui/calc-detail-templates.js"></script>
     <script src="js/ui/calculation-details.js"></script>
     <script src="js/ui/storage.js"></script>
     <script src="js/ui/export.js"></script>
+    <script src="js/ui/verdict-renderer.js"></script>
+    <script src="js/ui/disclaimer.js"></script>
     <script src="js/ui/app.js"></script>
 
     <!-- Modal d'acceptation des risques -->

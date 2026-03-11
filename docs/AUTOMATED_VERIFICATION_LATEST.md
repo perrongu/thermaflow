@@ -1,7 +1,7 @@
 # RAPPORT DE VÉRIFICATION AUTOMATIQUE - THERMAFLOW
 
-**Date**: 2026-03-10 12:31:58  
-**Version**: 1.2.2  
+**Date**: 2026-03-11 11:17:11  
+**Version**: 1.3.0  
 **Durée**: 0.0 minutes  
 **Statut global**: VALIDÉ ✓
 
@@ -13,7 +13,7 @@
 |-----------|-------|------|------|------|
   | **Constantes physiques** | 14 | 14 | 0 | 100.0% |
   | **Conversions d'unités** | 25 | 25 | 0 | 100.0% |
-  | **Tests unitaires** | 27 | 27 | 0 | 100.0% |
+  | **Tests unitaires** | 36 | 36 | 0 | 100.0% |
 
 
 ---
@@ -108,9 +108,18 @@
 | test_freeze_detector.js | ✓ PASS |
 | test_gnielinski_roughness.js | ✓ PASS |
 | test_integration.js | ✓ PASS |
+| test_phase1_critical.js | ✓ PASS |
 | test_phase1_heat_transfer.js | ✓ PASS |
 | test_phase1_hydraulics.js | ✓ PASS |
 | test_phase1_materials.js | ✓ PASS |
+| test_phase2_app_split.js | ✓ PASS |
+| test_phase2_calc_details.js | ✓ PASS |
+| test_phase2_input_form.js | ✓ PASS |
+| test_phase2_sensitivity.js | ✓ PASS |
+| test_phase3_css.js | ✓ PASS |
+| test_phase4_cleanup.js | ✓ PASS |
+| test_phase5_infra.js | ✓ PASS |
+| test_phase5_worker.js | ✓ PASS |
 | test_pipe_network.js | ✓ PASS |
 | test_pipe_segment.js | ✓ PASS |
 | test_precommit_adds_report.js | ✓ PASS |
@@ -200,15 +209,15 @@
 ✓ **TOUS LES CRITÈRES SONT VALIDÉS**
 
 Ce rapport confirme que:
-- 100% des tests unitaires passent (27/27) ✓
+- 100% des tests unitaires passent (36/36) ✓
 - 100% des conversions d'unités sont correctes (25/25) ✓
 - 14/14 constantes extraites et validées automatiquement
 - 50 cas de validation externe comparés aux logiciels de référence
 
-**Je certifie l'exactitude scientifique et technique de ThermaFlow v1.2.2**
+**Je certifie l'exactitude scientifique et technique de ThermaFlow v1.3.0**
 
 ---
 
-*Rapport généré automatiquement le 2026-03-10 12:31:58*  
+*Rapport généré automatiquement le 2026-03-11 11:17:11*  
 *Durée d'exécution: 0.0 minutes*  
-*ThermaFlow v1.2.2 - Automated Verification System*
+*ThermaFlow v1.3.0 - Automated Verification System*
